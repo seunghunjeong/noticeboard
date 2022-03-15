@@ -1,19 +1,12 @@
 const express = require('express');
 const app = express();
-const mysql = require('mysql');
+const db = require('./config/db');
 const bodyParser = require('body-parser');
 const { urlencoded } = require('body-parser');
 // node.js의 포트 설정. 기본 포트는 8000.
 const PORT = process.env.port || 8000;
 const cors = require('cors');
 
-// mysql db 접속
-const db = mysql.createPool({
-    host: "192.168.0.177",
-    user: "cmworld",
-    password: "Cmworld@1234",
-    database: "board"
-});
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());
@@ -29,6 +22,9 @@ app.get("/api/get", (req, res)=>{
         res.send(result);
     })
 })
+
+
+
 
 app.listen(PORT, ()=>{
     console.log(`running on port ${PORT}`);

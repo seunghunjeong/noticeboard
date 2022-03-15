@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "nodemon index.js",
-    "dev" : "concurrently \"npm run dev\" \"npm start --prefix ../client\""
+    "dev" : "concurrently \"npm run test\" \"npm start --prefix ../client\""
   },
   "author": "",
   "license": "ISC",
