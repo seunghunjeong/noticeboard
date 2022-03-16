@@ -4,6 +4,7 @@ import { useEffect, useState} from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
 import { Table, Layout, Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 
 function Board_list() {
   
@@ -15,23 +16,23 @@ function Board_list() {
 
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('http://localhost:8000/api/get').then((response) => {
+    Axios.get('http://192.168.0.152:8000/api/get').then((response) => {
       setViewContent(response.data);
     })
   },[])
-
+  
   //table columns
   const columns = [
     {
       title: '번호',
       dataIndex: 'idx',
-      key: 'idx'
+      key: 'idx',
+      render: idx => <a href={'/board/' + idx}> {idx} </a>
     },
     {
       title: '제목',
       dataIndex: 'title',
-      key: 'title',
-      render: title => <a>{title}</a>
+      key: 'title'
     },
     {
       title: '작성자',
@@ -59,7 +60,7 @@ function Board_list() {
           <Breadcrumb.Item>borad</Breadcrumb.Item>
           <Breadcrumb.Item>: Projects</Breadcrumb.Item>
           </Breadcrumb>
-          <Table columns={columns} dataSource={data}/>  
+          <Table columns={columns} dataSource={data}/>
       </Content>
     </div>
   )

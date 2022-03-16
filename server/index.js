@@ -17,14 +17,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // select 쿼리 사용
 app.get("/api/get", (req, res)=>{
-    const sqlQuery = "SELECT * FROM noticeboard;";
+    const sqlQuery = "SELECT * FROM noticeboard";
     db.query(sqlQuery, (err, result)=>{
         res.send(result);
     })
 })
 
-
-
+app.get("/api/read", (req, res)=>{
+    const idx = req.query.idx;
+    const sqlQuery = "SELECT * FROM noticeboard where idx = ?";
+    db.query(sqlQuery, [idx], (err,result) =>{
+        if(err){
+            res.send(result + err);
+        } else {
+            res.send(result);
+        }
+    });
+})
 
 app.listen(PORT, ()=>{
     console.log(`running on port ${PORT}`);

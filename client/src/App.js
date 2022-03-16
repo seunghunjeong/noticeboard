@@ -9,6 +9,7 @@ import Footer from './components/layout/footer';
 
 // components views
 import BoardingPage from '../src/components/BoardingPage/Board_list';
+import BoardingDetail from './components/BoardingPage/Board_detail';
 
 function App() {
   // 화면 표시부분
@@ -21,8 +22,9 @@ function App() {
             <Layout className="site-layout">
               <Header />
               <Routes>
-                  <Route exact path="/" element = {<BoardingPage/>}/>
-                  <Route exact path="/board" element = {<BoardingPage/>}/>
+                  <Route path="/" element = {<BoardingPage/>}/>
+                  <Route path="/board" element = {<BoardingPage/>}/>
+                  <Route path="/board/:idx" element = {<BoardingDetail/>}/>
                   </Routes>
               <Footer />
             </Layout>
