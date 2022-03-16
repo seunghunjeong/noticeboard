@@ -14,10 +14,11 @@ function Board_list() {
   const { Content } = Layout;
 
   // 내용 저장
-  const [viewContent , setViewContent] = useState([]);
+  const [viewContent, setViewContent] = useState([]);
+  
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('http://localhost:8000/api/get').then((response) => {
+    Axios.get('http://localhost:8000/api/getBoardList').then((response) => {
       setViewContent(response.data);
     })
   },[])
@@ -43,7 +44,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title', 
-      render: (title, record, index) => <Link to={'/board_detail/'+ index}>{title}</Link>,
+      render: (title, record, idx) => <Link to={'/board_detail/'+ idx}>{title}</Link>,
       align : 'left'
     },
     {
