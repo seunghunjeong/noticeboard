@@ -4,6 +4,7 @@ import { useEffect, useState} from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
 import { Table, Layout, Breadcrumb } from 'antd';
+import { Link } from 'react-router-dom';
 
 function Board_list() {
   
@@ -31,7 +32,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title',
-      render: title => <a>{title}</a>
+      render: title => <li><Link to={'/'}>{title}</Link></li>
     },
     {
       title: '작성자',
@@ -49,6 +50,7 @@ function Board_list() {
       title : element.title,
       writer : element.writer
     });
+    return data;
   });
 
   //render
@@ -56,10 +58,11 @@ function Board_list() {
     <div>
       <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>borad</Breadcrumb.Item>
-          <Breadcrumb.Item>: Projects</Breadcrumb.Item>
+            <Breadcrumb.Item>borad</Breadcrumb.Item>
+            <Breadcrumb.Item>: Projects</Breadcrumb.Item>
           </Breadcrumb>
-          <Table columns={columns} dataSource={data}/>  
+          <Table columns={columns} dataSource={data}/>
+          <Link to={'Board_register'}>임시등록버튼</Link>
       </Content>
     </div>
   )
