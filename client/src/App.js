@@ -6,7 +6,9 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 
 // components views
-import BoardingPage from '../src/components/BoardingPage/Board_list';
+import BoardingListPage from '../src/components/BoardingPage/Board_list';
+import BoardingDetailPage from '../src/components/BoardingPage/Board_detail';
+import BoardingRegisterPage from '../src/components/BoardingPage/Board_register';
 
 function App() {
   //antd 변수
@@ -20,30 +22,32 @@ function App() {
           <Sider>
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                <Menu.Item key="2" icon={<HomeOutlined />}>
+                <Menu.Item key="1" icon={<HomeOutlined />}>
                   Home
                 </Menu.Item>
-                <Menu.Item key="1" icon={<ProfileOutlined />}>
+                <Menu.Item key="2" icon={<ProfileOutlined />}>
                   Board
                 </Menu.Item>
-                <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                  <Menu.Item key="6">Team 1</Menu.Item>
-                  <Menu.Item key="8">Team 2</Menu.Item>
+                <SubMenu key="sub" icon={<TeamOutlined />} title="Team">
+                  <Menu.Item key="3">Team 1</Menu.Item>
+                  <Menu.Item key="4">Team 2</Menu.Item>
                 </SubMenu>
-                <Menu.Item key="9" icon={<SettingOutlined />}>
+                <Menu.Item key="5" icon={<SettingOutlined />}>
                   Setting
                 </Menu.Item>
             </Menu>
-            </Sider>
-            {/* 본문 */}
-            <Layout className="site-layout">
-              <Header className="site-layout-background" style={{ padding: 0 }} />
-              <Routes>
-                  <Route exact path="/" element = {<BoardingPage/>}/>
-                  <Route exact path="/board" element = {<BoardingPage/>}/>
-                  </Routes>
-              <Footer style={{ textAlign: 'center' }}> 게시판 이름 미정ㅎ.ㅎ ©2022 Created by Cmworld</Footer>
-            </Layout>
+          </Sider>
+          {/* 본문 */}
+          <Layout className="site-layout">
+            <Header className="site-layout-background" style={{ padding: 0 }} />
+            <Routes>
+                <Route exact path="/" element = {<BoardingListPage/>}/>
+                <Route exact path="/board_list" element = {<BoardingListPage/>}/>
+                <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
+                <Route exact path="/board_detail/:no'" element = {<BoardingDetailPage/>}/>
+            </Routes>
+            <Footer style={{ textAlign: 'center' }}> 게시판 이름 미정ㅎ.ㅎ ©2022 Created by Cmworld</Footer>
+          </Layout>
         </Layout>
       </BrowserRouter>
     </div>
