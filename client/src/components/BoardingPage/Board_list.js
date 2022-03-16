@@ -3,13 +3,16 @@ import Axios from 'axios';
 import { useEffect, useState} from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Tag, Space } from 'antd';
-
+import { Table, Layout, Breadcrumb } from 'antd';
 
 function Board_list() {
+  
+  //antd 변수
+  const { Content } = Layout;
 
   // 내용 저장
   const [viewContent , setViewContent] = useState([]);
+
   // select query문 불러오기.
   useEffect(() => {
     Axios.get('http://localhost:8000/api/get').then((response) => {
@@ -17,6 +20,7 @@ function Board_list() {
     })
   },[])
 
+  //table columns
   const columns = [
     {
       title: '번호',
@@ -35,34 +39,28 @@ function Board_list() {
       key: 'writer'
     }
   ];
+
+  //table rows
   const data = []
- 
   viewContent.map(element => {
     data.push({
+      key : element.idx,
       idx : element.idx,
       title : element.title,
       writer : element.writer
     });
   });
 
- 
-  // const title = viewContent.title;
-  // const writer = viewContent.writer;
-
-  // const data = [
-  //   {
-  //     idx : "idx",
-  //     title : "title",
-  //     writer : "writer"
-  //   }
-  // ];
-  
-
+  //render
   return (
-    <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
-         
-        <Table columns={columns} dataSource={data}/>  
-
+    <div>
+      <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+          <Breadcrumb.Item>borad</Breadcrumb.Item>
+          <Breadcrumb.Item>: Projects</Breadcrumb.Item>
+          </Breadcrumb>
+          <Table columns={columns} dataSource={data}/>  
+      </Content>
     </div>
   )
 }
