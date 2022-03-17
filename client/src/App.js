@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import 'antd/dist/antd';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
 // components views
 import BoardingListPage from '../src/components/BoardingPage/Board_list';
