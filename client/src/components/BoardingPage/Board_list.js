@@ -80,12 +80,12 @@ function Board_list() {
 
   //render
   return (
-    <div>
-      <Content style={{ margin : '0 16px' }}>
-          <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
-          <Table columns = {columns} dataSource = {data}/>  
-      </Content>
-    </div>
+
+    <Content style={{ margin : '0 16px' }}>
+        <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
+        <Table columns = {columns} dataSource = {data}/>  
+    </Content>
+  
   )
 }
 

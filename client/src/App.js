@@ -44,7 +44,7 @@ function App() {
                 <Route exact path="/" element = {<BoardingListPage/>}/>
                 <Route exact path="/board_list" element = {<BoardingListPage/>}/>
                 <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
-                <Route exact path="/board_detail/:id" element = {<BoardingDetailPage/>}/>
+                <Route exact path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
             </Routes>
             <Footer style={{ textAlign: 'center' }}> 게시판 이름 미정ㅎ.ㅎ ©2022 Created by Cmworld</Footer>
           </Layout>
