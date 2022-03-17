@@ -2,14 +2,40 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
+import { Button } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
+import { EditOutlined } from '@ant-design/icons';
 
 function Board_register() {
 
-  const asd = Editor.defaultConfig;
+  Editor
+    .create( document.querySelector( '#editor' ),{
+      codeBlock: {
+        languages: [
+            // Do not render the CSS class for the plain text code blocks.
+            { language: 'plaintext', label: 'Plain text', class: '' },
 
-  console.log(asd);
+            // Use the "php-code" class for PHP code blocks.
+            { language: 'php', label: 'PHP', class: 'php-code' },
+
+            // Use the "js" class for JavaScript code blocks.
+            // Note that only the first ("js") class will determine the language of the block when loading data.
+            { language: 'javascript', label: 'JavaScript', class: 'js javascript js-code' },
+
+            // Python code blocks will have the default "language-python" CSS class.
+            { language: 'python', label: 'Python' }
+        ]
+      } 
+    })
+    .then( editor => {
+        console.log( editor );
+    })
+    .catch( error => {
+        console.error( error );
+    });
+
+
   const [boardContent, setBoardContent] = useState({
     title: '',
     content: ''
@@ -63,9 +89,9 @@ function Board_register() {
             })
           }}
         />
-      <button variant="contained"
+      <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} 
         onClick={submitBoard}
-      >입력</button>
+      >등록</Button>
       </div>
     </div>
   )
