@@ -15,26 +15,43 @@ app.use(express.json());
 // npm qs라이브러리 사용
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// select 쿼리 사용
-app.get("/api/get", (req, res)=>{
-    const sqlQuery = "SELECT * FROM noticeboard";
-    db.query(sqlQuery, (err, result)=>{
+// board list
+app.get("/api/getBoardList", (req, res) => {
+    const sqlQuery = "SELECT * FROM board.noticeboard";
+    db.query(sqlQuery, (err, result) => {
         res.send(result);
     })
 })
 
-app.get("/api/read", (req, res)=>{
-    const idx = req.query.idx;
-    const sqlQuery = "SELECT * FROM noticeboard where idx = ?";
-    db.query(sqlQuery, [idx], (err,result) =>{
-        if(err){
-            res.send(result + err);
-        } else {
-            res.send(result);
-        }
-    });
+// board detail
+app.post("/api/getBoardDetail", (req, res) => {
+    const id = req.body.id;
+    const sqlQuery = "SELECT * FROM board.noticeboard WHERE idx = ?";
+    db.query(sqlQuery, [id], (err, result) => {
+        if(err) return res.status(400).send(err);
+        
+        return res.status(200).send(result);
+    })
 })
 
-app.listen(PORT, ()=>{
+// insert 쿼리 사용
+app.post("/api/insert", (req, res)=>{
+    const title = req.body.title;
+    const content = req.body.content;
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer) VALUES (?,?,'임시작성자')";
+    db.query(sqlQuery, [title,content], (err,result) => {
+        if(err){
+            res.send("error : " + err );
+        } else {
+            res.send("success");
+        }
+    })
+})
+
+
+
+
+
+app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });

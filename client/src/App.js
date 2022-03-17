@@ -2,32 +2,36 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import 'antd/dist/antd';
-import { Layout} from 'antd';
+import { Layout, Menu } from 'antd';
+
+// components views
+import BoardingListPage from '../src/components/BoardingPage/Board_list';
+import BoardingDetailPage from '../src/components/BoardingPage/Board_detail';
+import BoardingRegisterPage from '../src/components/BoardingPage/Board_register';
+
+// components layout
 import Nav from './components/layout/nav';
 import Header from './components/layout/header';
 import Footer from './components/layout/footer';
 
-// components views
-import BoardingPage from '../src/components/BoardingPage/Board_list';
-import BoardingDetail from './components/BoardingPage/Board_detail';
-
 function App() {
   // 화면 표시부분
   return ( 
-      <div> 
-        <BrowserRouter>
-          <Layout style={{ minHeight: '100vh' }}>
+    <div> 
+      <BrowserRouter>
+        <Layout style={{ minHeight: '100vh' }}>
           <Nav />
-            {/* 본문 */}
-            <Layout className="site-layout">
-              <Header />
-              <Routes>
-                  <Route path="/" element = {<BoardingPage/>}/>
-                  <Route path="/board" element = {<BoardingPage/>}/>
-                  <Route path="/board/:idx" element = {<BoardingDetail/>}/>
-                  </Routes>
-              <Footer />
-            </Layout>
+          {/* 본문 */}
+          <Layout className="site-layout">
+            <Header />
+            <Routes>
+                <Route exact path="/" element = {<BoardingListPage/>}/>
+                <Route exact path="/board_list" element = {<BoardingListPage/>}/>
+                <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
+                <Route exact path="/board_detail/:id" element = {<BoardingDetailPage/>}/>
+            </Routes>
+            <Footer />
+          </Layout>
         </Layout>
       </BrowserRouter>
     </div>
