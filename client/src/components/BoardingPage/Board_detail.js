@@ -5,7 +5,7 @@ import Axios from 'axios';
 import 'antd/dist/antd.less';
 import '../../App.css';
 import { Card, Layout, Divider, Button, Tag, Tabs } from 'antd';
-import { UnorderedListOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams  } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 
@@ -37,7 +37,7 @@ function Board_detail() {
    const onBoardUpdateHandler = (event) => {
      event.preventDefault();
  
-     navigate("/");
+     navigate("/board_update");
    }
 
    // 삭제
@@ -51,7 +51,7 @@ function Board_detail() {
       .then(response => {
           if(response.data === "success"){
             alert("삭제 완료");
-            navigate("/");
+            navigate("/"); //삭제 후 목록으로 이동
           } else {
             alert("삭제 실패");
           } 
@@ -92,7 +92,7 @@ function Board_detail() {
           </TabPane>
         </Tabs>
         <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardDeleteHandler}>삭제</Button>
-        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler}>수정</Button>
+        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
       </div>
       
       <Card style={{ width: '100%' }}>
