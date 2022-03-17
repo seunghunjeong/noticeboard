@@ -46,3 +46,7 @@
   float: right;
   margin: 16px 0;
 }
+
+.ck-editor__editable_inline {
+  min-height: 570px;
+}

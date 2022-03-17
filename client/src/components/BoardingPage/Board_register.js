@@ -31,13 +31,14 @@ function Board_register() {
   // 입력버튼
   const submitBoard = () => {
     const title = boardContent.title;
-    const content = boardContent.content;
-   
-    
+    let content = boardContent.content;
 
     if(title === ""){
       alert('제목을 입력해주세요.');
       return;
+    }
+    else if(content === ""){
+      content = "내용없음";
     }
 
     Axios.post('http://localhost:8000/api/insert', {
