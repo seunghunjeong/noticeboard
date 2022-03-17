@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "test": "nodemon index.js",
-    "dev" : "concurrently \"npm run test\" \"npm start --prefix ../client\""
+    "dev": "concurrently \"npm run test\" \"npm start --prefix ../client\""
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "mysql": "^2.18.1",
+    "node": "^17.7.1",
     "nodemon": "^2.0.15"
   },
   "description": ""
