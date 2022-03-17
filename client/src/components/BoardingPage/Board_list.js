@@ -44,7 +44,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title', 
-      render: (title, record, idx) => <Link to={'/board_detail/'+ idx}>{title}</Link>,
+      render: (title, row) => <Link to={'/board_detail/'+ row.idx}>{title}</Link>,
       align : 'left'
     },
     {
