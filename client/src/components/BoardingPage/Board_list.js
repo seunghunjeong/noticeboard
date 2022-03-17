@@ -34,7 +34,7 @@ function Board_list() {
   // table columns
   const columns = [
     {
-      title: '번호',
+      title: ' ',
       dataIndex: 'idx',
       key: 'idx',
       align : 'center',

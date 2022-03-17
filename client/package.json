@@ -17,6 +17,8 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.19.2",
     "axios": "^0.26.1",
+    "buffer": "^6.0.3",
+    "ckeditor5": "^33.0.0",
     "cors": "^2.8.5",
     "html-react-parser": "^1.4.8",
     "node-html-parser": "^5.3.3",
