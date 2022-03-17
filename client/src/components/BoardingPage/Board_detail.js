@@ -30,7 +30,7 @@ function Board_detail() {
 
     })
   }, []);
-
+  
    // 페이지 이동
    const navigate = useNavigate();
    const onBoardUpdateHandler = (event) => {
@@ -86,7 +86,6 @@ function Board_detail() {
       </Card>
       <Divider />
     </Content>
-
   )
 }
 
