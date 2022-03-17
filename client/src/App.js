@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import 'antd/dist/antd';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 
 // components views
 import BoardingListPage from '../src/components/BoardingPage/Board_list';
