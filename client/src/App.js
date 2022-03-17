@@ -8,6 +8,7 @@ import { Layout, Menu } from 'antd';
 import BoardingListPage from '../src/components/BoardingPage/Board_list';
 import BoardingDetailPage from '../src/components/BoardingPage/Board_detail';
 import BoardingRegisterPage from '../src/components/BoardingPage/Board_register';
+import BoardingUpdatePage from '../src/components/BoardingPage/Board_update';
 
 // components layout
 import Nav from './components/layout/nav';
@@ -29,6 +30,7 @@ function App() {
                 <Route exact path="/board_list" element = {<BoardingListPage/>}/>
                 <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
                 <Route exact path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
+                <Route exact path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
             </Routes>
             <Footer />
           </Layout>

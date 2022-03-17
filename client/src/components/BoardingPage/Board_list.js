@@ -34,7 +34,7 @@ function Board_list() {
   // table columns
   const columns = [
     {
-      title: '번호',
+      title: ' ',
       dataIndex: 'idx',
       key: 'idx',
       align : 'center',
@@ -81,11 +81,12 @@ function Board_list() {
 
   //render
   return (
+
     <Content style={{ margin : '0 16px' }}>
         <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
         <Table columns = {columns} dataSource = {data}/>  
     </Content>
-
+  
   )
 }
 

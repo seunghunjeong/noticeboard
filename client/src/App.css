@@ -39,3 +39,10 @@
   background: indianred;
   border-radius: 5px;
 }
+
+.main-logo{
+  width: 120px; height: 30px;
+  background: no-repeat url(../src/components/layout/cmworld-logo.png);
+  float: right;
+  margin: 16px 0;
+}
