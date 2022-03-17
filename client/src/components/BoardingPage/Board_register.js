@@ -6,45 +6,25 @@ import { Button } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic/build/ckeditor.js';
 import { EditOutlined } from '@ant-design/icons';
+import UploadFiles from './fileUpload/UploadFiles';
+
 function Board_register() {
+
+
+  const uploadReferenece = React.createRef();
+
+  async function onClickSearch() {
+    await uploadReferenece.current.upload().then(function (result) {
+      const files = result;
+      alert('저장 완료');
+    }).catch(function (err) {
+    });
+  }
 
   const [boardContent, setBoardContent] = useState({
     title: '',
     content: ''
   })
-
-  const defualtConfig = {
-    //plugins:[CodeBlock],
-    toolbar: {
-      items: [
-        'heading',
-        '|',
-        'codeBlock',
-        'bold',
-        'italic',
-        'imageUpload',
-        '|',
-        'undo',
-        'redo'
-      ]
-    },
-    language: 'kr',
-    image: {
-      toolbar: [
-        'imageTextAlternative',
-        'imageStyle:inline',
-        'imageStyle:block',
-        'imageStyle:side'
-      ]
-    },
-    table: {
-      contentToolbar: [
-        'tableColumn',
-        'tableRow',
-        'mergeTableCells'
-      ]
-    }
-  }
 
   // 에디터에서 입력값 받아오는 함수
   const getValue = e => {
@@ -79,12 +59,17 @@ function Board_register() {
 
   return (
     <div>
+
+        
+      {/* <button className="lf-button primary" onClick={onClickSearch}>저장</button> */}
+
       <div className='form-wrapper'>
         <input type='text' placeholder='제목' onChange={getValue} name='title' />
+        <UploadFiles ref={uploadReferenece} />
         <CKEditor
           editor={ClassicEditor}
           data=""
-          config={defualtConfig}
+          //config={defualtConfig}
           onChange={(event, editor) => {
             const data = editor.getData();
             setBoardContent({
