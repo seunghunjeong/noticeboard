@@ -76,6 +76,7 @@ function Board_list() {
       writer : element.writer,
       regist_date : moment(element.regist_date).format('YYYY-MM-DD')
     });
+    return data;
   });
 
   //render

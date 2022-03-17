@@ -27,11 +27,24 @@ app.get("/api/getBoardList", (req, res) => {
 app.post("/api/getBoardDetail", (req, res) => {
     const id = req.body.id;
     const sqlQuery = "SELECT * FROM board.noticeboard WHERE idx = ?";
-
     db.query(sqlQuery, [id], (err, result) => {
         if(err) return res.status(400).send(err);
         
         return res.status(200).send(result);
+    })
+})
+
+// insert 쿼리 사용
+app.post("/api/insert", (req, res)=>{
+    const title = req.body.title;
+    const content = req.body.content;
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer) VALUES (?,?,'임시작성자')";
+    db.query(sqlQuery, [title,content], (err,result) => {
+        if(err){
+            res.send("error : " + err );
+        } else {
+            res.send("success");
+        }
     })
 })
 
