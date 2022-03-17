@@ -30,7 +30,7 @@ function App() {
                 <Route exact path="/board_list" element = {<BoardingListPage/>}/>
                 <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
                 <Route exact path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
-                <Route exact path="/board_update" element = {<BoardingUpdatePage/>}/>
+                <Route exact path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
             </Routes>
             <Footer />
           </Layout>

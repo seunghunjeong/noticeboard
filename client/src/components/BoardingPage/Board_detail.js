@@ -26,7 +26,6 @@ function Board_detail() {
         } else {
           alert("상세페이지 불러오기 실패");
         } 
-
     })
   }, []);
 
@@ -37,7 +36,7 @@ function Board_detail() {
    const onBoardUpdateHandler = (event) => {
      event.preventDefault();
  
-     navigate("/board_update");
+     navigate("/board_update/" + BoardDetail.idx);
    }
 
    // 삭제
@@ -95,12 +94,12 @@ function Board_detail() {
         <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
       </div>
       
-      <Card style={{ width: '100%' }}>
-        <p className='title' style={{ fontSize : '50px' }}>{BoardDetail.title}</p>
+      <Card style={{ width: '100%', height : '170px' }}>
+        <p className='title' style={{ fontSize : '40px', marginBottom : '16px'}}>{BoardDetail.title}</p>
         <p className='writer'>{BoardDetail.writer}</p>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD. HH:mm')}</p>
       </Card>
-      <Card style={{ width: '100%', minHeight : '400px'}}>
+      <Card style={{ width: '100%', height : '70%'}}>
         <div className='content'>{ReactHtmlParser(BoardDetail.content)}</div>
       </Card>
     </Content>

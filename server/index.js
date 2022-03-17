@@ -49,10 +49,28 @@ app.post("/api/insert", (req, res)=>{
     })
 })
 
+// board update
+app.post("/api/updateBoard", (req, res) => {
+    const title = req.body.title;
+    const content = req.body.content;
+    const idx = req.body.idx;
+
+    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ? WHERE idx = ?";
+
+    db.query(sqlQuery, [title, content, idx], (err, result) => {
+        if(err){
+            res.send("error : " + err );
+        } else {
+            res.send("success");
+        }
+    })
+})
+
 // board delete
-app.post("/api/deleteBoard", (req, res)=>{
+app.post("/api/deleteBoard", (req, res) => {
     const idx = req.body.idx;
     const sqlQuery = "DELETE FROM board.noticeboard WHERE idx = ?";
+
     db.query(sqlQuery, [idx], (err, result) => {
         if(err) return res.status(400).send(err);
         
