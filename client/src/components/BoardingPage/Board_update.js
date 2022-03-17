@@ -8,8 +8,6 @@ import Editor from '@ckeditor/ckeditor5-build-classic';
 
 function Board_update() {
 
-  const asd = Editor.defaultConfig;
-
   const [BoardContent, setBoardContent] = useState({});
 
   // idx 가져오기
