@@ -16,9 +16,9 @@ function App() {
   const { SubMenu } = Menu;
   // 화면 표시부분
   return ( 
-      <div> 
-        <BrowserRouter>
-          <Layout style={{ minHeight: '100vh' }}>
+    <div> 
+      <BrowserRouter>
+        <Layout style={{ minHeight: '100vh' }}>
           <Sider>
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
@@ -36,7 +36,7 @@ function App() {
                   Setting
                 </Menu.Item>
             </Menu>
-            </Sider>
+          </Sider>
             {/* 본문 */}
             <Layout className="site-layout">
               <Header className="site-layout-background" style={{ padding: 0 }} />

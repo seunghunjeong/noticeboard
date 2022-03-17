@@ -27,13 +27,13 @@ app.get("/api/get", (req, res)=>{
 app.post("/api/insert", (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer) VALUES (?,?,'임시로넣은작성자')";
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer) VALUES (?,?,'임시작성자')";
 
     db.query(sqlQuery, [title,content], (err,result) => {
         if(err){
             res.send("error : " + err );
         } else {
-            res.send("success")
+            res.send("success");
         }
     })
 })
