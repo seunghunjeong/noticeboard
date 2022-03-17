@@ -7,7 +7,7 @@ import '../../App.css';
 import { Card, Layout, Divider, Button, Tag, Tabs } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams  } from "react-router-dom"
-
+import ReactHtmlParser from 'react-html-parser';
 
 function Board_detail() {
   // antd 변수
@@ -15,6 +15,7 @@ function Board_detail() {
   const { TabPane } = Tabs;
 
   const [BoardDetail, setBoardDetail] = useState([]);
+  const parser = require('html-react-parser');
 
   // 게시판 idx 가져오기
   let {idx} = useParams();
@@ -31,6 +32,8 @@ function Board_detail() {
     })
   }, []);
 
+  const html = BoardDetail.content;
+
    // 페이지 이동
    const navigate = useNavigate();
    const onBoardUpdateHandler = (event) => {
@@ -41,6 +44,7 @@ function Board_detail() {
 
   //date format 수정
   let moment =  require('moment');
+
   //render
   return (
 
@@ -68,25 +72,9 @@ function Board_detail() {
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD. HH:mm')}</p>
       </Card>
       <Card style={{ width: '100%', minHeight : '400px'}}>
-        <p className='content'>{BoardDetail.content}</p>
+        <div className='content'>{ReactHtmlParser(BoardDetail.content)}</div>
       </Card>
-      <Card>
-        <Tag color="#55acee">
-          Twitter
-        </Tag>
-        <Tag color="#cd201f">
-          Youtube
-        </Tag>
-        <Tag color="#3b5999">
-          Facebook
-        </Tag>
-        <Tag color="#55acee">
-          LinkedIn
-        </Tag>
-      </Card>
-      <Divider />
     </Content>
-
   )
 }
 
