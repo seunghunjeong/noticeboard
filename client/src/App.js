@@ -4,6 +4,7 @@ import './App.css';
 import 'antd/dist/antd';
 import { Layout, Menu } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 // components views
 import BoardingListPage from '../src/components/BoardingPage/Board_list';
@@ -16,9 +17,9 @@ function App() {
   const { SubMenu } = Menu;
   // 화면 표시부분
   return ( 
-      <div> 
-        <BrowserRouter>
-          <Layout style={{ minHeight: '100vh' }}>
+    <div> 
+      <BrowserRouter>
+        <Layout style={{ minHeight: '100vh' }}>
           <Sider>
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
