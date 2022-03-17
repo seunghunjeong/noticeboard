@@ -13,7 +13,10 @@ function Board_update() {
   const { TabPane } = Tabs;
 
   const [BoardContent, setBoardContent] = useState({});
-  const [BoardUpdateContent, setBoardUpdateContent] = useState({});
+  const [BoardUpdateContent, setBoardUpdateContent] = useState({
+    title: BoardContent.title,
+    content: BoardContent.content
+  });
 
   // idx 가져오기
   let {idx} = useParams();
@@ -30,12 +33,16 @@ function Board_update() {
   }, []);
 
   // 에디터에서 입력값 받아오는 함수
-  const getValue = (event) => {
+  const getTitleValue = (event) => {
 
     const {name, value} = event.target;
 
     setBoardUpdateContent({
       ...BoardUpdateContent,
+      [name]: value
+    })
+    setBoardContent({
+      ...BoardContent,
       [name]: value
     })
   }
@@ -104,7 +111,7 @@ function Board_update() {
       </div>
 
       <Card>
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' value={BoardContent.title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={BoardContent.title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
         <CKEditor
           editor = {Editor} data = {BoardContent.content}
           onChange = {(event, editor) => {
