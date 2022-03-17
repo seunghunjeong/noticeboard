@@ -10,6 +10,8 @@ import BoardingDetailPage from '../src/components/BoardingPage/Board_detail';
 import BoardingRegisterPage from '../src/components/BoardingPage/Board_register';
 import BoardingUpdatePage from '../src/components/BoardingPage/Board_update';
 
+import HomePage from '../src/components/HomePage/Home';
+
 // components layout
 import Nav from './components/layout/nav';
 import Header from './components/layout/header';
@@ -26,7 +28,7 @@ function App() {
           <Layout className="site-layout">
             <Header />
             <Routes>
-                <Route exact path="/" element = {<BoardingListPage/>}/>
+                <Route exact path="/" element = {<HomePage/>}/>
                 <Route exact path="/board_list" element = {<BoardingListPage/>}/>
                 <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
                 <Route exact path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
