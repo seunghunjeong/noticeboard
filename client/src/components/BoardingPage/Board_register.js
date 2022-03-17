@@ -2,7 +2,6 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate  } from 'react-router-dom';
-import { Button } from "@mui/material";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 
@@ -44,7 +43,7 @@ function Board_register() {
       title: title,
       content: content
     }).then(()=>{
-      navigate('/board');
+      navigate('/board_list');
       alert('등록완료');
     })
   };
@@ -64,9 +63,9 @@ function Board_register() {
             })
           }}
         />
-      <Button variant="contained"
+      <button variant="contained"
         onClick={submitBoard}
-      >입력</Button>
+      >입력</button>
       </div>
     </div>
   )
