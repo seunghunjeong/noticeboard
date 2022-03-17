@@ -15,6 +15,7 @@ app.use(express.json());
 // npm qs라이브러리 사용
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 // board list
 app.get("/api/getBoardList", (req, res) => {
     const sqlQuery = "SELECT * FROM board.noticeboard";
@@ -25,16 +26,16 @@ app.get("/api/getBoardList", (req, res) => {
 
 // board detail
 app.post("/api/getBoardDetail", (req, res) => {
-    const id = req.body.id;
+    const idx = req.body.idx;
     const sqlQuery = "SELECT * FROM board.noticeboard WHERE idx = ?";
-    db.query(sqlQuery, [id], (err, result) => {
+    db.query(sqlQuery, [idx], (err, result) => {
         if(err) return res.status(400).send(err);
         
         return res.status(200).send(result);
     })
 })
 
-// insert 쿼리 사용
+// board insert
 app.post("/api/insert", (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
@@ -47,6 +48,18 @@ app.post("/api/insert", (req, res)=>{
         }
     })
 })
+
+// board delete
+app.post("/api/deleteBoard", (req, res)=>{
+    const idx = req.body.idx;
+    const sqlQuery = "DELETE FROM board.noticeboard WHERE idx = ?";
+    db.query(sqlQuery, [idx], (err, result) => {
+        if(err) return res.status(400).send(err);
+        
+        return res.status(200).send("success");
+    })
+})
+
 
 
 

@@ -15,13 +15,11 @@ function Board_detail() {
   const { TabPane } = Tabs;
 
   const [BoardDetail, setBoardDetail] = useState([]);
-  const parser = require('html-react-parser');
 
   // 게시판 idx 가져오기
   let {idx} = useParams();
-
   useEffect(() => {
-    Axios.post('http://localhost:8000/api/getBoardDetail', {id : idx})
+    Axios.post('http://localhost:8000/api/getBoardDetail', {idx : idx})
     .then(response => {
         if(response.data){
           setBoardDetail(response.data[0])
@@ -32,15 +30,46 @@ function Board_detail() {
     })
   }, []);
 
-  const html = BoardDetail.content;
 
    // 페이지 이동
    const navigate = useNavigate();
+   // 수정
    const onBoardUpdateHandler = (event) => {
      event.preventDefault();
  
-     navigate("/");//board_update router로 이동
+     navigate("/");
    }
+
+   // 삭제
+   const onBoardDeleteHandler = (event) => {
+    event.preventDefault();
+    
+    const confirmAction = window.confirm("삭제하시겠습니까?");
+
+    if(confirmAction){ //yes 선택
+      Axios.post('http://localhost:8000/api/deleteBoard', {idx : idx})
+      .then(response => {
+          if(response.data === "success"){
+            alert("삭제 완료");
+            navigate("/");
+          } else {
+            alert("삭제 실패");
+          } 
+  
+      })
+    }
+    else {
+      event.preventDefault();
+    }
+  }
+
+  // 목록으로 이동
+  const onBoardGoHomeHandler = (event) => {
+    event.preventDefault();
+
+    navigate("/");
+  }
+
 
   //date format 수정
   let moment =  require('moment');
@@ -53,7 +82,7 @@ function Board_detail() {
         <Tabs style={{ float : 'left' }} defaultActiveKey="2">
           <TabPane
             tab={
-              <span onClick={onBoardUpdateHandler}>
+              <span onClick={onBoardGoHomeHandler}>
                 <UnorderedListOutlined />
                 목록
               </span>
@@ -62,7 +91,7 @@ function Board_detail() {
             >  
           </TabPane>
         </Tabs>
-        <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardUpdateHandler}>삭제</Button>
+        <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardDeleteHandler}>삭제</Button>
         <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler}>수정</Button>
       </div>
       

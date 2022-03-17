@@ -44,7 +44,7 @@ function Board_register() {
       title: title,
       content: content
     }).then(()=>{
-      navigate('/board');
+      navigate('/board_list');
       alert('등록완료');
     })
   };
@@ -64,9 +64,9 @@ function Board_register() {
             })
           }}
         />
-      <Button variant="contained"
+      <button variant="contained"
         onClick={submitBoard}
-      >입력</Button>
+      >입력</button>
       </div>
     </div>
   )
