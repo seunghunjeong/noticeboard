@@ -33,7 +33,7 @@ function Board_detail() {
    // 페이지 이동
    const navigate = useNavigate();
    // 수정
-   const onBoardUpdateHandler = (event) => {
+   const onGoUpdateHandler = (event) => {
      event.preventDefault();
  
      navigate("/board_update/" + BoardDetail.idx);
@@ -83,7 +83,7 @@ function Board_detail() {
             tab={
               <span onClick={onBoardGoHomeHandler}>
                 <UnorderedListOutlined />
-                목록
+                목록으로
               </span>
             }
             key="1"
@@ -91,13 +91,16 @@ function Board_detail() {
           </TabPane>
         </Tabs>
         <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardDeleteHandler}>삭제</Button>
-        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
+        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onGoUpdateHandler} icon={<EditOutlined />}>수정</Button>
       </div>
       
       <Card style={{ width: '100%', height : '170px' }}>
-        <p className='title' style={{ fontSize : '40px', marginBottom : '16px'}}>{BoardDetail.title}</p>
-        <p className='writer'>{BoardDetail.writer}</p>
-        <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD. HH:mm')}</p>
+        <p className='title' style={{ fontSize : '30px', marginBottom : '16px'}}>{BoardDetail.title}</p>
+        <p className='writer'>작성자 
+          <Divider type="vertical" /> 
+          <span style={{ fontWeight : 'bold' }}>{BoardDetail.writer}</span>
+        </p>
+        <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
       <Card style={{ width: '100%', height : '70%'}}>
         <div className='content'>{ReactHtmlParser(BoardDetail.content)}</div>
