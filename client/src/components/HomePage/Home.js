@@ -17,9 +17,10 @@ function Home() {
     const { TabPane } = Tabs;
 
     return (
-        <Content style={{ margin : '16px', height : '100%' }}>
+        <Content>
             <Calendar style={{ padding : '16px' }} onPanelChange={onPanelChange} />
         </Content>
+ 
   )
 }
 
