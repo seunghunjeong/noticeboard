@@ -66,7 +66,7 @@ function Board_detail() {
   const onBoardGoHomeHandler = (event) => {
     event.preventDefault();
 
-    navigate("/");
+    navigate("/board_list");
   }
 
 

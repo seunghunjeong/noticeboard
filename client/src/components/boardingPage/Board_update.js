@@ -12,11 +12,13 @@ function Board_update() {
   const { Content } = Layout;
   const { TabPane } = Tabs;
 
-  const [BoardContent, setBoardContent] = useState({});
-  const [BoardUpdateContent, setBoardUpdateContent] = useState({
-    title: BoardContent.title,
-    content: BoardContent.content
-  });
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  //const [BoardUpdateContent, setBoardUpdateContent] = useState({});
+  // const [BoardContent, setBoardContent] = useState({
+  //   title: '',
+  //   content: ''
+  // });
 
   // idx 가져오기
   let {idx} = useParams();
@@ -25,26 +27,25 @@ function Board_update() {
     Axios.post('http://localhost:8000/api/getBoardDetail', {idx : idx})
     .then(response => {
         if(response.data){
-          setBoardContent(response.data[0])
+          //setBoardContent(response.data[0])
+          setTitle(response.data[0].title);
+          setContent(response.data[0].content);
         } else {
           alert("상세페이지 불러오기 실패");
         } 
     })
   }, []);
 
+  
+
   // 에디터에서 입력값 받아오는 함수
   const getTitleValue = (event) => {
 
-    const {name, value} = event.target;
+    setTitle(event.currentTarget.value)  
 
-    setBoardUpdateContent({
-      ...BoardUpdateContent,
-      [name]: value
-    })
-    setBoardContent({
-      ...BoardContent,
-      [name]: value
-    })
+    // setBoardUpdateContent({
+    //   [name]: value
+    // })
   }
 
   // 이벤트 후 경로 이동할때 사용하는 hooks
@@ -53,23 +54,24 @@ function Board_update() {
   // 수정 버튼클릭시
   const onBoardUpdateHandler = (event) => {
     
-    const title = BoardUpdateContent.title;
-    let content = BoardUpdateContent.content;
+    let updateTitle = title;
+    let updateContent = content;
 
-    if(title === ""){
+    if(updateTitle === ""){
       alert('제목을 입력해주세요.');
       return;
     }
-    else if(content === ""){
-      content = "내용없음";
+    else if(updateContent === ""){
+      updateContent = "내용없음";
     }
 
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
     if(confirmAction){ //yes 선택
+      console.log(updateContent)
       Axios.post('http://localhost:8000/api/updateBoard', {
-        title : title,
-        content: content,
+        title : updateTitle,
+        content: updateContent,
         idx : idx
       }).then(() => {
         navigate('/board_list');
@@ -84,7 +86,7 @@ function Board_update() {
   const onBoardGoHomeHandler = (event) => {
     event.preventDefault();
 
-    navigate("/");
+    navigate("/board_list");
   }
 
   //CKeditor 커스텀
@@ -111,15 +113,12 @@ function Board_update() {
       </div>
 
       <Card>
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={BoardContent.title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
         <CKEditor
-          editor = {Editor} data = {BoardContent.content}
+          editor = {Editor} data = {content}
           onChange = {(event, editor) => {
             const data = editor.getData();
-            setBoardUpdateContent({
-              ...BoardUpdateContent,
-              content: data
-            })
+            setContent(data);
           }}
         />
       </Card>

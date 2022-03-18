@@ -1,8 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './App.css';
-import 'antd/dist/antd';
-import { Layout, Menu } from 'antd';
 
 // components views
 import BoardingListPage from './components/boardingPage/Board_list';

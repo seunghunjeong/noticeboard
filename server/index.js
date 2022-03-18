@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
 const db = require('./config/db');
+const mysql = require('mysql')
 const bodyParser = require('body-parser');
-const { urlencoded } = require('body-parser');
+const cookieParser = require("cookie-parser");
 // node.js의 포트 설정. 기본 포트는 8000.
 const PORT = process.env.port || 8000;
 const cors = require('cors');
@@ -12,10 +13,55 @@ const cors = require('cors');
 app.use(cors());
 // express.json 사용
 app.use(express.json());
-// npm qs라이브러리 사용
+// application/json
+app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// login
+app.post("/api/user/login", (req, res) => {
 
+    // id, pw 선언
+    const id = req.query.id
+    const pw = req.query.pw
+    
+    // 입력된 id 와 동일한 id 가 mysql 에 있는 지 확인
+    const SQLconfirmId = 'SELECT COUNT(*) AS result FROM board.member WHERE id = ?'
+
+    db.query(SQLconfirmId, id, (err, data) => {
+        if(!err) {
+        	// 결과값이 1보다 작다면(동일한 id 가 없다면)
+            if(data[0].result < 1) {
+                res.send({ 'msg': '입력하신 id 가 일치하지 않습니다.'})
+            } else { // 동일한 id 가 있으면 비밀번호 일치 확인
+                const SQLconfirmPw = `SELECT 
+                                CASE (SELECT COUNT(*) FROM board.member WHERE id = ? AND password = ?)
+                                    WHEN '0' THEN NULL
+                                    ELSE (SELECT 
+                                        id FROM board.member WHERE id = ? AND password = ?)
+                                END AS userId
+                                , CASE (SELECT COUNT(*) FROM board.member WHERE id = ? AND password = ?)
+                                    WHEN '0' THEN NULL
+                                    ELSE (SELECT password FROM board.member WHERE id = ? AND password = ?)
+                                END AS userPw`;
+
+                // sql 란에 필요한 parameter 값을 순서대로 기재
+                const params = [id, pw, id, pw, id, pw, id, pw]
+                
+                db.query(SQLconfirmPw, params, (err, data) => {
+                    if(!err) {
+                        res.send(data[0])
+                    } else {
+                        res.send(err)
+                    }
+                })
+            }
+        } else {
+            res.send(err)
+        }
+    })
+})
+  
 // board list
 app.get("/api/getBoardList", (req, res) => {
     const sqlQuery = "SELECT * FROM board.noticeboard";
