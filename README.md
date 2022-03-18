@@ -1,11 +1,11 @@
 # client
 
-npm install
+npm install \
 npm start
 
 ## server
 
-npm init
+npm init \
 npm run dev
 
 # `npm start`
@@ -34,3 +34,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## `npm run dev`
 
 nodemon으로 서버 구동시키기
+
+### CKEditor plugin 설치하기
+
+..\noticeboard\client\node_modules\@ckeditor\ckeditor5-build-classic \
+etc폴더에있는 압축파일을 위 경로에 붙여 넣는다.
