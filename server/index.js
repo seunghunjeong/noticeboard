@@ -7,7 +7,9 @@ const cookieParser = require("cookie-parser");
 // node.js의 포트 설정. 기본 포트는 8000.
 const PORT = process.env.port || 8000;
 const cors = require('cors');
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());
@@ -18,50 +20,58 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// login
-app.post("/api/user/login", (req, res) => {
+// 파일저장경로, 폴더가없다면 생성함
+const directory = fs.existsSync('C:/uploadtest');
+if(!directory) fs.mkdirSync('C:/uploadtest');
 
-    // id, pw 선언
-    const id = req.query.id
-    const pw = req.query.pw
-    
-    // 입력된 id 와 동일한 id 가 mysql 에 있는 지 확인
-    const SQLconfirmId = 'SELECT COUNT(*) AS result FROM board.member WHERE id = ?'
+//diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'C:/uploadtest');
+    },
+    filename: function (req, file, cb) {
+        cb(null, getFile(file));
+    }
+});
 
-    db.query(SQLconfirmId, id, (err, data) => {
-        if(!err) {
-        	// 결과값이 1보다 작다면(동일한 id 가 없다면)
-            if(data[0].result < 1) {
-                res.send({ 'msg': '입력하신 id 가 일치하지 않습니다.'})
-            } else { // 동일한 id 가 있으면 비밀번호 일치 확인
-                const SQLconfirmPw = `SELECT 
-                                CASE (SELECT COUNT(*) FROM board.member WHERE id = ? AND password = ?)
-                                    WHEN '0' THEN NULL
-                                    ELSE (SELECT 
-                                        id FROM board.member WHERE id = ? AND password = ?)
-                                END AS userId
-                                , CASE (SELECT COUNT(*) FROM board.member WHERE id = ? AND password = ?)
-                                    WHEN '0' THEN NULL
-                                    ELSE (SELECT password FROM board.member WHERE id = ? AND password = ?)
-                                END AS userPw`;
+// 파일명 셋팅
+function getFile(file) {
+    let oriFile = file.originalname;
+    let ext = path.extname(oriFile);
+    let name = path.basename(oriFile, ext);
+    let rnd = Math.floor(Math.random() * 90) + 10; // 10 ~ 99
+    return Date.now() + '-' + rnd + '-' + name + ext;
+}
 
-                // sql 란에 필요한 parameter 값을 순서대로 기재
-                const params = [id, pw, id, pw, id, pw, id, pw]
-                
-                db.query(SQLconfirmPw, params, (err, data) => {
-                    if(!err) {
-                        res.send(data[0])
-                    } else {
-                        res.send(err)
-                    }
-                })
-            }
-        } else {
-            res.send(err)
+let upload = multer({
+    storage: storage
+});
+
+
+
+// board insert
+app.post("/api/insert", upload.any(), (req, res)=>{
+    const title = req.body.title;
+    const content = req.body.content;
+    let filePath = "";
+
+    for( let i = 0; i< req.files.length; i++){
+        filePath = filePath.concat(req.files[i].path);
+        if(i !== req.files.length - 1){
+            filePath = filePath + ',';
         }
+    }
+    
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,'임시작성자',?)";
+    db.query(sqlQuery, [title,content,filePath], (err,result) => {
+        if(err) return res.status(400).send(err);
+
+        return res.status(200).send(result);
     })
+
+
 })
-  
+
 // board list
 app.get("/api/getBoardList", (req, res) => {
     const sqlQuery = "SELECT * FROM board.noticeboard";
@@ -81,19 +91,6 @@ app.post("/api/getBoardDetail", (req, res) => {
     })
 })
 
-// board insert
-app.post("/api/insert", (req, res)=>{
-    const title = req.body.title;
-    const content = req.body.content;
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer) VALUES (?,?,'임시작성자')";
-    db.query(sqlQuery, [title,content], (err,result) => {
-        if(err){
-            res.send("error : " + err );
-        } else {
-            res.send("success");
-        }
-    })
-})
 
 // board update
 app.post("/api/updateBoard", (req, res) => {
