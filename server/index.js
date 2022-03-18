@@ -8,6 +8,7 @@ const PORT = process.env.port || 8000;
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());
@@ -15,6 +16,10 @@ app.use(cors());
 app.use(express.json());
 // npm qs라이브러리 사용
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// 파일저장경로, 폴더가없다면 생성함
+const directory = fs.existsSync('C:/uploadtest');
+if(!directory) fs.mkdirSync('C:/uploadtest');
 
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
