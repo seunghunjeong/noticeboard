@@ -2,39 +2,38 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css';
 import 'antd/dist/antd';
-import { Layout } from 'antd';
+import { Layout, Menu } from 'antd';
 
 // components views
-import BoardingListPage from '../src/components/BoardingPage/Board_list';
-import BoardingDetailPage from '../src/components/BoardingPage/Board_detail';
-import BoardingRegisterPage from '../src/components/BoardingPage/Board_register';
-import BoardingUpdatePage from '../src/components/BoardingPage/Board_update';
+import BoardingListPage from './components/boardingPage/Board_list';
+import BoardingDetailPage from './components/boardingPage/Board_detail';
+import BoardingRegisterPage from './components/boardingPage/Board_register';
+import BoardingUpdatePage from './components/boardingPage/Board_update';
+
+import HomePage from './components/homePage/Home';
+import LoginPage from '../src/components/loginPage/Login';
 
 // components layout
-import Nav from './components/layout/nav';
-import Header from './components/layout/header';
-import Footer from './components/layout/footer';
+//import Nav from './components/layout/nav';
+//import Header from './components/layout/header';
+//import Footer from './components/layout/footer';
+import MainLayout from './components/layout/MainLayout';
 
 function App() {
   // 화면 표시부분
   return ( 
     <div> 
-      <BrowserRouter>
-        <Layout style={{ minHeight: '100vh' }}>
-          <Nav />
-          {/* 본문 */}
-          <Layout className="site-layout">
-            <Header />
-            <Routes>
-                <Route exact path="/" element = {<BoardingListPage/>}/>
-                <Route exact path="/board_list" element = {<BoardingListPage/>}/>
-                <Route exact path="/board_register" element = {<BoardingRegisterPage/>}/>
-                <Route exact path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
-                <Route exact path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
-            </Routes>
-            <Footer />
-          </Layout>
-        </Layout>
+      <BrowserRouter>   
+          <Routes>
+            <Route element = {<MainLayout/>}>
+              <Route path="/" element = {<HomePage/>}/>
+              <Route path="/board_list" element = {<BoardingListPage/>}/>
+              <Route path="/board_register" element = {<BoardingRegisterPage/>}/>
+              <Route path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
+              <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
+            </Route>
+            <Route path="/login" element = {<LoginPage/>}/>
+          </Routes>
       </BrowserRouter>
     </div>
   );

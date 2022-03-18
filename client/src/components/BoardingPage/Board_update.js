@@ -2,13 +2,21 @@ import React from 'react'
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from "antd";
+import { Card, Layout, Divider, Button, Input, Tabs } from 'antd';
+import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 
 function Board_update() {
+  // antd 변수
+  const { Content } = Layout;
+  const { TabPane } = Tabs;
 
   const [BoardContent, setBoardContent] = useState({});
+  const [BoardUpdateContent, setBoardUpdateContent] = useState({
+    title: BoardContent.title,
+    content: BoardContent.content
+  });
 
   // idx 가져오기
   let {idx} = useParams();
@@ -25,10 +33,17 @@ function Board_update() {
   }, []);
 
   // 에디터에서 입력값 받아오는 함수
-  const getValue = (event) => {
+  const getTitleValue = (event) => {
+
+    const {name, value} = event.target;
+
+    setBoardUpdateContent({
+      ...BoardUpdateContent,
+      [name]: value
+    })
     setBoardContent({
       ...BoardContent,
-      title: event.target.value
+      [name]: value
     })
   }
 
@@ -38,12 +53,15 @@ function Board_update() {
   // 수정 버튼클릭시
   const onBoardUpdateHandler = (event) => {
     
-    const title = BoardContent.title;
-    const content = BoardContent.content;
+    const title = BoardUpdateContent.title;
+    let content = BoardUpdateContent.content;
 
     if(title === ""){
       alert('제목을 입력해주세요.');
       return;
+    }
+    else if(content === ""){
+      content = "내용없음";
     }
 
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
@@ -62,24 +80,51 @@ function Board_update() {
     }
   };
 
+  // 목록으로 이동
+  const onBoardGoHomeHandler = (event) => {
+    event.preventDefault();
+
+    navigate("/");
+  }
+
+  //CKeditor 커스텀
+
+  
   //render
   return (
-    <div>
-      <div className='form-wrapper'>
-        <input type='text' placeholder='제목을 입력해주세요.' onChange={getValue} name='title' value={BoardContent.title} />
+    <Content style={{ margin : '16px 16px 0 16px', height : '100%' }}>
+      <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
+        <Tabs style={{ float : 'left' }} defaultActiveKey="2">
+          <TabPane
+            tab={
+              <span onClick={onBoardGoHomeHandler}>
+                <UnorderedListOutlined />
+                목록으로
+              </span>
+            }
+            key="1"
+            >  
+          </TabPane>
+        </Tabs>
+        <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
+        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
+      </div>
+
+      <Card>
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={BoardContent.title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
         <CKEditor
           editor = {Editor} data = {BoardContent.content}
           onChange = {(event, editor) => {
             const data = editor.getData();
-            setBoardContent({
-              ...BoardContent,
+            setBoardUpdateContent({
+              ...BoardUpdateContent,
               content: data
             })
           }}
         />
-      <Button type="primary" onClick = {onBoardUpdateHandler}>수정</Button>
-      </div>
-    </div>
+      </Card>
+    </Content>
+
   )
 }
 
