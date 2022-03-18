@@ -2,21 +2,22 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from "antd";
+import { Card, Layout, Divider, Button, Input, Tabs } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
-import { EditOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
+
 
 function Board_register() {
-
+  const { Content } = Layout;
+  const { TabPane } = Tabs;
   const [selectedFiles, setSelectedFiles] = useState(undefined);
 
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
-    console.log(selectedFiles);
   };
 
-  
+
   const [boardContent, setBoardContent] = useState({
     title: '',
     content: ''
@@ -48,20 +49,16 @@ function Board_register() {
       content = "내용없음";
     }
 
-    if(selectedFiles) {
+    if (selectedFiles) {
       for (const key of Object.keys(selectedFiles)) {
         formData.append('file', selectedFiles[key]);
-        console.log(formData.get('file'));
       }
     }
 
     formData.append('title', title);
-    formData.append('content',content);
-    
-    console.log(formData.get('title'));
-    console.log(formData.get('content'));
-    console.log(formData.get('file'));
-    Axios.post('http://localhost:8000/api/insert',formData,{
+    formData.append('content', content);
+
+    Axios.post('http://localhost:8000/api/insert', formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }
@@ -71,35 +68,60 @@ function Board_register() {
     })
   };
 
+
+  const onBoardGoHomeHandler = (event) => {
+    event.preventDefault();
+
+    navigate("/board_list");
+  }
+
+
   return (
     <div>
-      <div className='form-wrapper'>
-        <input type='text' placeholder='제목' onChange={getValue} name='title' />
-        <CKEditor
-          editor={Editor}
-          data=""
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            setBoardContent({
-              ...boardContent,
-              content: data
-            })
-          }}
-        />
-
-        <div className="form-group">
-          <label className="btn btn-default">
-            <input type="file" onChange={selectFile} multiple />
-          </label>
+      <Content style={{ margin: '16px 16px 0 16px', height: '100%' }}>
+        <div style={{ marginBottom: '16px', position: 'relative', height: '32px' }}>
+          <Tabs style={{ float: 'left' }} defaultActiveKey="2">
+            <TabPane
+              tab={
+                <span onClick={onBoardGoHomeHandler}>
+                  <UnorderedListOutlined />
+                  목록으로
+                </span>
+              }
+              key="1"
+            >
+            </TabPane>
+          </Tabs>
+          <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
+          <Button style={{  marginRight: '10px', float: 'right' }} type="primary"
+            icon={<EditOutlined />}
+            onClick={() => {
+              submitBoard()
+            }}
+          >등록</Button>
         </div>
-        
-        <Button style={{ margin: '16px 0', float: 'right' }} type="primary"
-          icon={<EditOutlined />}
-          onClick={() => {
-            submitBoard()
-          }}
-        >등록</Button>
-      </div>
+        <Card>
+          <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ fontSize: '30px', marginBottom: '16px' }} />
+          <CKEditor
+            editor={Editor}
+            data=""
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setBoardContent({
+                ...boardContent,
+                content: data
+              })
+            }}
+          />
+
+          <div className="form-group">
+            <label className="btn btn-default">
+              <input type="file" onChange={selectFile} />
+            </label>
+          </div>
+          
+        </Card>
+      </Content>
     </div>
   )
 }

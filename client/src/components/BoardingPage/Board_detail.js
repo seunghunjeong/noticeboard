@@ -29,7 +29,6 @@ function Board_detail() {
     })
   }, []);
 
-
    // 페이지 이동
    const navigate = useNavigate();
    // 수정
@@ -50,7 +49,7 @@ function Board_detail() {
       .then(response => {
           if(response.data === "success"){
             alert("삭제 완료");
-            navigate("/"); //삭제 후 목록으로 이동
+            navigate("/board_list"); //삭제 후 목록으로 이동
           } else {
             alert("삭제 실패");
           } 
