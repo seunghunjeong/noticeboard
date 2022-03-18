@@ -4,7 +4,7 @@ import Axios from 'axios';
 import { useEffect, useState} from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, Button } from 'antd';
+import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from "react-router-dom"
 
@@ -12,6 +12,8 @@ function Board_list() {
   
   // antd 변수
   const { Content } = Layout;
+  const { Search } = Input;
+  const { Option } = Select;
 
   // 내용 저장
   const [viewContent, setViewContent] = useState([]);
@@ -86,12 +88,38 @@ function Board_list() {
     console.log('params', pagination, filters, sorter, extra);
   }
 
+  // 게시글 검색
+  const onChangeSearchFilter = value => console.log(value);
+  const onSearch = value => console.log(value);
+
   //render
   return (
 
-    <Content style={{ margin : '0 16px' }}>
-        <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
-        <Table columns = {columns} dataSource = {data} onChange={onChange}/>  
+    <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
+      <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
+        <Breadcrumb style={{ float: 'left' }}>
+          <Breadcrumb.Item>Board</Breadcrumb.Item>
+          <Breadcrumb.Item>project</Breadcrumb.Item>
+        </Breadcrumb>
+        <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
+      </div>
+      
+      <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
+             pagination={{position: ["bottomCenter"]}}
+      /> 
+      <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
+        <Select
+          placeholder="검색"
+          optionFilterProp="children"
+          onChange={onChangeSearchFilter}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }>
+          <Option value="writer">작성자</Option>
+          <Option value="title">제목</Option>
+        </Select>
+        <Search placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} />
+      </div>
     </Content>
   
   )
