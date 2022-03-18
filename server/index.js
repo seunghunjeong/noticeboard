@@ -74,7 +74,7 @@ app.post("/api/insert", upload.any(), (req, res)=>{
 
 // board list
 app.get("/api/getBoardList", (req, res) => {
-    const sqlQuery = "SELECT * FROM board.noticeboard";
+    const sqlQuery = "SELECT * FROM board.noticeboard order by regist_date desc";
     db.query(sqlQuery, (err, result) => {
         res.send(result);
     })
@@ -91,16 +91,16 @@ app.post("/api/getBoardDetail", (req, res) => {
     })
 })
 
-
 // board update
-app.post("/api/updateBoard", (req, res) => {
+app.post("/api/updateBoard", upload.any(), (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const idx = req.body.idx;
+    let filePath = "";
 
-    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ? WHERE idx = ?";
+    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ? WHERE idx = ?";
 
-    db.query(sqlQuery, [title, content, idx], (err, result) => {
+    db.query(sqlQuery, [title, content, filePath, idx], (err, result) => {
         if(err){
             res.send("error : " + err );
         } else {

@@ -2,19 +2,22 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from "antd";
+import { Card, Layout, Button, Input, Tabs } from 'antd';
+import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
-import { EditOutlined } from '@ant-design/icons';
 
 function Board_register() {
+
+  // antd 변수
+  const { Content } = Layout;
+  const { TabPane } = Tabs;
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
 
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
   };
-
   
   const [boardContent, setBoardContent] = useState({
     title: '',
@@ -65,11 +68,41 @@ function Board_register() {
     })
   };
 
+  // 목록으로 이동
+  const onBoardGoHomeHandler = (event) => {
+    event.preventDefault();
+
+    navigate("/board_list");
+  }
+
   return (
-    <div>
-      <div className='form-wrapper'>
-        <input type='text' placeholder='제목' onChange={getValue} name='title' />
-        <CKEditor
+    <Content style={{ margin : '16px 16px 0 16px', height : '100%' }}>
+    <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
+      <Tabs style={{ float : 'left' }} defaultActiveKey="2">
+        <TabPane
+          tab={
+            <span onClick={onBoardGoHomeHandler}>
+              <UnorderedListOutlined />
+              목록으로
+            </span>
+          }
+          key="1"
+          >  
+        </TabPane>
+      </Tabs>
+     
+      <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
+      <Button style={{ marginRight : '10px', float: 'right' }} type="primary"
+          icon={<EditOutlined />}
+          onClick={() => {
+            submitBoard()
+          }}
+      >등록</Button>
+    </div>
+
+    <Card>
+      <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' value="" style={{ fontSize : '30px', marginBottom : '16px'}}/>
+      <CKEditor
           editor={Editor}
           data=""
           onChange={(event, editor) => {
@@ -80,21 +113,13 @@ function Board_register() {
             })
           }}
         />
-
-        <div className="form-group">
-          <label className="btn btn-default">
-            <input type="file" onChange={selectFile} multiple />
-          </label>
-        </div>
-        
-        <Button style={{ margin: '16px 0', float: 'right' }} type="primary"
-          icon={<EditOutlined />}
-          onClick={() => {
-            submitBoard()
-          }}
-        >등록</Button>
-      </div>
+    </Card>
+    <div className="form-group">
+      <label className="btn btn-default">
+        <input type="file" onChange={selectFile} multiple />
+      </label>
     </div>
+  </Content>
   )
 }
 

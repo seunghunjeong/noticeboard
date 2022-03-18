@@ -17,9 +17,9 @@ function Home() {
     const { TabPane } = Tabs;
 
     return (
-        <Content>
-            <Calendar style={{ padding : '16px' }} onPanelChange={onPanelChange} />
-        </Content>
+        
+            <Calendar style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }} fullscreen={true} onPanelChange={onPanelChange} />
+       
  
   )
 }

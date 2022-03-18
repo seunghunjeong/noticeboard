@@ -38,7 +38,8 @@ function Board_list() {
       dataIndex: 'idx',
       key: 'idx',
       align : 'center',
-      width : 100
+      width : 100,
+      sorter: (a, b) => a.idx - b.idx,
     },
     {
       title: '제목',
@@ -59,7 +60,8 @@ function Board_list() {
       dataIndex: 'regist_date',
       key: 'regist_date',
       align : 'center',
-      width : 200
+      width : 200,
+      sorter: true
     }
   ];
 
@@ -79,12 +81,17 @@ function Board_list() {
     return data;
   });
 
+  // table method
+  function onChange(pagination, filters, sorter, extra) {
+    console.log('params', pagination, filters, sorter, extra);
+  }
+
   //render
   return (
 
     <Content style={{ margin : '0 16px' }}>
         <Button style={{  margin : '16px 0', float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
-        <Table columns = {columns} dataSource = {data}/>  
+        <Table columns = {columns} dataSource = {data} onChange={onChange}/>  
     </Content>
   
   )

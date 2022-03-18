@@ -76,7 +76,7 @@ function Board_detail() {
   //render
   return (
 
-    <Content style={{ margin : '16px', height : '100%' }}>
+    <Content style={{ margin : '16px', height : 'calc(100% - 134px)' }}>
       <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Tabs style={{ float : 'left' }} defaultActiveKey="2">
           <TabPane
@@ -102,8 +102,14 @@ function Board_detail() {
         </p>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
-      <Card style={{ width: '100%', height : '70%'}}>
+      <Card style={{ width: '100%', height : 'calc(100% - 202px)' }}>
         <div className='content'>{ReactHtmlParser(BoardDetail.content)}</div>
+        <div style={{ width: '100%', height : '100px', position : 'absolute', bottom : '0', left : '0' }}>
+          <Divider orientation="left" style={{ fontSize : '12px', fontWeight : 'bold' }}>첨부파일</Divider>
+          <Tag style={{ marginLeft : '10px'}}>
+            <a href="#">첨부파일</a>
+          </Tag>
+        </div>
       </Card>
     </Content>
   )
