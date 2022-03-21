@@ -10,6 +10,8 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const mime = require('mime');
+var iconvLite = require('iconv-lite');
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());
@@ -128,9 +130,49 @@ app.post("/api/deleteBoard", (req, res) => {
     })
 })
 
+// file Download
+app.post("/api/fileDownload", (req, res)=> {
+    const filePath = req.body.filePath;
+    const fileName = req.body.fileName;
 
+    try{
+        // 해당 파일이 존재하는지 검사
+        if(fs.existsSync(filePath)) {
+            // 파일 타입 가져오기
+            const mimetype = mime.getType(filePath);
+            res.setHeader('Content-Disposition', `attachment; filename=` + getDownloadFilename(req, fileName));
+            res.setHeader('Content-type', mimetype);
+            // 파일 전송
+            let fileStream = fs.createReadStream(filePath);
+            fileStream.pipe(res);
+        } else {
+            res.send(false);
+            return;
+        }
+ 
+    } catch (e) {
+        console.log(e);
+        res.send('파일을 다운로드하는 중 에러가 발생하였습니다.');
+        return;
+    }
+})
 
+// 한글파일명 인코딩
+function getDownloadFilename(req, filename) {
+    var header = req.headers['user-agent'];
+    
+    if (header.includes("MSIE") || header.includes("Trident")) { 
+        return encodeURIComponent(filename).replace(/\\+/gi, "%20");
+    } else if (header.includes("Chrome")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    } else if (header.includes("Opera")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    } else if (header.includes("Firefox")) {
+        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
+    }
 
+    return filename;
+}
 
 
 app.listen(PORT, () => {
