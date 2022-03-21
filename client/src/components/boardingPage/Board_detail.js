@@ -99,10 +99,10 @@ function Board_detail() {
       
       <Card style={{ width: '100%', height : '170px' }}>
         <p className='title' style={{ fontSize : '30px', marginBottom : '16px'}}>{BoardDetail.title}</p>
-        <p className='writer'>작성자 
+        <div className='writer'>작성자 
           <Divider type="vertical" /> 
           <span style={{ fontWeight : 'bold' }}>{BoardDetail.writer}</span>
-        </p>
+        </div>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
       <Card style={{ width: '100%', height : '70%'}}>

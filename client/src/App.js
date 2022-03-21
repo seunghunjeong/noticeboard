@@ -9,11 +9,9 @@ import BoardingUpdatePage from './components/boardingPage/Board_update';
 
 import HomePage from './components/homePage/Home';
 import LoginPage from '../src/components/loginPage/Login';
+import JoinPage from '../src/components/joinPage/Join';
 
 // components layout
-//import Nav from './components/layout/nav';
-//import Header from './components/layout/header';
-//import Footer from './components/layout/footer';
 import MainLayout from './components/layout/MainLayout';
 
 function App() {
@@ -30,6 +28,7 @@ function App() {
               <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
             </Route>
             <Route path="/login" element = {<LoginPage/>}/>
+            <Route path="/sign-up" element = {<JoinPage/>}/>
           </Routes>
       </BrowserRouter>
     </div>

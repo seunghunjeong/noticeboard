@@ -1,24 +1,30 @@
 const express = require('express');
 const app = express();
-const db = require('./config/db');
-const mysql = require('mysql')
-const bodyParser = require('body-parser');
-const cookieParser = require("cookie-parser");
-// node.js의 포트 설정. 기본 포트는 8000.
-const PORT = process.env.port || 8000;
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
+// data base
+const db = require('./config/db');
+
+// add routes
+const loginRouter = require('./routers/loginRouter');
+app.use('/api', loginRouter);
+
+// set up port
+const PORT = process.env.port || 8000;
+
+// use set 
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// file upload
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// 크롬에서 cors 에러 방지용
-app.use(cors());
-// express.json 사용
-app.use(express.json());
-// application/json
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // 파일저장경로, 폴더가없다면 생성함
 const directory = fs.existsSync('C:/uploadtest');
@@ -46,7 +52,6 @@ function getFile(file) {
 let upload = multer({
     storage: storage
 });
-
 
 
 // board insert
@@ -132,7 +137,7 @@ app.post("/api/deleteBoard", (req, res) => {
 
 
 
-
+// run server
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });

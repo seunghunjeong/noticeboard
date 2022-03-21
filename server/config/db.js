@@ -15,7 +15,7 @@ db.connect((err) => {
         db.end();
         throw err;
     } else {
-        console.log("DB 접속 성공");
+        console.log("mysql DB connection!");
     }
 });
 

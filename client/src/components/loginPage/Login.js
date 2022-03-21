@@ -1,15 +1,11 @@
 import { Axios } from 'axios';
-//import { response } from 'express';
 import React, {useState} from 'react';
-import { useDispatch } from "react-redux";
-// import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
-// import Auth from '../../hoc/auth'
+
 
 function LoginPage(props) {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
@@ -32,7 +28,6 @@ function LoginPage(props) {
             id : Id,
             pw : Password
         }
-
        
         // dispatch(loginUser(body))
         // .then(response => {
@@ -45,7 +40,7 @@ function LoginPage(props) {
         //     }
         // });
 
-        Axios.post('http://localhost:8000/api/user/login', body)
+        Axios.post('http://localhost:8000/api/login', body)
         .then(response => {
           if(response){
               navigate("/");
