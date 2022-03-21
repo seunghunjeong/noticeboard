@@ -19,7 +19,7 @@ function Board_list() {
   const [viewContent, setViewContent] = useState([]);
   
   // select query문 불러오기.
-  useEffect(() => {
+  const getViewContenmt = useEffect(() => {
     Axios.get('http://localhost:8000/api/getBoardList').then((response) => {
       setViewContent(response.data);
     })
@@ -88,9 +88,25 @@ function Board_list() {
     console.log('params', pagination, filters, sorter, extra);
   }
 
+  // 검색 param
+  const [searchContent, setSearchContent] = useState({
+    filter: '',
+    keyword: ''
+  })
+
   // 게시글 검색
-  const onChangeSearchFilter = value => console.log(value);
-  const onSearch = value => console.log(value);
+  const onChangeSearchFilter = value => {
+    setSearchContent({
+      ...searchContent,
+      filter : value
+    })
+  };
+  const onSearch = value => {
+    setSearchContent({
+      ...searchContent,
+      keyword : value
+    })
+  };
 
   //render
   return (
@@ -109,7 +125,7 @@ function Board_list() {
       /> 
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
-          placeholder="검색"
+          placeholder="검색 조건"
           optionFilterProp="children"
           onChange={onChangeSearchFilter}
           filterOption={(input, option) =>
