@@ -9,6 +9,10 @@ import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams  } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 
+// codeblock
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css';
+
 function Board_detail() {
   // antd 변수
   const { Content } = Layout;
@@ -22,13 +26,15 @@ function Board_detail() {
     Axios.post('http://localhost:8000/api/getBoardDetail', {idx : idx})
     .then(response => {
         if(response.data){
-          setBoardDetail(response.data[0])
+          setBoardDetail(response.data[0]);
+         
+        // codeblock 적용
+        hljs.highlightAll();
         } else {
           alert("상세페이지 불러오기 실패");
         } 
     })
   }, []);
-
 
    // 페이지 이동
    const navigate = useNavigate();
@@ -50,7 +56,7 @@ function Board_detail() {
       .then(response => {
           if(response.data === "success"){
             alert("삭제 완료");
-            navigate("/board_list"); //삭제 후 목록으로 이동
+            navigate("/"); //삭제 후 목록으로 이동
           } else {
             alert("삭제 실패");
           } 
@@ -69,14 +75,11 @@ function Board_detail() {
     navigate("/board_list");
   }
 
-
   //date format 수정
   let moment =  require('moment');
-
   //render
   return (
-
-    <Content style={{ margin : '16px', height : 'calc(100% - 134px)' }}>
+    <Content style={{ margin : '16px', height : '100%' }}>
       <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Tabs style={{ float : 'left' }} defaultActiveKey="2">
           <TabPane
@@ -102,13 +105,9 @@ function Board_detail() {
         </p>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
-      <Card style={{ width: '100%', height : 'calc(100% - 202px)' }}>
-        <div className='content'>{ReactHtmlParser(BoardDetail.content)}</div>
-        <div style={{ width: '100%', height : '100px', position : 'absolute', bottom : '0', left : '0' }}>
-          <Divider orientation="left" style={{ fontSize : '12px', fontWeight : 'bold' }}>첨부파일</Divider>
-          <Tag style={{ marginLeft : '10px'}}>
-            <a href="#">첨부파일</a>
-          </Tag>
+      <Card style={{ width: '100%', height : '70%'}}>
+        <div  className='content'>
+            {ReactHtmlParser(BoardDetail.content)}
         </div>
       </Card>
     </Content>
