@@ -11,7 +11,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const mime = require('mime');
-var iconvLite = require('iconv-lite');
+const iconvLite = require('iconv-lite');
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());

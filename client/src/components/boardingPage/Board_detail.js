@@ -6,7 +6,7 @@ import 'antd/dist/antd.less';
 import '../../App.css';
 import { Card, Layout, Divider, Button, Tag, Tabs } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
-import { useNavigate, Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 
 // codeblock
@@ -99,9 +99,9 @@ function Board_detail() {
           return;
         }
 
-        let oriFileName = BoardDetail.file_path.split("\\");
-        let blob = new Blob([response.data]);
-        let link = document.createElement('a');
+        const oriFileName = BoardDetail.file_path.split("\\");
+        const blob = new Blob([response.data]);
+        const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = oriFileName[2];
         link.click();
@@ -110,9 +110,10 @@ function Board_detail() {
   
   const FilePath = () => {
     let fileName = BoardDetail.file_path;
+    console.log(BoardDetail);
     let fileNameArr = [];
     // 첨부파일 원본이름 표시
-    if (fileName == undefined) {
+    if (fileName == null) {
       fileName = "첨부된 파일이 없습니다.";
     } else {
       fileNameArr = fileName.split("\\");
