@@ -53,13 +53,10 @@ let upload = multer({
 app.post("/api/insert", upload.any(), (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
-    let filePath = "";
+    let filePath = null;
 
-    for( let i = 0; i< req.files.length; i++){
-        filePath = filePath.concat(req.files[i].path);
-        if(i !== req.files.length - 1){
-            filePath = filePath + ',';
-        }
+    if(req.files.length === 1){ 
+        filePath = req.files[0].path;
     }
     
     const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,'임시작성자',?)";
@@ -97,6 +94,17 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
     const content = req.body.content;
     const idx = req.body.idx;
     let filePath = "";
+
+    // 원래 등록되있던 파일명을 받아옴
+    let filePath = req.body.filePath; 
+
+    // 새롭게 등록된 파일이 있다면 새로 등록된 파일의 경로를 받아옴
+    if(req.files.length === 1){ 
+        filePath = req.files[0].path;
+    }
+
+    // 새롭게 등록된 파일이 없으면서 원래 등록되 있던 파일도 없는경우 
+    if(filePath === "null") filePath = null;
 
     const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ? WHERE idx = ?";
 

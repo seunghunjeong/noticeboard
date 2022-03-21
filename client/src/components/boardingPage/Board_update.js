@@ -2,77 +2,95 @@ import React from 'react'
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs, Tag } from 'antd';
+import { Card, Layout, Button, Input, Tabs } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 
 function Board_update() {
-
   // antd 변수
   const { Content } = Layout;
   const { TabPane } = Tabs;
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState("");
+  const [BoardContent, setBoardContent] = useState({});
+  const [BoardUpdateContent, setBoardUpdateContent] = useState({
+    title: BoardContent.title,
+    content: BoardContent.content
+  });
+
+  const [selectedFiles, setSelectedFiles] = useState(undefined);
 
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
   };
-  
 
   // idx 가져오기
-  let {idx} = useParams();
+  let { idx } = useParams();
+
   useEffect(() => {
-    Axios.post('http://localhost:8000/api/getBoardDetail', {idx : idx})
-    .then(response => {
-        if(response.data){
-          //setBoardContent(response.data[0])
-          setTitle(response.data[0].title);
-          setContent(response.data[0].content);
+    Axios.post('http://localhost:8000/api/getBoardDetail', { idx: idx })
+      .then(response => {
+        if (response.data) {
+          setBoardContent(response.data[0])
         } else {
           alert("상세페이지 불러오기 실패");
-        } 
-    })
-  }, []); 
-
+        }
+      })
+      
+    }, []);
+  
   // 에디터에서 입력값 받아오는 함수
   const getTitleValue = (event) => {
-    setTitle(event.currentTarget.value)  
+
+    const { name, value } = event.target;
+
+    setBoardUpdateContent({
+      ...BoardUpdateContent,
+      [name]: value
+    })
+    setBoardContent({
+      ...BoardContent,
+      [name]: value
+    })
   }
 
   // 이벤트 후 경로 이동할때 사용하는 hooks
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   // 수정 버튼클릭시
   const onBoardUpdateHandler = (event) => {
-    let formData = new FormData();
-    let updateTitle = title;
-    let updateContent = content;
 
-    if(updateTitle === ""){
+    let formData = new FormData();
+    let title = BoardUpdateContent.title ?? BoardContent.title;
+    let content = BoardUpdateContent.content;
+
+    if (title === "") {
       alert('제목을 입력해주세요.');
       return;
     }
-    else if(updateContent === ""){
-      updateContent = "내용없음";
+    else if (content === "") {
+      content = "내용없음";
     }
 
-    if(selectedFiles) {
+    //선택한 파일이 있다면 formdata 에 담음
+    if (selectedFiles) {
       for (const key of Object.keys(selectedFiles)) {
         formData.append('file', selectedFiles[key]);
       }
     }
+
+    // 선택한 파일이 없다면 , 기존에 있던 파일이름을 가져옴
+    if(selectedFiles === undefined){
+      formData.append('filePath', BoardContent.file_path);
+    }
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('idx', idx);
+
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
-    formData.append('title', updateTitle);
-    formData.append('content', updateContent);   
-    formData.append('idx', idx);   
-
-    if(confirmAction){ //yes 선택
-      console.log(updateContent)
-      Axios.post('http://localhost:8000/api/updateBoard', formData,{
+    if (confirmAction) { //yes 선택
+      Axios.post('http://localhost:8000/api/updateBoard',formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }
@@ -92,17 +110,14 @@ function Board_update() {
     navigate("/board_list");
   }
 
-  // 첨부 파일 삭제
-  // function preventDefault(e) {
-  //   e.preventDefault();
-  //   console.log('Clicked! But prevent default.');
-  // }
-  
+  //CKeditor 커스텀
+
+
   //render
   return (
-    <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
-      <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
-        <Tabs style={{ float : 'left' }} defaultActiveKey="2">
+    <Content style={{ margin: '16px 16px 0 16px', height: '100%' }}>
+      <div style={{ marginBottom: '16px', position: 'relative', height: '32px' }}>
+        <Tabs style={{ float: 'left' }} defaultActiveKey="2">
           <TabPane
             tab={
               <span onClick={onBoardGoHomeHandler}>
@@ -111,31 +126,32 @@ function Board_update() {
               </span>
             }
             key="1"
-            >  
+          >
           </TabPane>
         </Tabs>
-        <Button style={{ float : 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
-        <Button style={{ marginRight : '10px', float : 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
+        <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
+        <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
       </div>
 
-      <Card style={{ width: '100%', height : 'calc(100% - 140px)' }} >
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={title} style={{ fontSize : '30px', marginBottom : '16px'}}/>
+      <Card>
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={BoardContent.title} style={{ fontSize: '30px', marginBottom: '16px' }} />
         <CKEditor
-          editor = {Editor} data = {content}
-          onChange = {(event, editor) => {
+          editor={Editor} data={BoardContent.content}
+          onChange={(event, editor) => {
             const data = editor.getData();
-            setContent(data);
+            setBoardUpdateContent({
+              ...BoardUpdateContent,
+              content: data
+            })
           }}
         />
-      </Card>
-      <Card style={{ width: '100%', height : '80px'}}>
-        첨부파일 : 
-        {/* <Tag style={{ marginLeft : '10px'}} closable onClose={preventDefault}>
-          파일이름
-        </Tag> */}
-        <label style={{ marginLeft : '10px'}} className="btn btn-default">
-          <input type="file" onChange={selectFile} multiple />
-        </label>
+
+        <div className="form-group">
+          <label className="btn btn-default">
+            <input type="file" onChange={selectFile} />
+          </label>
+        </div>
+
       </Card>
     </Content>
 
