@@ -93,7 +93,6 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const idx = req.body.idx;
-    let filePath = "";
 
     // 원래 등록되있던 파일명을 받아옴
     let filePath = req.body.filePath; 
