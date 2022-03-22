@@ -73,8 +73,23 @@ app.post("/api/insert", upload.any(), (req, res)=>{
 
 // board list
 app.get("/api/getBoardList", (req, res) => {
-    const sqlQuery = "SELECT * FROM board.noticeboard order by regist_date desc";
-    db.query(sqlQuery, (err, result) => {
+    const filter = req.query.filter;
+    const keyword = req.query.keyword;
+    
+    let sqlQuery = "SELECT * FROM board.noticeboard";
+
+    switch (filter) {
+        case '' : 
+            break;
+        case 'writer' :
+            sqlQuery += " where writer like ?";
+            break;
+        case 'title' :
+            sqlQuery += " where title like ?";
+            break;
+    }
+    sqlQuery += " order by regist_date desc";
+    db.query(sqlQuery, [keyword] , (err, result) => {
         res.send(result);
     })
 })
