@@ -87,8 +87,30 @@ app.post("/api/insert", upload.any(), (req, res)=>{
 
 // board list
 app.get("/api/getBoardList", (req, res) => {
-    const sqlQuery = "SELECT * FROM board.noticeboard order by regist_date desc";
-    db.query(sqlQuery, (err, result) => {
+    // params 받기
+    const filter = req.query.filter;
+    const keyword = req.query.keyword;
+    
+    // select 시작
+    let sqlQuery = "SELECT * FROM board.noticeboard";
+
+    // filter에 따른 조건 추가
+    switch (filter) {
+        case '' : 
+            break;
+        case 'writer' :
+            sqlQuery += " where writer like ?";
+            break;
+        case 'title' :
+            sqlQuery += " where title like ?";
+            break;
+    }
+
+    // 날짜순으로 정렬
+    sqlQuery += " order by regist_date desc";
+
+    // ?에 키워드 넣기.
+    db.query(sqlQuery, [keyword] , (err, result) => {
         res.send(result);
     })
 })
@@ -134,7 +156,7 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
     if(filePath === "null") filePath = null;
     
 
-    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ? WHERE idx = ?";
+    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ?, update_date = CURRENT_TIMESTAMP WHERE idx = ?";
 
     db.query(sqlQuery, [title, content, filePath, idx], (err, result) => {
         if(err){

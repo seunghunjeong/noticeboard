@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import Axios from 'axios';
-import { useEffect, useState} from 'react';
+import { useEffect, useState, useRef} from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
@@ -17,13 +16,26 @@ function Board_list() {
 
   // 내용 저장
   const [viewContent, setViewContent] = useState([]);
+
+  // 검색 param
+  const [searchContent, setSearchContent] = useState({
+    filter: '',
+    keyword: ''
+  })
   
   // select query문 불러오기.
-  const getViewContenmt = useEffect(() => {
-    Axios.get('http://localhost:8000/api/getBoardList').then((response) => {
+  useEffect(() => {
+    Axios.get('http://localhost:8000/api/getBoardList',{
+      params: {
+        filter : searchContent.filter === '' ? '' : searchContent.filter,
+        // %를 넣어줘야 와일드카드 검색 조건.
+        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%'
+     }
+    }).then((response) => {
       setViewContent(response.data);
     })
-  },[])
+    // 검색 값이 변경될때마다 랜더링
+  },[searchContent])
 
   // 페이지 이동
   const navigate = useNavigate();
@@ -88,24 +100,23 @@ function Board_list() {
     console.log('params', pagination, filters, sorter, extra);
   }
 
-  // 검색 param
-  const [searchContent, setSearchContent] = useState({
-    filter: '',
-    keyword: ''
-  })
-
-  // 게시글 검색
+  // 게시글 검색 조건 설정
   const onChangeSearchFilter = value => {
     setSearchContent({
       ...searchContent,
       filter : value
     })
   };
+
+  // 게시글 검색
   const onSearch = value => {
+    if(searchContent.filter === '') {
+      alert('검색 조건을 선택해주세요.');
+    }
     setSearchContent({
       ...searchContent,
       keyword : value
-    })
+    });
   };
 
   //render
