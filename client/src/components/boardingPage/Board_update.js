@@ -85,6 +85,9 @@ function Board_update() {
       for (const key of Object.keys(selectedFiles)) {
         formData.append('file', selectedFiles[key]);
       }
+      if(BoardContent.file_path !== undefined){
+        formData.append('filePath', BoardContent.file_path) 
+      }
     }
 
     // 선택한 파일이 없다면 , 기존에 있던 파일이름을 가져옴
@@ -120,12 +123,13 @@ function Board_update() {
   }
 
   const AttaFile = () => {
-
+    let fileName = BoardContent.file_path;
+    let fileNameArr = fileName.split('\\');
     return (
       <>
         <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
           <button className={fileDeleteChk ? "deleteY" : "deleteN"} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-            {BoardContent.file_path}
+            {fileNameArr[2]}
           </button>
         </Tag>
         <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
@@ -168,12 +172,10 @@ function Board_update() {
         />
         <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider>
         {
-          BoardContent.file_path && <AttaFile/>
+          BoardContent.file_path && <AttaFile />
         }
         <br></br>
-        <Tag style={{ marginLeft: '10px' }}>
-          <input type="file" onChange={selectFile} />
-        </Tag>
+        <input style={{height:'30px' , marginLeft:'10px'}} type="file" onChange={selectFile} />
       </Card>
     </Content>
 

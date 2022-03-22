@@ -52,11 +52,13 @@ function Board_detail() {
     const confirmAction = window.confirm("삭제하시겠습니까?");
 
     if (confirmAction) { //yes 선택
-      Axios.post('http://localhost:8000/api/deleteBoard', { idx: idx })
-        .then(response => {
+      Axios.post('http://localhost:8000/api/deleteBoard', { 
+        idx: idx ,
+        filePath: BoardDetail.file_path
+      }).then(response => {
           if (response.data === "success") {
             alert("삭제 완료");
-            navigate("/"); //삭제 후 목록으로 이동
+            navigate("/board_list"); //삭제 후 목록으로 이동
           } else {
             alert("삭제 실패");
           }

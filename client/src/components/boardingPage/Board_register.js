@@ -2,7 +2,7 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs } from 'antd';
+import { Card, Layout, Button, Input, Tabs, Divider } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
@@ -93,7 +93,7 @@ function Board_register() {
             </TabPane>
           </Tabs>
           <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
-          <Button style={{  marginRight: '10px', float: 'right' }} type="primary"
+          <Button style={{ marginRight: '10px', float: 'right' }} type="primary"
             icon={<EditOutlined />}
             onClick={() => {
               submitBoard()
@@ -113,13 +113,8 @@ function Board_register() {
               })
             }}
           />
-
-          <div className="form-group">
-            <label className="btn btn-default">
-              <input type="file" onChange={selectFile} />
-            </label>
-          </div>
-          
+          <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider>
+          <input type="file" onChange={selectFile} />
         </Card>
       </Content>
     </div>
