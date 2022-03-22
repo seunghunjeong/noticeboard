@@ -1,30 +1,29 @@
-// middleware/users.js
-
 const jwt = require("jsonwebtoken");
 
 module.exports = {
+  //회원가입 체크
   validateRegister: (req, res, next) => {
     // username min length 3
     if (!req.body.username || req.body.username.length < 3) {
-      return res.status(400).send({
-        msg: 'Please enter a username with min. 3 chars'
+      return res.json({
+        msg: '아이디 3자리이상'
       });
     }
 
-    // password min 6 chars
-    if (!req.body.password || req.body.password.length < 6) {
-      return res.status(400).send({
-        msg: 'Please enter a password with min. 6 chars'
+    // password min 4 chars
+    if (!req.body.password || req.body.password.length < 4) {
+      return res.json({
+        msg: '비밀번호 4자리이상'
       });
     }
 
     // password (repeat) does not match
     if (
-      !req.body.password_repeat ||
-      req.body.password != req.body.password_repeat
+      !req.body.comfirmPassword ||
+      req.body.password != req.body.comfirmPassword
     ) {
-      return res.status(400).send({
-        msg: 'Both passwords must match'
+      return res.json({
+        msg: '비밀번호 불일치'
       });
     }
 

@@ -1,53 +1,41 @@
-// routes/router.js
 const express = require('express');
+const cors = require('cors')
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const uuid = require('uuid');
-const jwt = require('jsonwebtoken');
-
 const db = require('../config/db');
+router.use(cors());
+
+// 암호화
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const saltRounds = 10; //암호화를 몇 번시킬지 정하는 숫자
+
+
 const userMiddleware = require('../middleware/users.js');
 
 router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
-    db.query(
-      `SELECT * FROM users WHERE LOWER(username) = LOWER(${db.escape(
-        req.body.username
-      )});`,
-      (err, result) => {
-        if (result.length) {
-          return res.status(409).send({
-            msg: 'This username is already in use!'
-          });
-        } else {
-          // username is available
-          bcrypt.hash(req.body.password, 10, (err, hash) => {
-            if (err) {
-              return res.status(500).send({
-                msg: err
-              });
-            } else {
-              // has hashed pw => add to database
-              db.query(
-                `INSERT INTO users (id, username, password, registered) VALUES ('${uuid.v4()}', ${db.escape(
-                  req.body.username
-                )}, ${db.escape(hash)}, now())`,
-                (err, result) => {
-                  if (err) {
-                    throw err;
-                    return res.status(400).send({
-                      msg: err
-                    });
-                  }
-                  return res.status(201).send({
-                    msg: 'Registered!'
-                  });
-                }
-              );
-            }
+
+  const id = req.body.id;
+  const password = req.body.password;
+  const username = req.body.username; 
+  const sqlQuery = "INSERT INTO board.users (id, username, password) VALUES (?, ?, ?)"
+  
+  // 비밀번호 > 암호화시켜서 insert 
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(password, salt, (err, hash) => {
+      db.query(sqlQuery, [id, username, hash], (err, result) => {
+          if (err) {
+            //throw err;
+            return res.json({
+              msg: err,
+            })
+          }
+          return res.json({
+            msg : "success"
           });
         }
-      }
-    );
+      );
+    });      
+  });
 });
 
 router.post('/login', (req, res, next) => {

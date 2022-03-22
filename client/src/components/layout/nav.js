@@ -1,7 +1,6 @@
+import React from 'react';
 import { Layout, Menu, Button } from 'antd';
-
 import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
-
 import { Link } from 'react-router-dom';
 
 //antd 
