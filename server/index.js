@@ -73,11 +73,14 @@ app.post("/api/insert", upload.any(), (req, res)=>{
 
 // board list
 app.get("/api/getBoardList", (req, res) => {
+    // params 받기
     const filter = req.query.filter;
     const keyword = req.query.keyword;
     
+    // select 시작
     let sqlQuery = "SELECT * FROM board.noticeboard";
 
+    // filter에 따른 조건 추가
     switch (filter) {
         case '' : 
             break;
@@ -88,7 +91,11 @@ app.get("/api/getBoardList", (req, res) => {
             sqlQuery += " where title like ?";
             break;
     }
+
+    // 날짜순으로 정렬
     sqlQuery += " order by regist_date desc";
+
+    // ?에 키워드 넣기.
     db.query(sqlQuery, [keyword] , (err, result) => {
         res.send(result);
     })

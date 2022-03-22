@@ -28,11 +28,13 @@ function Board_list() {
     Axios.get('http://localhost:8000/api/getBoardList',{
       params: {
         filter : searchContent.filter === '' ? '' : searchContent.filter,
-        keyword : searchContent.keyword === '' ? '%%' : '%'+searchContent.keyword+'%'
+        // %를 넣어줘야 와일드카드 검색 조건.
+        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%'
      }
     }).then((response) => {
       setViewContent(response.data);
     })
+    // 검색 값이 변경될때마다 랜더링
   },[searchContent])
 
   // 페이지 이동
@@ -98,7 +100,7 @@ function Board_list() {
     console.log('params', pagination, filters, sorter, extra);
   }
 
-  // 게시글 검색
+  // 게시글 검색 조건 설정
   const onChangeSearchFilter = value => {
     setSearchContent({
       ...searchContent,
@@ -106,7 +108,11 @@ function Board_list() {
     })
   };
 
+  // 게시글 검색
   const onSearch = value => {
+    if(searchContent.filter === '') {
+      alert('검색 조건을 선택해주세요.');
+    }
     setSearchContent({
       ...searchContent,
       keyword : value
