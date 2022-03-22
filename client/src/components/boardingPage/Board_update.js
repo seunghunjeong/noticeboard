@@ -2,10 +2,11 @@ import React from 'react'
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs } from 'antd';
+import { Card, Layout, Button, Input, Tabs, Divider, Tag } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
+import '../../App.css';
 
 function Board_update() {
   // antd 변수
@@ -19,10 +20,17 @@ function Board_update() {
   });
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
+  const [fileDeleteChk, setFileDeleteChk] = useState(false);
 
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
   };
+
+  // 파일삭제 검사
+  //let fileDeleteChk = false;
+  const fileDeleteClick = () => {
+    setFileDeleteChk(!fileDeleteChk)
+  }
 
   // idx 가져오기
   let { idx } = useParams();
@@ -36,9 +44,9 @@ function Board_update() {
           alert("상세페이지 불러오기 실패");
         }
       })
-      
-    }, []);
-  
+
+  }, []);
+
   // 에디터에서 입력값 받아오는 함수
   const getTitleValue = (event) => {
 
@@ -77,20 +85,24 @@ function Board_update() {
       for (const key of Object.keys(selectedFiles)) {
         formData.append('file', selectedFiles[key]);
       }
+      if(BoardContent.file_path !== undefined){
+        formData.append('filePath', BoardContent.file_path) 
+      }
     }
 
     // 선택한 파일이 없다면 , 기존에 있던 파일이름을 가져옴
-    if(selectedFiles === undefined){
+    if (selectedFiles === undefined) {
       formData.append('filePath', BoardContent.file_path);
     }
     formData.append('title', title);
     formData.append('content', content);
     formData.append('idx', idx);
+    formData.append('deleteChk', fileDeleteChk);
 
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
     if (confirmAction) { //yes 선택
-      Axios.post('http://localhost:8000/api/updateBoard',formData, {
+      Axios.post('http://localhost:8000/api/updateBoard', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }
@@ -110,7 +122,20 @@ function Board_update() {
     navigate("/board_list");
   }
 
-  //CKeditor 커스텀
+  const AttaFile = () => {
+    let fileName = BoardContent.file_path;
+    let fileNameArr = fileName.split('\\');
+    return (
+      <>
+        <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
+          <button className={fileDeleteChk ? "deleteY" : "deleteN"} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+            {fileNameArr[2]}
+          </button>
+        </Tag>
+        <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
+      </>
+    )
+  }
 
 
   //render
@@ -145,13 +170,12 @@ function Board_update() {
             })
           }}
         />
-
-        <div className="form-group">
-          <label className="btn btn-default">
-            <input type="file" onChange={selectFile} />
-          </label>
-        </div>
-
+        <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider>
+        {
+          BoardContent.file_path && <AttaFile />
+        }
+        <br></br>
+        <input style={{height:'30px' , marginLeft:'10px'}} type="file" onChange={selectFile} />
       </Card>
     </Content>
 
