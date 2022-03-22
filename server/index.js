@@ -23,13 +23,14 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // 파일저장경로, 폴더가없다면 생성함
-const directory = fs.existsSync('C:/uploadtest');
-if(!directory) fs.mkdirSync('C:/uploadtest');
+const uploadPath = 'C:/uploadtest';
+const directory = fs.existsSync(uploadPath);
+if(!directory) fs.mkdirSync(uploadPath);
 
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'C:/uploadtest');
+        cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         cb(null, getFile(file));
@@ -95,9 +96,12 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const idx = req.body.idx;
+    const deleteChk = req.body.deleteChk;
 
     // 원래 등록되있던 파일명을 받아옴
     let filePath = req.body.filePath; 
+
+    if(deleteChk) filePath = null;
 
     // 새롭게 등록된 파일이 있다면 새로 등록된 파일의 경로를 받아옴
     if(req.files.length === 1){ 
@@ -106,6 +110,7 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
 
     // 새롭게 등록된 파일이 없으면서 원래 등록되 있던 파일도 없는경우 
     if(filePath === "null") filePath = null;
+    
 
     const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ? WHERE idx = ?";
 

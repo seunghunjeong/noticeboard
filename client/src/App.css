@@ -55,3 +55,7 @@
   height: 58px;
   line-height: 58px;
 }
+
+.deleteY {
+  text-decoration: line-through
+}
