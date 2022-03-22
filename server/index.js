@@ -16,12 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // login auth 
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const bcrypt = require("bcrypt");
 app.use(cookieParser());
-app.use(session({key:'userId',secret: "secret", resave: false, saveUninitialized: false, cookie:{
-    expires: 60 * 60 * 24
-}}));
 
 // file upload
 const multer = require('multer');
@@ -31,10 +26,13 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
-
 // add routes
 const loginRouter = require('./routers/loginRouter');
+//const boardRouter = require('./routers/');
+//const fileRouter = require('./routers/');
+//const dailyReportRouter = require('./routers/');
 app.use('/api', loginRouter);
+
 
 // 파일저장경로, 폴더가없다면 생성함
 const uploadPath = 'C:/uploadtest';

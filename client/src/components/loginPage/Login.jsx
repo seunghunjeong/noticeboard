@@ -1,12 +1,17 @@
 import { Axios } from 'axios';
 import React, {useState} from 'react';
+import { useDispatch } from "react-redux";
+import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 
 
-function LoginPage(props) {
+function LoginPage() {
 
+    //페이지이동
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    //inform
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
 
@@ -18,38 +23,26 @@ function LoginPage(props) {
     }
 
     const onSubmitHandler = (event) => {
-       
         event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
-
-        //console.log('Email', Email);
-        //console.log('Password', Password);
 
         let body = {
             id : Id,
-            pw : Password
+            password : Password
         }
        
-        // dispatch(loginUser(body))
-        // .then(response => {
-        //     if(response.payload.loginSuccess){
-        //         navigate("/");
-        //         //props.history.push("/") //페이지 이동
-        //     }
-        //     else { 
-        //         alert("error");
-        //     }
-        // });
+        //redux를 사용함으로 axios는 사용안한다.
+        //Axios.post('/api/user/register', body)
+        //.then(response => {});
 
-        Axios.post('http://localhost:8000/api/login', body)
+        dispatch(loginUser(body))
         .then(response => {
-          if(response){
-              navigate("/");
-              //props.history.push("/") //페이지 이동
-          }
-          else { 
-              alert("error");
-          }
-
+            if(response.payload.success === true){
+                alert("로그인 성공");
+                navigate("/");
+            }
+            else { 
+                alert(response.payload.msg);
+            }
         });
     
     }
