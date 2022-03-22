@@ -122,7 +122,7 @@ app.post("/api/updateBoard", upload.any(), (req, res) => {
     if(filePath === "null") filePath = null;
     
 
-    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ? WHERE idx = ?";
+    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ?, update_date = CURRENT_TIMESTAMP WHERE idx = ?";
 
     db.query(sqlQuery, [title, content, filePath, idx], (err, result) => {
         if(err){
