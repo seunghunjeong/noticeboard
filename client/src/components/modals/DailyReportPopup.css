@@ -64,6 +64,22 @@
     border-radius: 5px;
     font-size: 13px;
   }
+  .modal > section > footer button.delete {
+    padding: 6px 12px;
+    margin-right: 5px;
+    color: #fff;
+    background-color: #ca3030;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  .modal > section > footer button.update {
+    padding: 6px 12px;
+    margin-right: 5px;
+    color: #fff;
+    background-color: #3a6e9c;
+    border-radius: 5px;
+    font-size: 13px;
+  }
   .modal.openModal {
     display: flex;
     align-items: center;
