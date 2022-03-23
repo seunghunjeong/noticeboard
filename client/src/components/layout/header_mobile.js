@@ -1,6 +1,7 @@
-import { Layout, Button } from 'antd';
-import '../../App.css';
+import { Layout } from 'antd';
+import {BarsOutlined } from '@ant-design/icons';
 
+import MobileStyle from '../../App_mobile.module.css';
 
 const { Header } = Layout;
 
@@ -8,7 +9,7 @@ function header() {
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
             <div className="main-logo"/>
-            <Button type = "primary">버튼</Button>
+            <BarsOutlined className={MobileStyle.btnHeader} />
         </Header>
     )
 }

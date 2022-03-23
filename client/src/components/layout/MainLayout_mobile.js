@@ -1,5 +1,4 @@
 import { Layout } from 'antd';
-import '../../App.css';
 import { Outlet } from 'react-router-dom'; //보여져야할 화면
 
 // components layout

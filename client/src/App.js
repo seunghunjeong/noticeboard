@@ -21,15 +21,16 @@ import MainLayoutMobile from './components/layout/MainLayout_mobile';
 // divide Browser, Mobile
 import {
   BrowserView,
-  MobileView,
-  isBrowser,
-  isMobile
+  MobileView
 } from "react-device-detect";
+
+// mobile
+import HomePageMobile from './components/homePage/Home_mobile';
 
 function App() {
   // 화면 표시부분
   return ( 
-    <div> 
+    <div>
       <BrowserView>
         <BrowserRouter>   
             <Routes>
@@ -45,14 +46,10 @@ function App() {
         </BrowserRouter>
       </BrowserView>
       <MobileView>
-      <BrowserRouter>   
+        <BrowserRouter>
             <Routes>
               <Route element = {<MainLayoutMobile/>}>
-                <Route path="/" element = {<HomePage/>}/>
-                <Route path="/board_list" element = {<BoardingListPage/>}/>
-                <Route path="/board_register" element = {<BoardingRegisterPage/>}/>
-                <Route path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
-                <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
+                <Route path="/" element = {<HomePageMobile/>}/>
               </Route>
               <Route path="/login" element = {<LoginPage/>}/>
             </Routes>
