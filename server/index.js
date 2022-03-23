@@ -1,6 +1,11 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+var corsOptions = {
+    origin: "http://localhost:3000",
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true
+  };
 const bodyParser = require('body-parser');
 
 // data base
@@ -10,7 +15,7 @@ const db = require('./config/db');
 const PORT = process.env.port || 8000;
 
 // use set 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

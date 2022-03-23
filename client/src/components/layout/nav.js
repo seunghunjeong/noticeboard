@@ -1,15 +1,28 @@
 import React from 'react';
+import { axios } from 'axios';
 import { Layout, Menu, Button } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
-//antd 
-const { Sider } = Layout;
-const { SubMenu } = Menu;
-
+import { useNavigate } from "react-router-dom";
 
 
 function nav() {
+
+    //antd 
+    const { Sider } = Layout;
+    const { SubMenu } = Menu;
+
+    //페이지이동
+    const navigate = useNavigate();
+
+    //로그아웃버튼 클릭
+    const onLogoutHandler = (event) => {
+      event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
+
+      sessionStorage.removeItem('user_id');
+      navigate("/");
+     
+    }
 
     return (
       <Sider>
@@ -33,7 +46,9 @@ function nav() {
             <Button type="primary" danger style={{ width : '90%' }}>
               <Link to={'/login'}>login</Link>
             </Button>
-            <Button type="primary" danger style={{ width : '90%' }}>로그아웃</Button>
+            <Button type="primary" danger style={{ width : '90%' }} onClick={onLogoutHandler}>
+                로그아웃
+            </Button>
           </div>
        </Sider>
     )

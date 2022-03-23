@@ -2,15 +2,12 @@ import React, { Fragment, useState } from 'react'
 import Axios from 'axios';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Card, Layout, Calendar, Badge, Button, Tag, Tabs } from 'antd';
-import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
-import { useNavigate, Link, useParams } from "react-router-dom"
-import ReactHtmlParser from 'react-html-parser';
+import { Calendar, Badge, Button, Tag } from 'antd';
 import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from './DailyReportPopup';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-
+import Auth from '../../hoc/auth'
 
 
 
@@ -117,4 +114,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Auth(Home, true)

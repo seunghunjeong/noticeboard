@@ -2,7 +2,8 @@ import axios from "axios";
 import {
     LOGIN_USER, 
     REGISTER_USER,
-    AUTH_USER
+    AUTH_USER,
+    LOGOUT
 } from "./types";
 
 //로그인 action
@@ -40,6 +41,19 @@ export function auth(){
     return {
         type : AUTH_USER,
         payload : request
+    }
+
+}
+
+//logout
+export function logout(){
+        //get은 바디부분이 필요없다
+    const request = axios.get('http://localhost:8000/api/logout')
+    .then(response => response.data)
+
+    return {
+    type : LOGOUT,
+    payload : request
     }
 
 }

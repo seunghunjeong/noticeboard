@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
+import Auth from '../../hoc/auth'
 
 
 function LoginPage() {
@@ -36,8 +37,9 @@ function LoginPage() {
 
         dispatch(loginUser(body))
         .then(response => {
-            if(response.payload.success === true){
+            if(response.payload.loginSuccess === true){
                 alert("로그인 성공");
+                sessionStorage.setItem('user_id', Id)
                 navigate("/");
             }
             else { 
@@ -71,4 +73,4 @@ function LoginPage() {
 }
 
 //export default Auth(LoginPage, null);
-export default LoginPage;
+export default Auth(LoginPage, false);

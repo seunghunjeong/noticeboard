@@ -33,8 +33,6 @@ function Join() {
     const onSubmitHandler = (event) => {   
         event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
 
-        console.log(Id, Password, Name);
-
         //password와 confirm password가 일치할때만 가입승인
         if(Password !== ConfirmPassword){
             return alert("비밀번호와 비밀번호 확인은 같아야 합니다.")

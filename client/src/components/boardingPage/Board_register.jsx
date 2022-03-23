@@ -2,6 +2,7 @@ import React from 'react'
 import Axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Auth from '../../hoc/auth'
 import { Card, Layout, Button, Input, Tabs, Divider } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
@@ -126,7 +127,7 @@ function Board_register() {
 
 
 
-export default Board_register
+export default Auth(Board_register, true)
 
 
 
