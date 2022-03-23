@@ -8,7 +8,7 @@ const { Header } = Layout;
 function header() {
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
-            <div className="main-logo"/>
+            <div className={MobileStyle.mainLogo} />
             <BarsOutlined className={MobileStyle.btnHeader} />
         </Header>
     )

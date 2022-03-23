@@ -1,15 +1,9 @@
-@import '~antd/dist/antd.css';
-.main-logo{
+.mainLogo{
   width: 120px; height: 30px;
   background: no-repeat url(../src/components/layout/cmworld-logo.png);
   float: left;
   margin: 16px 0 16px 0.8em;
 }
-
-.events {
-  width: 80vh;
-}
-
 /* header */
 .btnHeader {
   color : white;
