@@ -1,0 +1,21 @@
+/* classname 겹치지 않는 module용 css */
+.mainLogo{
+  width: 120px; height: 30px;
+  background: no-repeat url(../src/components/layout/cmworld-logo.png);
+  float: left;
+  margin: 16px 0 16px 0.8em;
+}
+/* header */
+.btnHeader {
+  color : white;
+  font-size: 3em;
+  float: right;
+  margin-top: 0.25em;
+  margin-right: 0.25em;
+}
+
+.bogo{
+  position: absolute;
+  bottom: 1vh;
+  right: 1vh;
+}

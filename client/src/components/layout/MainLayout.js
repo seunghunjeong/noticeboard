@@ -8,6 +8,7 @@ import NavLayout from './nav';
 import HeaderLayout from './header';
 import FooterLayout from './footer';
 
+
 function MainLayout() {
     return (
         <Layout style={{ minHeight: '100vh' }}>

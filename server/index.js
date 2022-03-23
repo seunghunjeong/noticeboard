@@ -34,11 +34,18 @@ const { isGeneratorFunction } = require('util/types');
 
 // add routes
 const loginRouter = require('./routers/loginRouter');
-//const boardRouter = require('./routers/');
-//const fileRouter = require('./routers/');
-//const dailyReportRouter = require('./routers/');
+const dailyReportRouter = require('./routers/daliyReport');
+app.use('/report', dailyReportRouter);
 app.use('/api', loginRouter);
 
+// 크롬에서 cors 에러 방지용
+app.use(cors());
+// express.json 사용
+app.use(express.json());
+// application/json
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // 파일저장경로, 폴더가없다면 생성함
 const uploadPath = 'C:/uploadtest';
@@ -67,7 +74,6 @@ function getFile(file) {
 let upload = multer({
     storage: storage
 });
-
 
 // board insert
 app.post("/api/insert", upload.any(), (req, res)=>{
@@ -234,8 +240,21 @@ function getDownloadFilename(req, filename) {
     return filename;
 }
 
+// 모바일용 일일보고
+app.post("/api/insertR", (req, res)=>{
+    /* console.log(req.body.id); */
+    
+    const sqlQuery = "INSERT INTO dailyReport (id, writer, report, regist_date) VALUES(?, ?, ?, ?);";
+    db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report,req.body.regist_date], (err,result) => {
+        if(err) return res.status(400).send(err);
+
+        return res.status(200).send(result);
+    }) 
+})
+
 
 // run server
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });
+

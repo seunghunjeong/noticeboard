@@ -14,23 +14,45 @@ import JoinPage from '../src/components/joinPage/Join';
 // components layout
 import MainLayout from './components/layout/MainLayout';
 
+// components layout mobile
+import MainLayoutMobile from './components/layout/MainLayout_mobile';
+// divide Browser, Mobile
+import {
+  BrowserView,
+  MobileView
+} from "react-device-detect";
+
+// mobile
+import HomePageMobile from './components/homePage/Home_mobile';
+
 function App() {
   // 화면 표시부분
   return ( 
-    <div> 
-      <BrowserRouter>   
-          <Routes>
-            <Route element = {<MainLayout/>}>
-              <Route path="/" element = {<HomePage/>}/>
-              <Route path="/board_list" element = {<BoardingListPage/>}/>
-              <Route path="/board_register" element = {<BoardingRegisterPage/>}/>
-              <Route path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
-              <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
-            </Route>
-            <Route path="/login" element = {<LoginPage/>}/>
-            <Route path="/sign-up" element = {<JoinPage/>}/>
-          </Routes>
-      </BrowserRouter>
+    <div>
+      <BrowserView>
+        <BrowserRouter>   
+            <Routes>
+              <Route element = {<MainLayout/>}>
+                <Route path="/" element = {<HomePage/>}/>
+                <Route path="/board_list" element = {<BoardingListPage/>}/>
+                <Route path="/board_register" element = {<BoardingRegisterPage/>}/>
+                <Route path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
+                <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
+              </Route>
+              <Route path="/login" element = {<LoginPage/>}/>
+            </Routes>
+        </BrowserRouter>
+      </BrowserView>
+      <MobileView>
+        <BrowserRouter>
+            <Routes>
+              <Route element = {<MainLayoutMobile/>}>
+                <Route path="/" element = {<HomePageMobile/>}/>
+              </Route>
+              <Route path="/login" element = {<LoginPage/>}/>
+            </Routes>
+        </BrowserRouter>
+      </MobileView>
     </div>
   );
 }
