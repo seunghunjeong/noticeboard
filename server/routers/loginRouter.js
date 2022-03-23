@@ -138,9 +138,13 @@ router.post('/login', (req, res, next) => {
 //router.get('/auth', userMiddleware.isLoggedIn, (req, res, next) => {
 router.get('/auth', (req, res, next) => {
     //여기까지 미들웨어를 통과해 왔다는 얘기는 Authentication 이 true 라는 말
-  
+    console.log(req.session)
     if(req.session.isLogin){
-      res.json({ isAdmin : false, isAuth : true })
+      res.json({ 
+        isAdmin : false, 
+        isAuth : true,
+        id : req.session.isLogin
+      })
     }
     else {
       res.json({ isAdmin : false, isAuth : false })
@@ -157,7 +161,7 @@ router.get('/auth', (req, res, next) => {
 });
 
 router.get('/logout', (req, res) => {
-  console.log(req/session)
+  console.log(req.session)
   if(req.session.isLogin){
     req.session.destroy(error => {
       if(error) console.log(error) 

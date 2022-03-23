@@ -10,8 +10,16 @@ import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import '../../App.css';
 import Auth from '../../hoc/auth'
+import { useSelector } from 'react-redux';
+
+Axios.defaults.withCredentials = true;
 
 function Home() {
+
+    //사용자 정보 받아오기
+    const user = useSelector(state => state.user.userData.id);
+    console.log(user);
+
     const [state, setState] = useState("");
     const [writer, setWriter] = useState("임시작성자");
     const [viewDailyReport, setViewDailyReport] = useState([]);
@@ -45,8 +53,6 @@ function Home() {
             setViewDailyReport(response.data);
         })
     }, [state])
-
-
 
 
     // 월 단위 캘린더 랜더링할 내용

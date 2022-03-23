@@ -5,7 +5,6 @@ import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
 
-
 function LoginPage() {
 
     //페이지이동

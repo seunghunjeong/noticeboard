@@ -7,17 +7,23 @@ import { Card, Layout, Button, Input, Tabs, Divider } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
+Axios.defaults.withCredentials = true;
 
 function Board_register() {
+
   const { Content } = Layout;
   const { TabPane } = Tabs;
   const [selectedFiles, setSelectedFiles] = useState(undefined);
 
+  //사용자 정보 받아오기
+  const user = useSelector(state => state.user.userData.id);
+  console.log(user);
+
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
   };
-
 
   const [boardContent, setBoardContent] = useState({
     title: '',
@@ -38,9 +44,11 @@ function Board_register() {
   const navigate = useNavigate();
   // 입력버튼
   const submitBoard = () => {
+
     let formData = new FormData();
     let content = boardContent.content;
     const title = boardContent.title;
+    const writer = user;
 
     if (title === "") {
       alert('제목을 입력해주세요.');
@@ -58,6 +66,7 @@ function Board_register() {
 
     formData.append('title', title);
     formData.append('content', content);
+    formData.append('writer', writer);
 
     Axios.post('http://localhost:8000/api/insert', formData, {
       headers: {
