@@ -12,7 +12,6 @@ import '../../App.css';
 
 function Home() {
     const [state, setState] = useState("");
-    const [report, setReport] = useState("");
     const [writer, setWriter] = useState("임시작성자");
     const [viewDailyReport, setViewDailyReport] = useState([]);
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -20,7 +19,7 @@ function Home() {
     const [selectDay, setSelectDay] = useState({
         selectedValue: moment('')
     });
-
+    const [report, setReport] = useState("");
     // 등록창 열고닫기
     const openRegisterModal = () => {
         setRegisterModalOpen(true);
@@ -51,7 +50,7 @@ function Home() {
 
     // 월 단위 캘린더 랜더링할 내용
     function getListData(value) {
-        
+
         const reportData = viewDailyReport;
         let listData;
         let calendarMoment;
@@ -81,7 +80,7 @@ function Home() {
                         listData.length === 1 ? null : <Button className="bogo_register" onClick={openRegisterModal}><PlusSquareOutlined /></Button>
                     }
                     {
-                        listData.length === 0 ? null : <Button className="bogo_update" onClick={()=>{setReport(dailyReportDetail.content); openUpdateModal();}}><EditOutlined /></Button>
+                        listData.length === 0 ? null : <Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
                     }
                     <Button className="bogo_view" onClick={() => { alert("상세보기창") }}><BarsOutlined /></Button>
                 </li>
@@ -132,21 +131,17 @@ function Home() {
     // 클릭한 셀이 표시하는 일자, 데이터를 받아서 저장
     const onSelect = value => {
         setState("");
-        setReport("");
         const reportData = viewDailyReport;
         let calendarMoment;
+
         for (let i in reportData) {
             calendarMoment = moment(reportData[i].regist_date).format("YYYY-MM-DD");
-
             if (calendarMoment === value.format("YYYY-MM-DD")) {
                 setDailyReportDetail({
                     idx: reportData[i].idx,
                     content: reportData[i].report,
                     date: moment(reportData[i].regist_date).format("YYYY-MM-DD")
                 })
-                setReport(dailyReportDetail.content);
-                console.log("dailyReportDetail : "+dailyReportDetail.content);
-                console.log("report : "+report);
             }
         }
 
@@ -161,6 +156,7 @@ function Home() {
     const getReport = e => {
         const { value } = e.target;
         setReport(value);
+        console.log(report);
     }
 
     // 일일보고 등록
@@ -182,9 +178,20 @@ function Home() {
         })
     }
     // 일일보고 수정
+
+    useEffect(()=>{
+        setReport(dailyReportDetail.content);
+    },[dailyReportDetail.content])
+    
+
+
     const updateReport = () => {
-        
-        if(report === "") {
+        console.log("dailyReportDetail.content : " + dailyReportDetail.content);
+        console.log("report : " + report);
+        if (report === "") {
+            console.log("dailyReportDetail.content : " + dailyReportDetail.content);
+            console.log("report : " + report);
+
             alert("내용을 입력해주세요");
             return;
         }

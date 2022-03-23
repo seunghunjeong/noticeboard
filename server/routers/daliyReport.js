@@ -60,6 +60,7 @@ router.post("/update", (req, res) => {
 
 })
 
+// 일일보고 삭제
 router.post("/delete", (req,res) => {
     const sqlQuery = `
         DELETE FROM
