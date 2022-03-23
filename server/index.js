@@ -14,6 +14,10 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
+const dailyReportRouter = require('./routers/daliyReport');
+app.use('/report', dailyReportRouter);
+
+
 // 크롬에서 cors 에러 방지용
 app.use(cors());
 // express.json 사용
@@ -222,3 +226,4 @@ function getDownloadFilename(req, filename) {
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });
+

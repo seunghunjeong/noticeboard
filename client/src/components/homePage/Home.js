@@ -94,6 +94,29 @@ function Home() {
         });
     };
 
+    const [report, setReport] = useState("");
+    const [writer, setWriter] = useState("임시작성자");
+    // 일일보고 등록
+    const getReport = e => {
+        const {value} = e.target;
+        setReport(value);
+    }
+    const submitReport = () => {
+
+        if(report === ""){
+            alert("내용을 입력해주세요.");
+            return;
+        }
+        Axios.post('http://localhost:8000/report/insert',{
+                report: report,
+                writer: writer,
+                date: selectDay.selectedValue.format('YYYY-MM-DD')
+        }).then(() => {
+            alert("등록완료");
+            closeModal();
+        })
+    }
+
 
     return (
         <Fragment>
@@ -108,10 +131,10 @@ function Home() {
                 // monthCellRender={monthCellRender}
                 onSelect={onSelect}
             />
-            <Modal open={modalOpen} close={closeModal} header="일일 보고" insert={() => { alert("click"); }}>
+            <Modal display={modalOpen} close={closeModal} header="일일 보고" insert={submitReport}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :이름</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
-                <TextArea style={{ height: '300px' }}></TextArea>
+                <TextArea style={{ height: '300px' }} onChange={getReport}></TextArea>
             </Modal>
         </Fragment>
     )

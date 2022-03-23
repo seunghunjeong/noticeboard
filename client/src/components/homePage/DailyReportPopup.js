@@ -2,13 +2,13 @@ import React from 'react';
 import './DailyReportPopup.css'
 
 const Modal = (props) => {
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, header, insert } = props;
+    // 부모로부터 값을 받아옴
+    const { display, close, header, insert } = props;
 
     return (
-        // 모달이 열릴때 openModal 클래스가 생성된다.
-        <div className={open ? 'openModal modal' : 'modal'}>
-            {open ? (
+        // 클래스명 변경을 통해 활성화 / 비활성화
+        <div className={display ? 'openModal modal' : 'modal'}>
+            {display ? (
                 <section>
                     <header>
                         {header}
