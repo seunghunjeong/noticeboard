@@ -157,6 +157,7 @@ router.get('/auth', (req, res, next) => {
 });
 
 router.get('/logout', (req, res) => {
+  console.log(req/session)
   if(req.session.isLogin){
     req.session.destroy(error => {
       if(error) console.log(error) 
