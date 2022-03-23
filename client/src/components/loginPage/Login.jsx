@@ -39,7 +39,7 @@ function LoginPage() {
         .then(response => {
             if(response.payload.loginSuccess === true){
                 alert("로그인 성공");
-                sessionStorage.setItem('user_id', Id)
+                //sessionStorage.setItem('user_id', Id)
                 navigate("/");
             }
             else { 

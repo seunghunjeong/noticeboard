@@ -2,29 +2,37 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 const cookieParser = require("cookie-parser");
-const cookies = require("react-cookies");
-const session = require('express-session');//session은 cookie를 이용하기 때문에 cookieParser 아래에 선언이 되야한다.
 router.use(cookieParser());
-router.use(session({
-  httpOnly: true,	//자바스크립트를 통해 세션 쿠키를 사용할 수 없도록 함
-  secure: false,	//https 환경에서만 session 정보를 주고받도록처리
-  secret: 'secret',	//암호화하는 데 쓰일 키
-  resave: false,	//세션을 언제나 저장할지 설정함
-  saveUninitialized: true,	//세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
-  cookie: {	//세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
-    httpOnly: true,
-    Secure: true
-  }
-}));
+var session = require("express-session"); 
+router.use(session({ 
+  key : "isLogin",
+  secret : "secret", 
+  resave : false, 
+  saveUninitialized : false,
+  cookie : {
+    expires : 60*60*24
+  } 
+}))
+/* option - secret : 필수, 세션 암호화에 사용 
+- resave : 세션이 변경되지 않아도 저장이 됨, false 권장 
+- saveUninitialized : 세션 초기화시 미리 만들지를 설정 
+*/
 
-
-// 암호화
+// 비밀번호 암호화
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10; //암호화를 몇 번시킬지 정하는 숫자
 
 
 const userMiddleware = require('../middleware/users.js');
+
+router.use(function(req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
 
 //회원가입
 router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
@@ -91,20 +99,27 @@ router.post('/login', (req, res, next) => {
           //토큰생성
           if (bResult) {
             const token = jwt.sign( {token : result[0].id},
-              'SECRETKEY', { expiresIn:'7d' });//만료기간(임의설정)
+              'SECRETKEY', { expiresIn : '86400' });//만료기간(24 hours)
 
             //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
             //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
-            // res.cookie("x_auth", token,  {
-            //   httpOnly: false,
-            //   sameSite: "None" //cookie의 옵션 중 하나인 sameSite의 값이 디폴트로 lax에 지정되는 문제가 발생한다. (크롬의 경우)
-            //                    //그래서 POST API를 사용할 수 없고 GET API만이 허용된다
+            // res.cookie("test", "test");
+            // res.cookie("accessToken", token, {
+            //   maxAge: 10000, 
+            //   expires  : new Date(Date.now() + 9999999), 
+            //   httpOnly :false
             // });
-            //req.session.id  = result[0].id;
+            // 로그인 후 사용자 정보를 세션에 저장 
+            req.session.isLogin = result[0].id
+
+            req.session.save(error => {
+              if(error) console.log(error)
+            })
+            
 
             return res.json({
                msg: '로그인 성공',
-               token,
+               accessToken: token,
                user : result[0],
                loginSuccess : true
             });
@@ -123,25 +138,34 @@ router.post('/login', (req, res, next) => {
 //router.get('/auth', userMiddleware.isLoggedIn, (req, res, next) => {
 router.get('/auth', (req, res, next) => {
     //여기까지 미들웨어를 통과해 왔다는 얘기는 Authentication 이 true 라는 말
-    //console.log(req.session.id)
-    if(req.session.id){
-      return  res.json({
-        //id : req.user.id,
-        isAdmin : false,
-        //isAdmin : req.user.role === 0 ? false : true, // role 0 -> 일반유저, 0이 아니면 관리자
-        isAuth : true,
-        //username : req.user.username,
-        //role : req.user.role
-      })
-    } 
-    else {
-      return res.json({
-        status: "FAILED",
-        msg: '접근권한이 없습니다.'
-      });
-
+  
+    if(req.session.isLogin){
+      res.json({ isAdmin : false, isAuth : true })
     }
+    else {
+      res.json({ isAdmin : false, isAuth : false })
+    }
+    // return  res.json({
+    //   //id : req.user.id,
+    //   isAdmin : false,
+    //   //isAdmin : req.user.role === 0 ? false : true, // role 0 -> 일반유저, 0이 아니면 관리자
+    //   isAuth : true,
+    //   //username : req.user.username,
+    //   //role : req.user.role
+    // })
+   
 });
 
+router.get('/logout', (req, res) => {
+  if(req.session.isLogin){
+    req.session.destroy(error => {
+      if(error) console.log(error) 
+    })
+    return res.json({ success : true})
+
+  } else {
+    res.json({ success : true})
+  }
+})
 
 module.exports = router;

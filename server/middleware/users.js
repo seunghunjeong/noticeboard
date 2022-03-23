@@ -35,9 +35,8 @@ module.exports = {
     try {
       //일단 jwt 인증 보류
       //token decoded
-      const token = req.cookies.x_auth;
-      console.log('쿠키', req.cookies );
-      const decoded = jwt.verify(token, 'SECRETKEY');
+      //const token = req.session.IsLogin.id
+      //const decoded = jwt.verify(token, 'SECRETKEY');
       //req.user.user.id = decoded;
 
       const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'

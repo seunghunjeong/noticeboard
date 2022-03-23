@@ -4,7 +4,8 @@ const cors = require('cors');
 var corsOptions = {
     origin: "http://localhost:3000",
     methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true
+    credentials: true,
+    exposedHeaders: ["set-Cookie"]
   };
 const bodyParser = require('body-parser');
 

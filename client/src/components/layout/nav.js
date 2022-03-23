@@ -1,7 +1,7 @@
 import React from 'react';
-import { axios } from 'axios';
+import { Axios } from 'axios';
 import { Layout, Menu, Button } from 'antd';
-import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
@@ -19,8 +19,14 @@ function nav() {
     const onLogoutHandler = (event) => {
       event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
 
-      sessionStorage.removeItem('user_id');
-      navigate("/");
+      // Axios.get("/api/logout")
+      // .then(response => {
+      //     if(response.data.success){
+      //         navigate("/");
+      //     }else{
+      //         alert("로그아웃 하는데 실패했습니다.");
+      //     }
+      // })
      
     }
 
