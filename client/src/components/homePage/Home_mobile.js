@@ -4,7 +4,7 @@ import 'antd/dist/antd.less';
 import { Calendar, Badge, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import locale from "antd/es/calendar/locale/ko_KR";
-import Modal from './DailyReportPopup';
+import Modal from '../../components/modals/DailyReportPopup';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 

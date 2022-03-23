@@ -1,14 +1,14 @@
 import React from 'react';
 import './DailyReportPopup.css'
 
-const Modal = (props) => {
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
-    const { open, close, header, insert } = props;
+const ReportRegisterModal = (props) => {
+    // 부모로부터 값을 받아옴
+    const { display, close, header, update, del } = props;
 
     return (
-        // 모달이 열릴때 openModal 클래스가 생성된다.
-        <div className={open ? 'openModal modal' : 'modal'}>
-            {open ? (
+        // 클래스명 변경을 통해 활성화 / 비활성화
+        <div className={display ? 'openModal modal' : 'modal'}>
+            {display ? (
                 <section>
                     <header>
                         {header}
@@ -18,11 +18,14 @@ const Modal = (props) => {
                     </header>
                     <main>{props.children}</main>
                     <footer>
-                        <button className="insert" onClick={insert}>
-                            등록
+                        <button className="update" onClick={update}>
+                            수정
+                        </button>
+                        <button className="delete" onClick={del}>
+                            삭제
                         </button>
                         <button className="close" onClick={close}>
-                            취소
+                            닫기
                         </button>
                     </footer>
                 </section>
@@ -31,4 +34,4 @@ const Modal = (props) => {
     );
 };
 
-export default Modal;
+export default ReportRegisterModal;
