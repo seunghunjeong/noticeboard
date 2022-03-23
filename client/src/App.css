@@ -43,7 +43,7 @@
 .main-logo{
   width: 120px; height: 30px;
   background: no-repeat url(../src/components/layout/cmworld-logo.png);
-  float: right;
+  float: left;
   margin: 16px 0;
 }
 
