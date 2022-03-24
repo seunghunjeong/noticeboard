@@ -10,8 +10,11 @@ import ReportViewModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import '../../App.css';
+import { useSelector } from 'react-redux';
+import Auth from '../../hoc/auth'
 
 function Home() {
+    
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState("first");
     // useState("임시작성자"); 임시작성자 -> 작성자 이름 변경필요.
@@ -310,4 +313,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Auth(Home, true)

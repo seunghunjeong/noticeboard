@@ -6,17 +6,27 @@ import { Card, Layout, Button, Input, Tabs, Divider } from 'antd';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import Auth from '../../hoc/auth'
 
 
 function Board_register() {
+  
+  //antd
   const { Content } = Layout;
   const { TabPane } = Tabs;
-  const [selectedFiles, setSelectedFiles] = useState(undefined);
 
+
+  //사용자 정보 받아오기
+  const userState = useSelector(state => state.user.userData);
+  const userId = userState === undefined ? null : userState.id;
+  const userName = userState === undefined ? null : userState.userName;
+  const isAuth = userState === undefined ? null : userState.isAuth;
+
+  const [selectedFiles, setSelectedFiles] = useState(undefined);
   const selectFile = (event) => {
     setSelectedFiles(event.target.files);
   };
-
 
   const [boardContent, setBoardContent] = useState({
     title: '',
@@ -35,12 +45,13 @@ function Board_register() {
 
   // 이벤트 후 경로 이동할때 사용하는 hooks
   const navigate = useNavigate();
+
   // 입력버튼
   const submitBoard = () => {
     let formData = new FormData();
     let content = boardContent.content;
     const title = boardContent.title;
-    const writer = user;
+    const writer = userName;
 
     if (title === "") {
       alert('제목을 입력해주세요.');
@@ -128,7 +139,7 @@ function Board_register() {
 
 
 
-export default Board_register
+export default Auth(Board_register, true)
 
 
 
