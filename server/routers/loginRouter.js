@@ -1,11 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
+
 const db = require('../config/db');
+const userMiddleware = require('../middleware/users.js');
+
 const cookieParser = require("cookie-parser");
 router.use(cookieParser());
 var session = require("express-session"); 
+
+var corsOptions = {
+  origin: "http://localhost:3000",
+  methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+  exposedHeaders: ["set-Cookie"]
+};
+router.use(cors(corsOptions))
 router.use(session({ 
-  key : "isLogin",
+  //key : "isLogin",
   secret : "secret", 
   resave : false, 
   saveUninitialized : false,
@@ -17,22 +29,20 @@ router.use(session({
 - resave : 세션이 변경되지 않아도 저장이 됨, false 권장 
 - saveUninitialized : 세션 초기화시 미리 만들지를 설정 
 */
+router.use(function(req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    //"x-access-token, Origin, Content-Type, Accept"
+    "http://localhost:3000"
+  );
+  next();
+});
 
 // 비밀번호 암호화
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10; //암호화를 몇 번시킬지 정하는 숫자
 
-
-const userMiddleware = require('../middleware/users.js');
-
-router.use(function(req, res, next) {
-  res.header(
-    "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
-  );
-  next();
-});
 
 //회원가입
 router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
@@ -111,12 +121,12 @@ router.post('/login', (req, res, next) => {
             // });
             // 로그인 후 사용자 정보를 세션에 저장 
             req.session.isLogin = result[0].id
-
+            req.session.userName = result[0].username
             req.session.save(error => {
               if(error) console.log(error)
             })
             
-
+            
             return res.json({
                msg: '로그인 성공',
                accessToken: token,
@@ -143,11 +153,17 @@ router.get('/auth', (req, res, next) => {
       res.json({ 
         isAdmin : false, 
         isAuth : true,
-        id : req.session.isLogin
+        id : req.session.isLogin,
+        userName : req.session.userName
       })
     }
     else {
-      res.json({ isAdmin : false, isAuth : false })
+      res.json({ 
+        isAdmin : false, 
+        isAuth : false ,
+        id : ' ',
+        userName : ' '
+      })
     }
     // return  res.json({
     //   //id : req.user.id,

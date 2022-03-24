@@ -16,13 +16,7 @@ Axios.defaults.withCredentials = true;
 
 function Home() {
 
-    //사용자 정보 받아오기
-    let user = ""
-
-    if(useSelector(state => state.user.userData) > 0){
-        user = state.user.userData.id;
-    }
-    console.log(user);
+    
 
     const [state, setState] = useState("");
     const [writer, setWriter] = useState("");
@@ -33,6 +27,18 @@ function Home() {
         selectedValue: moment('')
     });
     const [report, setReport] = useState("");
+
+    //사용자 정보 받아오기
+    const userState = useSelector(state => state.user.userData);
+    //const user = userState.id === undefined ? " " : userState.id;
+    
+    const userId = userState === undefined ? null : userState.id;
+    const userName = userState === undefined ? null : userState.userName;
+
+    console.log(userId + userName);
+    
+    
+
     // 등록창 열고닫기
     const openRegisterModal = () => {
         setRegisterModalOpen(true);
@@ -246,14 +252,14 @@ function Home() {
 
             {/* 등록팝업 */}
             <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
             <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
             </ReportUpdateModal>
@@ -262,4 +268,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Auth(Home, true)

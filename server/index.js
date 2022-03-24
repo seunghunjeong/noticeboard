@@ -1,12 +1,6 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-var corsOptions = {
-    origin: "http://localhost:3000",
-    methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-    exposedHeaders: ["set-Cookie"]
-  };
 const bodyParser = require('body-parser');
 
 // data base
@@ -16,13 +10,30 @@ const db = require('./config/db');
 const PORT = process.env.port || 8000;
 
 // use set 
-app.use(cors());
+var corsOptions = {
+    origin: "http://localhost:3000",
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    exposedHeaders: ["set-Cookie"]
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      //"x-access-token, Origin, Content-Type, Accept"
+      "http://localhost:3000"
+    );
+    next();
+});
 
-// login auth 
-const cookieParser = require("cookie-parser");
-app.use(cookieParser());
+// add routes
+const loginRouter = require('./routers/loginRouter');
+const dailyReportRouter = require('./routers/daliyReport');
+app.use('/report', dailyReportRouter);
+app.use('/api', loginRouter);
+
 
 // file upload
 const multer = require('multer');
@@ -31,21 +42,6 @@ const fs = require('fs');
 const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
-
-// add routes
-const loginRouter = require('./routers/loginRouter');
-const dailyReportRouter = require('./routers/daliyReport');
-app.use('/report', dailyReportRouter);
-app.use('/api', loginRouter);
-
-// 크롬에서 cors 에러 방지용
-app.use(cors());
-// express.json 사용
-app.use(express.json());
-// application/json
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 // 파일저장경로, 폴더가없다면 생성함
 const uploadPath = 'C:/uploadtest';
