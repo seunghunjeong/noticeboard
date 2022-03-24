@@ -17,7 +17,7 @@ Axios.defaults.withCredentials = true;
 function Home() {
 
     const [state, setState] = useState("");
-    const [writer, setWriter] = useState("");
+    //const [writer, setWriter] = useState("");
     const [viewDailyReport, setViewDailyReport] = useState([]);
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -28,10 +28,11 @@ function Home() {
 
     //사용자 정보 받아오기
     const userState = useSelector(state => state.user.userData);
-    //const user = userState.id === undefined ? " " : userState.id;
-    
     const userId = userState === undefined ? null : userState.id;
     const userName = userState === undefined ? null : userState.userName;
+    // if(userName !== null || userName !== undefined || userName !== " "){
+    //     setWriter(userName);
+    // } -> 무한루프오류
     const isAuth = userState === undefined ? null : userState.isAuth;
 
     // 등록창 열고닫기
@@ -178,7 +179,7 @@ function Home() {
         }
         Axios.post('http://localhost:8000/report/insert', {
             report: report,
-            writer: writer,
+            writer: userName,
             date: selectDay.selectedValue.format('YYYY-MM-DD')
         }).then(() => {
             alert("등록완료");
