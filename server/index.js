@@ -1,14 +1,5 @@
 const express = require('express');
 const app = express();
-<<<<<<< HEAD
-const db = require('./config/db');
-const mysql = require('mysql')
-const bodyParser = require('body-parser');
-const cookieParser = require("cookie-parser");
-// node.js의 포트 설정. 기본 포트는 8000.
-const PORT = process.env.port || 8000;
-const cors = require('cors');
-=======
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
@@ -45,7 +36,6 @@ app.use('/api', loginRouter);
 
 
 // file upload
->>>>>>> test_4
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -53,22 +43,6 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
-<<<<<<< HEAD
-const dailyReportRouter = require('./routers/daliyReport');
-app.use('/report', dailyReportRouter);
-
-
-// 크롬에서 cors 에러 방지용
-app.use(cors());
-// express.json 사용
-app.use(express.json());
-// application/json
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-=======
->>>>>>> test_4
 // 파일저장경로, 폴더가없다면 생성함
 const uploadPath = 'C:/uploadtest';
 const directory = fs.existsSync(uploadPath);

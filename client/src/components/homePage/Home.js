@@ -12,32 +12,10 @@ import moment from 'moment';
 import '../../App.css';
 
 function Home() {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-<<<<<<< HEAD
-    //사용자 정보 받아오기
-    let user = ""
-
-    if(useSelector(state => state.user.userData) > 0){
-        user = state.user.userData.id;
-    }
-    console.log(user);
-
->>>>>>> test_4
-=======
->>>>>>> test_4
-    const [state, setState] = useState("");
-    //const [writer, setWriter] = useState("");
-    const [viewDailyReport, setViewDailyReport] = useState([]);
-    const [registerModalOpen, setRegisterModalOpen] = useState(false);
-    const [updateModalOpen, setUpdateModalOpen] = useState(false);
-=======
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState("first");
     // useState("임시작성자"); 임시작성자 -> 작성자 이름 변경필요.
-    const [writer, setWriter] = useState("임시작성자");
+    //const [writer, setWriter] = useState("임시작성자");
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     // 일일보고 전체내용을 받기위한 state // 모든 사람것
@@ -49,18 +27,24 @@ function Home() {
         date: ""
     });
     // 선택한 셀의 날자를 보관하는 state
->>>>>>> 05fa9922d1ad161a80d57b7ac376bfbfad4e94b0
     const [selectDay, setSelectDay] = useState({
         selectedValue: moment('YYYY-MM-DD')
     });
     // 보고등록 textarea 입력한 값을 보관하는 state
     const [report, setReport] = useState("");
-<<<<<<< HEAD
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
-=======
+    // 등록창 열고닫기
+    const openRegisterModal = () => { setRegisterModalOpen(true); };
+    const closeRegisterModal = () => { setRegisterModalOpen(false); };
+    // 수정창 열고닫기
+    const openUpdateModal = () => { setUpdateModalOpen(true); };
+    const closeUpdateModal = () => { setUpdateModalOpen(false); };
+    // 조회창 열고닫기
+    const openViewModal = () => { setViewModalOpen(true); };
+    const closeViewModal = () => { setViewModalOpen(false); };
 
     //사용자 정보 받아오기
     const userState = useSelector(state => state.user.userData);
@@ -71,32 +55,9 @@ function Home() {
     // } -> 무한루프오류
     const isAuth = userState === undefined ? null : userState.isAuth;
 
->>>>>>> test_4
-    // 등록창 열고닫기
-    const openRegisterModal = () => { setRegisterModalOpen(true); };
-    const closeRegisterModal = () => { setRegisterModalOpen(false); };
-    // 수정창 열고닫기
-<<<<<<< HEAD
-    const openUpdateModal = () => {
-        setUpdateModalOpen(true);
-    };
-    const closeUpdateModal = () => {
-        setUpdateModalOpen(false);
-    };
-=======
-    const openUpdateModal = () => { setUpdateModalOpen(true); };
-    const closeUpdateModal = () => { setUpdateModalOpen(false); };
-    // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); };
-    const closeViewModal = () => { setViewModalOpen(false); };
-
-    // 유저 아이디 들어갈곳
-    const userId = "test";
->>>>>>> 05fa9922d1ad161a80d57b7ac376bfbfad4e94b0
-
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
-        const id = userId; // 임시 id 
+        const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
             params: {
                 id : id
@@ -114,9 +75,6 @@ function Home() {
             setViewDetailReportList(res.data);
         })
     }, [state])
-
-
-
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -191,9 +149,6 @@ function Home() {
     // }
 
 
-
-
-
     // 클릭한 셀이 표시하는 일자, 데이터를 받아서 저장
     const onSelect = value => {
         setState("");
@@ -226,21 +181,16 @@ function Home() {
 
     // 일일보고 등록
     const submitReport = () => {
-        const id = userId; // 등록시 들어갈 임시아이디
+        const id = userId; 
         if (report === "") {
             alert("내용을 입력해주세요.");
             return;
         }
         Axios.post('http://localhost:8000/report/insert', {
             report: report,
-<<<<<<< HEAD
-            writer: writer,
+            writer: userName,
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
-=======
-            writer: userName,
-            date: selectDay.selectedValue.format('YYYY-MM-DD')
->>>>>>> test_4
         }).then(() => {
             alert("등록완료");
             closeRegisterModal();
@@ -322,10 +272,6 @@ function Home() {
         )
     }
 
-
-
-
-
     return (
         <Fragment>
 
@@ -343,14 +289,14 @@ function Home() {
 
             {/* 등록팝업 */}
             <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
             <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
             </ReportUpdateModal>

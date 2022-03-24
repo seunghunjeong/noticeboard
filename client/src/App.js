@@ -9,6 +9,7 @@ import BoardingUpdatePage from './components/boardingPage/Board_update';
 
 import HomePage from './components/homePage/Home';
 import LoginPage from '../src/components/loginPage/Login';
+import JoinPage from '../src/components/joinPage/Join';
 
 // components layout
 //import Nav from './components/layout/nav';
