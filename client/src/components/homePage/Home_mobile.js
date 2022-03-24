@@ -2,23 +2,15 @@ import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
 import 'antd/dist/antd.less';
 import { Calendar, Badge, Tag } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import locale from "antd/es/calendar/locale/ko_KR";
-import Modal from '../../components/modals/DailyReportPopup';
+import Modal from '../../components/modals/DailyReportPopup_mobile';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 
 import MobileStyle from '../../App_mobile.module.css';
 
 function Home() {
-
-    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
-    useEffect(() => {
-        Axios.get('http://localhost:8000/report/getReportList'
-        ).then((response) => {
-            setViewDailyReport(response.data);
-        })
-    }, [])
 
     // dailyReport 정보
     const [dailyReport, setDailyReport] = useState(
@@ -28,10 +20,20 @@ function Home() {
             report : '',
             regist_date : ''
         }
-    );
+    );    
+    const [state, setState] = useState();
 
     const [viewDailyReport, setViewDailyReport] = useState([]);
-    const [state, setState] = useState("");
+
+    const [readBogoArr, setReadBogoArr] = useState();
+
+    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
+    useEffect(() => {
+        Axios.get('http://localhost:8000/report/getReportList'
+        ).then((response) => {
+            setViewDailyReport(response.data);
+        })
+    }, [state])
 
     // 월 단위 캘린더 랜더링할 내용
     function getListData(value) {
@@ -47,6 +49,7 @@ function Home() {
                 listData = [
                     {
                         key: reportData[i].idx,
+                        content : reportData[i].report,
                         type: type
                     },
                 ];
@@ -62,10 +65,13 @@ function Home() {
 
         return (
             <ul className='events'>
-                <PlusOutlined className={MobileStyle.bogo} onClick={openModal} />
+                {/* 데이터에 따른 버튼 변경 */}
+                { listData.length === 0 ? 
+                <PlusOutlined className={MobileStyle.bogo} onClick={openModal} state='insertModal'/> 
+                : <EditOutlined className={MobileStyle.bogo} onClick={openModal} state='updateModal'/> }                
                 {listData.map(item => (
                     <li key={item.index}>
-                        <Badge status={item.type} text={item.content} />
+                        <Badge status={item.type} text={item.content}/>
                     </li>
                 ))}
             </ul>
@@ -93,8 +99,10 @@ function Home() {
 
     // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
     const [modalOpen, setModalOpen] = useState(false);
-    const openModal = () => {
+    const openModal = (e) => {
         setModalOpen(true);
+        // 버튼 상태 가져오기
+        setState(e.currentTarget.getAttribute('state'));
     };
     const closeModal = () => {
         setModalOpen(false);
@@ -122,8 +130,52 @@ function Home() {
         console.log(dailyReport);
         Axios.post('http://localhost:8000/api/insertR', dailyReport
         ).then(() => {
-        alert('일일보고가 작성되었습니다.');
+            alert('일일보고가 작성되었습니다.');
+            closeModal();
+            setState('insert');
         })
+    }
+
+    const updateReport = () => {
+        if (dailyReport.report === "") {
+            alert("내용을 입력해주세요");
+            return;
+        }
+
+         Axios.post('http://localhost:8000/report/update', {
+            idx: readBogoArr.idx,
+            content: dailyReport.report,
+            date: dailyReport.regist_date
+        }).then(() => {
+            alert("수정완료");
+            closeModal();
+            setState("update");
+        })
+
+    }
+
+     const deleteReport = () => {
+        Axios.post('http://localhost:8000/report/delete', {
+            idx: readBogoArr.idx,
+        }).then(() => {
+            alert("삭제완료");
+            closeModal();
+            setState("delete");
+        })
+    } 
+
+    
+
+    // 일보 읽기
+    const readBogo = () => {
+        let resultTxt;
+        if(state === 'updateModal') {
+            resultTxt = viewDailyReport.filter(
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === dailyReport.regist_date
+            )
+            setReadBogoArr(resultTxt[0]);
+        }
+        return resultTxt ? resultTxt[0].report : ' @' 
     }
 
     return (
@@ -139,10 +191,10 @@ function Home() {
                 // monthCellRender={monthCellRender}
                 onSelect={onSelect}
             />
-            <Modal display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo}>
+            <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo}  update={updateReport} del={deleteReport}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :이름</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
-                <TextArea style={{ height: '300px' }} onChange={textAreaHandleChange}></TextArea>
+                <TextArea style={{ height: '300px' }} onChange={textAreaHandleChange} defaultValue={readBogo}></TextArea>
             </Modal>
         </Fragment>
     )

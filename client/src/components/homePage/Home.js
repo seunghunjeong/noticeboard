@@ -236,7 +236,7 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport} update={updateReport} del={deleteReport}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 : 이름</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
