@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
 import 'antd/dist/antd.less';
 import { Calendar, Badge, Tag } from 'antd';
@@ -11,7 +11,15 @@ import moment from 'moment';
 import MobileStyle from '../../App_mobile.module.css';
 
 function Home() {
-    
+
+    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
+    useEffect(() => {
+        Axios.get('http://localhost:8000/report/getReportList'
+        ).then((response) => {
+            setViewDailyReport(response.data);
+        })
+    }, [])
+
     // dailyReport 정보
     const [dailyReport, setDailyReport] = useState(
         {
@@ -22,19 +30,28 @@ function Home() {
         }
     );
 
+    const [viewDailyReport, setViewDailyReport] = useState([]);
+    const [state, setState] = useState("");
+
     // 월 단위 캘린더 랜더링할 내용
     function getListData(value) {
-        let listData;
-        let i = 1
-        let type = "success";
-        switch (value.date()) {
-            case i:
-                listData = [
-                    { type: type }
-                ];
-                break;
 
-            default:
+        const reportData = viewDailyReport;
+        let listData;
+        let calendarMoment;
+        let type = "success";
+        for (let i in reportData) {
+            calendarMoment = moment(reportData[i].regist_date).format("YYYY-MM-DD");
+
+            if (calendarMoment === value.format("YYYY-MM-DD")) {
+                listData = [
+                    {
+                        key: reportData[i].idx,
+                        type: type
+                    },
+                ];
+            }
+
         }
         return listData || [];
     }
@@ -83,18 +100,8 @@ function Home() {
         setModalOpen(false);
     };
 
-    // 선택일 담기위한 state
-    const [selectDay, setSelectDay] = useState({
-        selectedValue: moment('')
-    })
-
-
     // 클릭한 셀이 표시하는 일자를 받아옴
     const onSelect = value => {
-        setSelectDay({
-            selectedValue: value,
-        });
-
         // 등록일 저장
         setDailyReport({
             ...dailyReport,
@@ -132,9 +139,9 @@ function Home() {
                 // monthCellRender={monthCellRender}
                 onSelect={onSelect}
             />
-            <Modal open={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo}>
+            <Modal display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :이름</Tag>
-                <Tag style={{ marginBottom: '5px' }}>작성일 :{selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={textAreaHandleChange}></TextArea>
             </Modal>
         </Fragment>
