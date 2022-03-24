@@ -10,8 +10,6 @@ import moment from 'moment';
 
 import MobileStyle from '../../App_mobile.module.css';
 
-Axios.defaults.withCredentials = true;
-
 function Home() {
     
     // dailyReport 정보

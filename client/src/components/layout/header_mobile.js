@@ -1,4 +1,3 @@
-import React from 'react';
 import { Layout } from 'antd';
 import {BarsOutlined } from '@ant-design/icons';
 

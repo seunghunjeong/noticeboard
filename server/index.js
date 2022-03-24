@@ -1,30 +1,12 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
-var corsOptions = {
-    origin: "http://localhost:3000",
-    methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-    exposedHeaders: ["set-Cookie"]
-  };
-const bodyParser = require('body-parser');
-
-// data base
 const db = require('./config/db');
-
-// set up port
-const PORT = process.env.port || 8000;
-
-// use set 
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// login auth 
+const mysql = require('mysql')
+const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-app.use(cookieParser());
-
-// file upload
+// node.js의 포트 설정. 기본 포트는 8000.
+const PORT = process.env.port || 8000;
+const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -32,11 +14,9 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
-// add routes
-const loginRouter = require('./routers/loginRouter');
 const dailyReportRouter = require('./routers/daliyReport');
 app.use('/report', dailyReportRouter);
-app.use('/api', loginRouter);
+
 
 // 크롬에서 cors 에러 방지용
 app.use(cors());
@@ -79,16 +59,14 @@ let upload = multer({
 app.post("/api/insert", upload.any(), (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
-    const writer = req.body.writer;
-
     let filePath = null;
 
     if(req.files.length === 1){ 
         filePath = req.files[0].path;
     }
     
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,?,?)";
-    db.query(sqlQuery, [title,content,writer,filePath], (err,result) => {
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,'임시작성자',?)";
+    db.query(sqlQuery, [title,content,filePath], (err,result) => {
         if(err) return res.status(400).send(err);
 
         return res.status(200).send(result);
@@ -255,7 +233,6 @@ app.post("/api/insertR", (req, res)=>{
 })
 
 
-// run server
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });

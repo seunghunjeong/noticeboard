@@ -1,34 +1,16 @@
-import React from 'react';
-import { Axios } from 'axios';
 import { Layout, Menu, Button } from 'antd';
-import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
+
+import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
+
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+
+//antd 
+const { Sider } = Layout;
+const { SubMenu } = Menu;
 
 
-function Nav() {
 
-    //antd 
-    const { Sider } = Layout;
-    const { SubMenu } = Menu;
-
-    //페이지이동
-    const navigate = useNavigate();
-
-    //로그아웃버튼 클릭
-    const onLogoutHandler = (event) => {
-      event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
-
-      // Axios.get("/api/logout")
-      // .then(response => {
-      //     if(response.data.success){
-      //         navigate("/");
-      //     }else{
-      //         alert("로그아웃 하는데 실패했습니다.");
-      //     }
-      // })
-     
-    }
+function nav() {
 
     return (
       <Sider>
@@ -52,12 +34,10 @@ function Nav() {
             <Button type="primary" danger style={{ width : '90%' }}>
               <Link to={'/login'}>login</Link>
             </Button>
-            <Button type="primary" danger style={{ width : '90%' }} onClick={onLogoutHandler}>
-                로그아웃
-            </Button>
+            <Button type="primary" danger style={{ width : '90%' }}>로그아웃</Button>
           </div>
        </Sider>
     )
 }
 
-export default Nav
+export default nav
