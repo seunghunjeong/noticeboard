@@ -11,8 +11,20 @@ import moment from 'moment';
 import '../../App.css';
 
 function Home() {
+<<<<<<< HEAD
+=======
+
+    //사용자 정보 받아오기
+    let user = ""
+
+    if(useSelector(state => state.user.userData) > 0){
+        user = state.user.userData.id;
+    }
+    console.log(user);
+
+>>>>>>> test_4
     const [state, setState] = useState("");
-    const [writer, setWriter] = useState("임시작성자");
+    const [writer, setWriter] = useState("");
     const [viewDailyReport, setViewDailyReport] = useState([]);
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -34,8 +46,6 @@ function Home() {
     const closeUpdateModal = () => {
         setUpdateModalOpen(false);
     };
-
-
 
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
@@ -237,14 +247,14 @@ function Home() {
 
             {/* 등록팝업 */}
             <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : 이름</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
             <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : 이름</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
             </ReportUpdateModal>
