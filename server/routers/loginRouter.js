@@ -108,8 +108,9 @@ router.post('/login', (req, res, next) => {
           //아이디와 패스워드가 같아서 결과값이 나왔다면
           //토큰생성
           if (bResult) {
-            const token = jwt.sign( {token : result[0].id},
-              'SECRETKEY', { expiresIn : '86400' });//만료기간(24 hours)
+            // jwt은 나중에 붙이기
+            // const token = jwt.sign( {token : result[0].id},
+            //   'SECRETKEY', { expiresIn : '86400' });//만료기간(24 hours)
 
             //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
             //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
@@ -129,7 +130,7 @@ router.post('/login', (req, res, next) => {
             
             return res.json({
                msg: '로그인 성공',
-               accessToken: token,
+               //accessToken: token,
                user : result[0],
                loginSuccess : true
             });
@@ -177,16 +178,23 @@ router.get('/auth', (req, res, next) => {
 });
 
 router.get('/logout', (req, res) => {
-  console.log(req.session)
+  
   if(req.session.isLogin){
     req.session.destroy(error => {
       if(error) console.log(error) 
     })
-    return res.json({ success : true})
-
+    console.log(req.session)
+    return res.json({  
+      isAdmin : false, 
+      isAuth : false ,
+      id : ' ',
+      userName : ' ',
+      logoutSuccess : true
+    })
   } else {
-    res.json({ success : true})
+    res.json({ logoutSuccess : false})
   }
+  
 })
 
 module.exports = router;

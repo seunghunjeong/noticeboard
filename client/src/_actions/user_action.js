@@ -2,7 +2,8 @@ import axios from "axios";
 import {
     LOGIN_USER, 
     REGISTER_USER,
-    AUTH_USER
+    AUTH_USER,
+    LOGOUT
 } from "./types";
 
 axios.defaults.withCredentials = true //세션관리를 위한 옵션
@@ -41,6 +42,19 @@ export function auth(){
 
     return {
         type : AUTH_USER,
+        payload : request
+    }
+
+}
+
+//로그아웃 action
+export function logout(){
+    
+    const request = axios.get('http://localhost:8000/api/logout')
+    .then(response => response.data)
+
+    return {
+        type : LOGOUT,
         payload : request
     }
 

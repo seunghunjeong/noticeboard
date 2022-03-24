@@ -3,9 +3,10 @@ import { Layout } from 'antd';
 import '../../App.css';
 import { Outlet } from 'react-router-dom'; //보여져야할 화면
 import { useSelector } from 'react-redux';
+
 // components layout
 import NavLayout from './nav';
-import HeaderLayout from './header';
+import HeaderLayout from './HeaderLayout';
 import FooterLayout from './footer';
 
 
