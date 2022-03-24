@@ -1,28 +1,28 @@
 import React from 'react';
-import './DailyReportPopup.css'
+import { Tag } from 'antd';
+import './DailyReportView.css'
 
-const ReportRegisterModal = (props) => {
+
+const ReportViewModal = (props) => {
     // 부모로부터 값을 받아옴
-    const { display, close, header, insert } = props;
+    const { display, close, header, day } = props;
 
     return (
         // 클래스명 변경을 통해 활성화 / 비활성화
-        <div className={display ? 'openModal modal' : 'modal'}>
+        <div className={display ? 'openModal modalView' : 'modalView'}>
             {display ? (
                 <section>
                     <header>
                         {header}
-                        <button className="close" onClick={close}>
+                        <Tag style={{position:'absolute',right: '50px'}}>{day}</Tag>
+                        <button style={{position:'absolute',top:'8px'}} className="closeView" onClick={close}>
                             &times;
                         </button>
                     </header>
                     <main>{props.children}</main>
                     <footer>
-                        <button className="insert" onClick={insert}>
-                            등록
-                        </button>
-                        <button className="close" onClick={close}>
-                            취소
+                        <button className="closeView" onClick={close}>
+                            닫기
                         </button>
                     </footer>
                 </section>
@@ -31,4 +31,4 @@ const ReportRegisterModal = (props) => {
     );
 };
 
-export default ReportRegisterModal;
+export default ReportViewModal;
