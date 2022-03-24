@@ -9,7 +9,10 @@ import ReportUpdateModal from '../../components/modals/DailyReportUpdate';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import '../../App.css';
-import {useSelector} from 'react-redux'
+import Auth from '../../hoc/auth'
+import { useSelector } from 'react-redux';
+
+Axios.defaults.withCredentials = true;
 
 function Home() {
 
@@ -52,8 +55,6 @@ function Home() {
             setViewDailyReport(response.data);
         })
     }, [state])
-
-
 
 
     // 월 단위 캘린더 랜더링할 내용

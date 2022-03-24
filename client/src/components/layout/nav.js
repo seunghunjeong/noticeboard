@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 
-function nav() {
+function Nav() {
 
     //antd 
     const { Sider } = Layout;
@@ -60,4 +60,4 @@ function nav() {
     )
 }
 
-export default nav
+export default Nav

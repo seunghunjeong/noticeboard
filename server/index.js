@@ -16,7 +16,7 @@ const db = require('./config/db');
 const PORT = process.env.port || 8000;
 
 // use set 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -79,14 +79,16 @@ let upload = multer({
 app.post("/api/insert", upload.any(), (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
+    const writer = req.body.writer;
+
     let filePath = null;
 
     if(req.files.length === 1){ 
         filePath = req.files[0].path;
     }
     
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,'임시작성자',?)";
-    db.query(sqlQuery, [title,content,filePath], (err,result) => {
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,?,?)";
+    db.query(sqlQuery, [title,content,writer,filePath], (err,result) => {
         if(err) return res.status(400).send(err);
 
         return res.status(200).send(result);
