@@ -18,7 +18,7 @@ function Home() {
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState("first");
     // useState("임시작성자"); 임시작성자 -> 작성자 이름 변경필요.
-    //const [writer, setWriter] = useState("임시작성자");
+    const [writer, setWriter] = useState("임시작성자");
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     // 일일보고 전체내용을 받기위한 state // 모든 사람것
@@ -51,6 +51,7 @@ function Home() {
 
     //사용자 정보 받아오기
     const userState = useSelector(state => state.user.userData);
+
     const userId = userState === undefined ? null : userState.id;
     const userName = userState === undefined ? null : userState.userName;
     // if(userName !== null || userName !== undefined || userName !== " "){
