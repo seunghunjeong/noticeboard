@@ -48,14 +48,6 @@ function Nav() {
                 Setting
               </Menu.Item> */}
           </Menu>
-          <div style={{ width : '100%', textAlign : 'center', position : 'absolute', bottom : '10px', left : '0' }}>
-            <Button type="primary" danger style={{ width : '90%' }}>
-              <Link to={'/login'}>login</Link>
-            </Button>
-            <Button type="primary" danger style={{ width : '90%' }} onClick={onLogoutHandler}>
-                로그아웃
-            </Button>
-          </div>
        </Sider>
     )
 }
