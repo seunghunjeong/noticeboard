@@ -155,15 +155,18 @@ function Board_detail() {
         </p>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
-      <Card style={{ width: '100%', height : '70%'}}>
-        <div  className='content'>
-            {ReactHtmlParser(BoardDetail.content)}
-        </div>
-        <div style={{ width: '100%', height: '100px', position: 'absolute', bottom: '0', left: '0' }}>
-          <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider>
+      <Card>
+        <div style={{ width: '100%', position: 'relative', bottom: '0', left: '0' }}>
+          {/* <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider> */}
+          첨부파일 :
           <Tag style={{ marginLeft: '10px' }}>
-            <FilePath/>
+             <FilePath/>
           </Tag>
+        </div>
+      </Card>
+      <Card style={{ width: '100%', height : '70%'}}>
+        <div className='content'>
+            {ReactHtmlParser(BoardDetail.content)}
         </div>
       </Card>
     </Content>
