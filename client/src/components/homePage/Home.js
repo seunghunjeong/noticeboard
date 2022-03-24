@@ -16,6 +16,7 @@ function Home() {
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
     //사용자 정보 받아오기
     let user = ""
 
@@ -25,8 +26,10 @@ function Home() {
     console.log(user);
 
 >>>>>>> test_4
+=======
+>>>>>>> test_4
     const [state, setState] = useState("");
-    const [writer, setWriter] = useState("");
+    //const [writer, setWriter] = useState("");
     const [viewDailyReport, setViewDailyReport] = useState([]);
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -52,10 +55,23 @@ function Home() {
     });
     // 보고등록 textarea 입력한 값을 보관하는 state
     const [report, setReport] = useState("");
+<<<<<<< HEAD
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
+=======
+
+    //사용자 정보 받아오기
+    const userState = useSelector(state => state.user.userData);
+    const userId = userState === undefined ? null : userState.id;
+    const userName = userState === undefined ? null : userState.userName;
+    // if(userName !== null || userName !== undefined || userName !== " "){
+    //     setWriter(userName);
+    // } -> 무한루프오류
+    const isAuth = userState === undefined ? null : userState.isAuth;
+
+>>>>>>> test_4
     // 등록창 열고닫기
     const openRegisterModal = () => { setRegisterModalOpen(true); };
     const closeRegisterModal = () => { setRegisterModalOpen(false); };
@@ -217,9 +233,14 @@ function Home() {
         }
         Axios.post('http://localhost:8000/report/insert', {
             report: report,
+<<<<<<< HEAD
             writer: writer,
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
+=======
+            writer: userName,
+            date: selectDay.selectedValue.format('YYYY-MM-DD')
+>>>>>>> test_4
         }).then(() => {
             alert("등록완료");
             closeRegisterModal();
@@ -322,14 +343,14 @@ function Home() {
 
             {/* 등록팝업 */}
             <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
             <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {user}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
             </ReportUpdateModal>

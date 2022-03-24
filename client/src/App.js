@@ -28,6 +28,7 @@ import {
 import HomePageMobile from './components/homePage/Home_mobile';
 
 function App() {
+
   // 화면 표시부분
   return ( 
     <div>
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
               </Route>
               <Route path="/login" element = {<LoginPage/>}/>
+              <Route path="/sign-up" element = {<JoinPage/>}/>
             </Routes>
         </BrowserRouter>
       </BrowserView>
@@ -52,6 +54,7 @@ function App() {
                 <Route path="/" element = {<HomePageMobile/>}/>
               </Route>
               <Route path="/login" element = {<LoginPage/>}/>
+              <Route path="/sign-up" element = {<JoinPage/>}/>
             </Routes>
         </BrowserRouter>
       </MobileView>

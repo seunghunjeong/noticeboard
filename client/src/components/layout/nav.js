@@ -1,4 +1,9 @@
 import { Layout, Menu, Button } from 'antd';
+<<<<<<< HEAD
+=======
+import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+>>>>>>> test_4
 
 import { HomeOutlined, ProfileOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 
@@ -8,10 +13,13 @@ import { Link } from 'react-router-dom';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
+<<<<<<< HEAD
 
 
 function nav() {
 
+=======
+>>>>>>> test_4
     return (
       <Sider>
           <div className="logo" />
@@ -30,12 +38,15 @@ function nav() {
                 Setting
               </Menu.Item> */}
           </Menu>
+<<<<<<< HEAD
           <div style={{ width : '100%', textAlign : 'center', position : 'absolute', bottom : '10px', left : '0' }}>
             <Button type="primary" danger style={{ width : '90%' }}>
               <Link to={'/login'}>login</Link>
             </Button>
             <Button type="primary" danger style={{ width : '90%' }}>로그아웃</Button>
           </div>
+=======
+>>>>>>> test_4
        </Sider>
     )
 }

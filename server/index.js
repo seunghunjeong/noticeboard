@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+<<<<<<< HEAD
 const db = require('./config/db');
 const mysql = require('mysql')
 const bodyParser = require('body-parser');
@@ -7,6 +8,44 @@ const cookieParser = require("cookie-parser");
 // node.js의 포트 설정. 기본 포트는 8000.
 const PORT = process.env.port || 8000;
 const cors = require('cors');
+=======
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+// data base
+const db = require('./config/db');
+
+// set up port
+const PORT = process.env.port || 8000;
+
+// use set 
+var corsOptions = {
+    origin: "http://localhost:3000",
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+    exposedHeaders: ["set-Cookie"]
+};
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      //"x-access-token, Origin, Content-Type, Accept"
+      "http://localhost:3000"
+    );
+    next();
+});
+
+// add routes
+const loginRouter = require('./routers/loginRouter');
+const dailyReportRouter = require('./routers/daliyReport');
+app.use('/report', dailyReportRouter);
+app.use('/api', loginRouter);
+
+
+// file upload
+>>>>>>> test_4
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -14,6 +53,7 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
+<<<<<<< HEAD
 const dailyReportRouter = require('./routers/daliyReport');
 app.use('/report', dailyReportRouter);
 
@@ -27,6 +67,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+=======
+>>>>>>> test_4
 // 파일저장경로, 폴더가없다면 생성함
 const uploadPath = 'C:/uploadtest';
 const directory = fs.existsSync(uploadPath);
