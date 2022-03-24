@@ -26,7 +26,7 @@ router.use(function(req, res, next) {
 router.post('/insert', (req, res) => {
     const sqlQuery = `
         INSERT INTO 
-        dailyReport
+            board.dailyReport
             (
                 writer,
                 report,
@@ -54,7 +54,7 @@ router.get("/getMyReport", (req, res) => {
     const sqlQuery = `
     SELECT * 
     FROM 
-        dailyReport
+        board.dailyReport
     WHERE
         id = '${req.query.id}'`;
 
@@ -66,7 +66,7 @@ router.get("/getMyReport", (req, res) => {
 
 // 일일보고 리스트 불러오기
 router.get("/getReportDetail", (req, res) => {
-    const sqlQuery = `SELECT * FROM dailyReport`;
+    const sqlQuery = `SELECT * FROM board.dailyReport`;
 
     db.query(sqlQuery, (err, result) => {
         res.send(result);
@@ -78,7 +78,7 @@ router.get("/getReportDetail", (req, res) => {
 router.post("/update", (req, res) => {
 
     const sqlQuery = `
-        UPDATE dailyReport
+        UPDATE board.dailyReport
         SET
             report = '${req.body.content}',
             regist_date = '${req.body.date}'
@@ -96,7 +96,7 @@ router.post("/update", (req, res) => {
 router.post("/delete", (req,res) => {
     const sqlQuery = `
         DELETE FROM
-            dailyReport
+            board.dailyReport
         WHERE
             idx = '${req.body.idx}'
     `;

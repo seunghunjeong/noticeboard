@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import Auth from '../../hoc/auth'
 
 function Home() {
-    
+
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState("first");
     // useState("임시작성자"); 임시작성자 -> 작성자 이름 변경필요.
@@ -60,6 +60,7 @@ function Home() {
 
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
+        console.log(userId);
         const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
             params: {
