@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
 import { Calendar, Button, Tag, Divider, Badge } from 'antd';
-import { PlusSquareOutlined, EditOutlined, BarsOutlined, FireFilled } from '@ant-design/icons';
+import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
 import ReportRegisterModal from '../modals/DailyReportRegister';
@@ -51,7 +51,7 @@ function Home() {
 
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
-        const id = userId; // 임시 id 
+        const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
             params: {
                 id : id
@@ -104,8 +104,10 @@ function Home() {
                 <li className='bogo'>
                     {
                         listData.length === 1 ?
-                            <Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button> :
-                            <Button className="bogo_register" onClick={openRegisterModal}><PlusSquareOutlined /></Button>
+                        <>
+                            <CheckOutlined style={{color:'green', marginRight:'5px'}}/><Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
+                        </>
+                            : <Button className="bogo_register" onClick={openRegisterModal}><PlusSquareOutlined /></Button>
                     }
                     <Button className="bogo_view" onClick={openViewModal}><BarsOutlined /></Button>
                 </li>
@@ -113,6 +115,7 @@ function Home() {
                     <li key={"report" + item.idx}>
                         <textarea className='reportView' style={{
                             border: 'none',
+                            fontSize:'12px',
                             background: 'none',
                             resize: 'none',
                             cursor: 'pointer',
@@ -120,6 +123,7 @@ function Home() {
                             height: '80px'
                         }} readOnly defaultValue={item.content}>
                         </textarea>
+                        
                     </li>
                 ))}
             </ul>
@@ -236,7 +240,7 @@ function Home() {
         })
     }
 
-
+    // select day 동기화 시킨후 상세보기 실행
     useEffect(() => {
         GetDetailReport();
     }, [viewModalOpen])
@@ -265,16 +269,13 @@ function Home() {
                 </pre>
             </div>
         ));
+
         return (
             <>
                 {reportList}
             </>
         )
     }
-
-
-
-
 
     return (
         <Fragment>

@@ -33,9 +33,6 @@ router.post('/insert', (req, res) => {
 // 일일보고 리스트 불러오기
 router.get("/getMyReport", (req, res) => {
     // where 조건 user id 넘겨서 바꿔줘야함
-    console.log(req.body);
-    console.log(req.params);
-    console.log(req.query);
     const sqlQuery = `
     SELECT * 
     FROM 
