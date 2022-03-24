@@ -16,8 +16,6 @@ Axios.defaults.withCredentials = true;
 
 function Home() {
 
-    
-
     const [state, setState] = useState("");
     const [writer, setWriter] = useState("");
     const [viewDailyReport, setViewDailyReport] = useState([]);
@@ -34,10 +32,7 @@ function Home() {
     
     const userId = userState === undefined ? null : userState.id;
     const userName = userState === undefined ? null : userState.userName;
-
-    console.log(userId + userName);
-    
-    
+    const isAuth = userState === undefined ? null : userState.isAuth;
 
     // 등록창 열고닫기
     const openRegisterModal = () => {

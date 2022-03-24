@@ -3,13 +3,15 @@ import { Layout, Button } from 'antd';
 import '../../App.css';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
- 
+
 //antd 
 const { Header } = Layout;
 
-function header() {
+function header(props) {
 
-    
+    const isAuth = props.props;
+    //console.log(isAuth);
+
     //페이지이동
     //const navigate = useNavigate();
 
@@ -31,12 +33,17 @@ function header() {
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
             <div className="main-logo"/>
-            <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}>
-            <Link to={'/login'}>login</Link>
-            </Button>
-            <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }} onClick={onLogoutHandler}>
-                로그아웃
-            </Button>
+            {
+                {isAuth} === false ? <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}>
+                <Link to={'/login'}>login</Link>
+                </Button> :
+                <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }} 
+                    onClick={onLogoutHandler}>
+                    로그아웃
+                </Button>
+            }
+            
+          
         </Header>
     )
 }
