@@ -47,14 +47,14 @@ function Home() {
     const closeViewModal = () => { setViewModalOpen(false); };
 
     // 유저 아이디 들어갈곳
-    const userId = "test";
+    const userId = "123";
 
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
         const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
             params: {
-                id : id
+                id: id
             }
         }
         ).then((response) => {
@@ -104,9 +104,9 @@ function Home() {
                 <li className='bogo'>
                     {
                         listData.length === 1 ?
-                        <>
-                            <CheckOutlined style={{color:'green', marginRight:'5px'}}/><Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
-                        </>
+                            <>
+                                <CheckOutlined style={{ color: 'green', marginRight: '5px' }} /><Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
+                            </>
                             : <Button className="bogo_register" onClick={openRegisterModal}><PlusSquareOutlined /></Button>
                     }
                     <Button className="bogo_view" onClick={openViewModal}><BarsOutlined /></Button>
@@ -115,7 +115,7 @@ function Home() {
                     <li key={"report" + item.idx}>
                         <textarea className='reportView' style={{
                             border: 'none',
-                            fontSize:'12px',
+                            fontSize: '12px',
                             background: 'none',
                             resize: 'none',
                             cursor: 'pointer',
@@ -123,7 +123,7 @@ function Home() {
                             height: '80px'
                         }} readOnly defaultValue={item.content}>
                         </textarea>
-                        
+
                     </li>
                 ))}
             </ul>
@@ -260,19 +260,36 @@ function Home() {
         }
 
         const reportList = detailReport.map((item) => (
-            <div key={item.idx} >
-                <pre style={{ font: 'initial', fontSize: '12px' }}>
-                    <Badge status='success' text={item.writer} />
-                    <br></br><br></br>
-                    {item.report}
-                    <Divider></Divider>
-                </pre>
-            </div>
+            <tr key={item.idx}>
+                <td className='writer'>{item.writer}</td>
+                <td><pre>{item.report}</pre></td>
+                <td><pre></pre></td>
+            </tr>
+            // <div key={item.idx} >
+            //     <pre style={{ font: 'initial', fontSize: '12px' }}>
+            //         <Badge status='success' text={item.writer} />
+            //         <br></br><br></br>
+            //         {item.report}
+            //         <Divider></Divider>
+            //     </pre>
+            // </div>
         ));
 
         return (
             <>
-                {reportList}
+                <table className="type11">
+                    <thead>
+                        <tr>
+                            <th scope="cols" className='title'>이름</th>
+                            <th scope="cols" className='today'>금일 실적</th>
+                            <th scope="cols" className='tomorrow'>익일 계획</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {reportList}
+                    </tbody>
+                </table>
+                {/* {reportList} */}
             </>
         )
     }
@@ -307,7 +324,7 @@ function Home() {
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="일일보고 조회" day={selectDay.selectedValue.format('YYYY-MM-DD')}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={selectDay.selectedValue.format('YYYY-MM-DD')}>
                 <GetDetailReport />
             </ReportViewModal>
 
