@@ -42,7 +42,7 @@ function HeaderLayout(props) {
 
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
-            <div className="main-logo"/>
+            {/* <div className="main-logo"/> */}
             {
                 isAuth === "true" ? <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}
                                     onClick={onLogoutHandler}>

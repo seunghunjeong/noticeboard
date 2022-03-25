@@ -4,12 +4,6 @@
   text-align: center;
 }
 
-#components-layout-demo-side .logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
-}
-
 .site-layout .site-layout-background {
   background: #001529;
 }
@@ -41,10 +35,10 @@
 }
 
 .main-logo{
-  width: 120px; height: 30px;
-  background: no-repeat url(../src/components/layout/cmworld-logo.png);
+  width: 200px; height: 60px;
+  background: no-repeat url(../src/components/layout/cmworld-logo.png) center;
   float: left;
-  margin: 16px 0;
+  text-align: center;
 }
 
 .ck-editor__editable_inline {

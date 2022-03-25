@@ -10,14 +10,14 @@ function nav() {
 
     return (
       <Sider>
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <div className="main-logo"/>
+          <Menu theme="dark" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline">
               <Menu.Item key="1" icon={<HomeOutlined />}>
                 <Link to={'/'}>Home</Link>
               </Menu.Item>
-              <SubMenu key="sub" icon={<ProfileOutlined />} title="Board">
-                <Menu.Item key="2">notice</Menu.Item>
-                <Menu.Item key="3"><Link to={'/board_list/'}>project</Link></Menu.Item>
+              <SubMenu key="sub1" icon={<ProfileOutlined />} title="Board">
+                <Menu.Item key="1">notice</Menu.Item>
+                <Menu.Item key="2"><Link to={'/board_list/'}>project</Link></Menu.Item>
               </SubMenu>
               {/* <Menu.Item key="5" icon={<SettingOutlined />}>
                 Setting

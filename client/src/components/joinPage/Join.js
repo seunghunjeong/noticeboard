@@ -31,8 +31,8 @@ function Join() {
         setName(event.currentTarget.value)
     }
 
-    const onSubmitHandler = (event) => {   
-        event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
+    const onSubmitHandler = (value) => {   
+        //event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
 
         //password와 confirm password가 일치할때만 가입승인
         if(Password !== ConfirmPassword){
