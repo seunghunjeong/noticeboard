@@ -51,7 +51,7 @@
 }
 
 .deleteY {
-  text-decoration: line-through
+  display: none;
 }
 
 .filebox label {

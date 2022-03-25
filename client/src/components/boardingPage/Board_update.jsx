@@ -127,12 +127,14 @@ function Board_update() {
     let fileNameArr = fileName.split('\\');
     return (
       <>
+      <div className={fileDeleteChk ? "deleteY" : "deleteN"} >
         <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
-          <button className={fileDeleteChk ? "deleteY" : "deleteN"} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
             {fileNameArr[2]}
           </button>
         </Tag>
         <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
+      </div>
       </>
     )
   }
