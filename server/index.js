@@ -13,8 +13,7 @@ const PORT = process.env.port || 8000;
 var corsOptions = {
     origin: "http://localhost:3000",
     methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-    exposedHeaders: ["set-Cookie"]
+    credentials: true
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());

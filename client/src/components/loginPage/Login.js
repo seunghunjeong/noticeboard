@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
-import { Layout, Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-
+import axios from "axios";
 
 function Login() {
 
@@ -42,8 +42,12 @@ function Login() {
         dispatch(loginUser(body))
         .then(response => {
             if(response.payload.loginSuccess === true){
-                alert("로그인 성공");
-                //sessionStorage.setItem('user_id', Id)
+                const accessToken = response.payload.accessToken;
+                console.log(accessToken);
+
+                // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+		        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+               
                 navigate("/");
             }
             else { 

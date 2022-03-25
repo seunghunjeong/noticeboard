@@ -12,8 +12,7 @@ var session = require("express-session");
 var corsOptions = {
   origin: "http://localhost:3000",
   methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true,
-  exposedHeaders: ["set-Cookie"]
+  credentials: true
 };
 router.use(cors(corsOptions))
 router.use(session({ 
@@ -108,9 +107,9 @@ router.post('/login', (req, res, next) => {
           //아이디와 패스워드가 같아서 결과값이 나왔다면
           //토큰생성
           if (bResult) {
-            // jwt은 나중에 붙이기
-            // const token = jwt.sign( {token : result[0].id},
-            //   'SECRETKEY', { expiresIn : '86400' });//만료기간(24 hours)
+            // jwt
+            const token = jwt.sign( {token : result[0].id},
+              'SECRETKEY', { expiresIn : '86400' });//만료기간24 hours
 
             //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
             //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
@@ -121,16 +120,15 @@ router.post('/login', (req, res, next) => {
             //   httpOnly :false
             // });
             // 로그인 후 사용자 정보를 세션에 저장 
-            req.session.isLogin = result[0].id
-            req.session.userName = result[0].username
-            req.session.save(error => {
-              if(error) console.log(error)
-            })
-            
-            
+            // req.session.isLogin = result[0].id
+            // req.session.userName = result[0].username
+            // req.session.save(error => {
+            //   if(error) console.log(error)
+            // })
+               
             return res.json({
                msg: '로그인 성공',
-               //accessToken: token,
+               accessToken: token,
                //user : result[0],
                loginSuccess : true
             });
@@ -145,37 +143,17 @@ router.post('/login', (req, res, next) => {
   );
 });
 
-
 //router.get('/auth', userMiddleware.isLoggedIn, (req, res, next) => {
 router.get('/auth', (req, res, next) => {
-    //여기까지 미들웨어를 통과해 왔다는 얘기는 Authentication 이 true 라는 말
-    console.log(req.session)
-    if(req.session.isLogin){
-      res.json({ 
-        isAdmin : false, 
-        isAuth : true,
-        id : req.session.isLogin,
-        userName : req.session.userName
-      })
-    }
-    else {
-      res.json({ 
-        isAdmin : false, 
-        isAuth : false ,
-        id : ' ',
-        userName : ' '
-      })
-    }
-    // return  res.json({
-    //   //id : req.user.id,
-    //   isAdmin : false,
-    //   //isAdmin : req.user.role === 0 ? false : true, // role 0 -> 일반유저, 0이 아니면 관리자
-    //   isAuth : true,
-    //   //username : req.user.username,
-    //   //role : req.user.role
-    // })
    
-});
+  if(res.statusCode == 200){
+    return res.json({
+      userName : req.userName,
+      id : req.id,
+      isAuth : false
+    });
+  }  
+})
 
 router.get('/logout', (req, res) => {
   

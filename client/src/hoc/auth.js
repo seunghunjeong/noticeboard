@@ -45,11 +45,8 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     } 
 
                 }
-            })
-            
-
-            
-        }, [])
+            })           
+        }, []) //[] 한번만호출
 
         return (
             <SpecificComponent/>

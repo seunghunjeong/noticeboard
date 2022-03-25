@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { registerUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
-import { Layout, Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 function Join() {

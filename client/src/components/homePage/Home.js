@@ -256,6 +256,7 @@ function Home() {
     useEffect(() => {
         GetDetailReport();
     }, [viewModalOpen])
+    
     let detailReport = [];
     const GetDetailReport = () => {
 
