@@ -14,14 +14,14 @@ function MainLayout(props) {
     //사용자 정보 받아오기
     const userState = useSelector(state => state.user.userData);
     const isAuth = userState === undefined ? null : userState.isAuth;
-    console.log(isAuth);
+    const userName = userState === undefined ? null : userState.userName;
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <NavLayout />
             {/* 본문 */}
             <Layout className="site-layout">
-              <HeaderLayout props={isAuth}/>
+              <HeaderLayout props={[isAuth, userName]}/>
                 <Outlet /> 
               <FooterLayout />
             </Layout>
