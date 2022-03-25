@@ -30,6 +30,7 @@ router.post('/insert', (req, res) => {
             (
                 writer,
                 report,
+                plan,
                 id,
                 regist_date
             )
@@ -37,6 +38,7 @@ router.post('/insert', (req, res) => {
             (
                 '${req.body.writer}',
                 '${req.body.report}',
+                '${req.body.plan}',
                 '${req.body.id}',
                 '${req.body.date}'
             )`;
@@ -78,6 +80,7 @@ router.post("/update", (req, res) => {
         UPDATE board.dailyReport
         SET
             report = '${req.body.content}',
+            plan = '${req.body.plan}',
             regist_date = '${req.body.date}'
         WHERE
             idx = '${req.body.idx}'

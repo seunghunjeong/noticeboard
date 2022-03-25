@@ -122,7 +122,7 @@
     font-weight: bold;
     vertical-align: top;
     color: #fff;
-    background: #48cead ;
+    background: #808080 ;
   }
   table.type11 .title{
     color: rgb(0, 0, 0);
@@ -134,7 +134,7 @@
   }
   table.type11 .today{
     color: rgb(0, 0, 0);
-    background: #a8f5ff ;
+    background: #c7f2f8 ;
     width:40%;
   }
   table.type11 .tomorrow{
