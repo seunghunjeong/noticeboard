@@ -59,7 +59,7 @@ function Home() {
     // } -> 무한루프오류
     const isAuth = userState === undefined ? null : userState.isAuth;
 
-    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
+    // 자신이 작성한 일일보고 데이터 불러오기
     useEffect(() => {
         const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
@@ -70,7 +70,7 @@ function Home() {
         ).then((response) => {
             setViewMyDailyReport(response.data);
         })
-    }, [state])
+    }, [userId, state])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
