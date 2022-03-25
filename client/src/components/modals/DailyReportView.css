@@ -120,7 +120,6 @@
     width: 155px;
     padding: 10px;
     font-weight: bold;
-    vertical-align: top;
     color: #fff;
     background: #808080 ;
   }
@@ -131,6 +130,7 @@
   table.type11 .writer{
     text-align: center;
     width:20%;
+    
   }
   table.type11 .today{
     color: rgb(0, 0, 0);
@@ -145,7 +145,6 @@
   table.type11 td {
     width: 155px;
     padding: 10px;
-    vertical-align: top;
     border-bottom: 1px solid #ccc;
     background: #eee;
   }

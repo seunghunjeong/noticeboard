@@ -49,16 +49,15 @@ function Home() {
     const closeUpdateModal = () => { setUpdateModalOpen(false); };
     // 조회창 열고닫기
     const openViewModal = () => { setViewModalOpen(true); };
-    const closeViewModal = () => { setViewModalOpen(false); };
+    const closeViewModal = () => { setViewModalOpen(false); setReport({today:"",tomorrow:""}) };
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
-    //const getUserId = useSelector(state => setWriter(state.user.userData.id));
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName; 
     const isAuth = getUserData === undefined ? null : getUserData.isAuth;
 
-    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
+    // 자신이 작성한 전체 일일보고 받아오기
     useEffect(() => {
         const id = userId;
         Axios.get('http://localhost:8000/report/getMyReport', {
@@ -278,14 +277,7 @@ function Home() {
                 <td><pre>{item.report}</pre></td>
                 <td><pre>{item.plan}</pre></td>
             </tr>
-            // <div key={item.idx} >
-            //     <pre style={{ font: 'initial', fontSize: '12px' }}>
-            //         <Badge status='success' text={item.writer} />
-            //         <br></br><br></br>
-            //         {item.report}
-            //         <Divider></Divider>
-            //     </pre>
-            // </div>
+            
         ));
 
         return (
