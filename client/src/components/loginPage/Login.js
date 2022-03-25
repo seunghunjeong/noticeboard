@@ -1,11 +1,16 @@
-import { Axios } from 'axios';
 import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
+import { Layout, Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
-function LoginPage() {
+
+function Login() {
+
+    //antd
 
     //페이지이동
     const navigate = useNavigate();
@@ -22,8 +27,8 @@ function LoginPage() {
         setPassword(event.currentTarget.value)
     }
 
-    const onSubmitHandler = (event) => {
-        event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
+    const onSubmitHandler = (value) => {
+        //event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
 
         let body = {
             id : Id,
@@ -49,27 +54,32 @@ function LoginPage() {
     }
 
     return (
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
-            
-            <form style={{display:'flex', flexDirection:'column'}}
-                  onSubmit={onSubmitHandler}>
-                <label>ID</label>
-                <input type="text" value={Id} onChange={onIdHandler}/>
-
-                <label>Password</label>
-                <input type="password" value={Password} onChange={onPasswordHandler}/>
-
-                <br/>
-                <button>
-                    로그인
-                </button>
-
-            </form>
-
-        </div>
-    
+        <Layout style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
+        
+            <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
+                <Form.Item name="username" rules={[{ required: true, message: '아이디를 입력하세요.'}]}>
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" value={Id} onChange={onIdHandler}/>
+                </Form.Item>
+                <Form.Item name="password" rules={[{ required: true, message: '비밀번호를 입력하세요.'}]}>
+                    <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" value={Password} onChange={onPasswordHandler}/>
+                </Form.Item>
+                <Form.Item>
+                    <Form.Item name="remember" valuePropName="checked" noStyle>
+                        <Checkbox>아이디/비밀번호 저장</Checkbox>
+                    </Form.Item>
+                        <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link>
+                    </Form.Item>
+                    <Form.Item>
+                    <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight : "10px"}}>
+                        로그인
+                    </Button>
+                        Or <Link to={'/sign-up'}>회원가입</Link>
+                </Form.Item>
+            </Form>
+        
+        </Layout>
     )
 }
 
 //export default Auth(LoginPage, null);
-export default Auth(LoginPage, false);
+export default Auth(Login, false);

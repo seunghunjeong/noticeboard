@@ -131,7 +131,7 @@ router.post('/login', (req, res, next) => {
             return res.json({
                msg: '로그인 성공',
                //accessToken: token,
-               user : result[0],
+               //user : result[0],
                loginSuccess : true
             });
           }

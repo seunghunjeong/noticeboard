@@ -15,12 +15,9 @@ function nav() {
               <Menu.Item key="1" icon={<HomeOutlined />}>
                 <Link to={'/'}>Home</Link>
               </Menu.Item>
-              {/* <Menu.Item key="2" icon={<TeamOutlined />}>
-                Team
-              </Menu.Item> */}
               <SubMenu key="sub" icon={<ProfileOutlined />} title="Board">
-                <Menu.Item key="3">notice</Menu.Item>
-                <Menu.Item key="4"><Link to={'/board_list/'}>project</Link></Menu.Item>
+                <Menu.Item key="2">notice</Menu.Item>
+                <Menu.Item key="3"><Link to={'/board_list/'}>project</Link></Menu.Item>
               </SubMenu>
               {/* <Menu.Item key="5" icon={<SettingOutlined />}>
                 Setting
