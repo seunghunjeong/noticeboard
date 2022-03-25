@@ -17,8 +17,6 @@ function Home() {
 
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState("first");
-    // useState("임시작성자"); 임시작성자 -> 작성자 이름 변경필요.
-    const [writer, setWriter] = useState("임시작성자");
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     // 일일보고 전체내용을 받기위한 state // 모든 사람것
@@ -50,14 +48,11 @@ function Home() {
     const closeViewModal = () => { setViewModalOpen(false); };
 
     //사용자 정보 받아오기
-    const userState = useSelector(state => state.user.userData);
-
-    const userId = userState === undefined ? null : userState.id;
-    const userName = userState === undefined ? null : userState.userName;
-    // if(userName !== null || userName !== undefined || userName !== " "){
-    //     setWriter(userName);
-    // } -> 무한루프오류
-    const isAuth = userState === undefined ? null : userState.isAuth;
+    const getUserData = useSelector(state => state.user.userData);
+    //const getUserId = useSelector(state => setWriter(state.user.userData.id));
+    const userId = getUserData === undefined ? null : getUserData.id;
+    const userName = getUserData === undefined ? null : getUserData.userName; 
+    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
 
     // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
     useEffect(() => {
@@ -70,8 +65,8 @@ function Home() {
         }
         ).then((response) => {
             setViewMyDailyReport(response.data);
-        })
-    }, [state])
+        }) 
+    }, [state, userId])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
@@ -294,14 +289,14 @@ function Home() {
 
             {/* 등록팝업 */}
             <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
             <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
                 <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
             </ReportUpdateModal>
