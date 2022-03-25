@@ -19,3 +19,11 @@
   bottom: 1vh;
   right: 1vh;
 }
+
+.bogoTxtArea {
+  height: 14vh !important;
+}
+
+.bogoTxt {
+  font-size: 0.9em  !important;
+}

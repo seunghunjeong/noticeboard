@@ -237,19 +237,6 @@ function getDownloadFilename(req, filename) {
     return filename;
 }
 
-// 모바일용 일일보고
-app.post("/api/insertR", (req, res)=>{
-    /* console.log(req.body.id); */
-    
-    const sqlQuery = "INSERT INTO dailyReport (id, writer, report, regist_date) VALUES(?, ?, ?, ?);";
-    db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report,req.body.regist_date], (err,result) => {
-        if(err) return res.status(400).send(err);
-
-        return res.status(200).send(result);
-    }) 
-})
-
-
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
 });
