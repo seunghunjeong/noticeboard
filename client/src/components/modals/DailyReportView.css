@@ -122,22 +122,25 @@
     font-weight: bold;
     vertical-align: top;
     color: #fff;
-    background: #48cead ;
+    background: #808080 ;
   }
   table.type11 .title{
     color: rgb(0, 0, 0);
-    background: #ffe867 ;
+    background: #fdf0a4 ;
   }
   table.type11 .writer{
     text-align: center;
+    width:20%;
   }
   table.type11 .today{
     color: rgb(0, 0, 0);
-    background: #b0f6ff ;
+    background: #c7f2f8 ;
+    width:40%;
   }
   table.type11 .tomorrow{
     color: rgb(0, 0, 0);
-    background: #ffb24d ;
+    background: #ffdaaa ;
+    width:40%;
   }
   table.type11 td {
     width: 155px;
