@@ -71,7 +71,7 @@ function Board_register() {
     formData.append('content', content);
     formData.append('writer', writer);
 
-    Axios.post('http://localhost:8000/api/insert', formData, {
+    Axios.post('http://localhost:8000/board/api/insert', formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }

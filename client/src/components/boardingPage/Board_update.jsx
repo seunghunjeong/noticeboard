@@ -36,7 +36,7 @@ function Board_update() {
   let { idx } = useParams();
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/api/getBoardDetail', { idx: idx })
+    Axios.post('http://localhost:8000/board/api/getBoardDetail', { idx: idx })
       .then(response => {
         if (response.data) {
           setBoardContent(response.data[0])
@@ -102,7 +102,7 @@ function Board_update() {
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
     if (confirmAction) { //yes 선택
-      Axios.post('http://localhost:8000/api/updateBoard', formData, {
+      Axios.post('http://localhost:8000/board/api/updateBoard', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }

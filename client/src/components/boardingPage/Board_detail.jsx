@@ -23,7 +23,7 @@ function Board_detail() {
   // 게시판 idx 가져오기
   let { idx } = useParams();
   useEffect(() => {
-    Axios.post('http://localhost:8000/api/getBoardDetail', {idx : idx})
+    Axios.post('http://localhost:8000/board/api/getBoardDetail', {idx : idx})
     .then(response => {
         if(response.data){
           setBoardDetail(response.data[0]);
@@ -52,7 +52,7 @@ function Board_detail() {
     const confirmAction = window.confirm("삭제하시겠습니까?");
 
     if (confirmAction) { //yes 선택
-      Axios.post('http://localhost:8000/api/deleteBoard', { 
+      Axios.post('http://localhost:8000/board/api/deleteBoard', { 
         idx: idx ,
         filePath: BoardDetail.file_path
       }).then(response => {
@@ -88,7 +88,7 @@ function Board_detail() {
     fileNameArr = filePath.split("\\");
     fileName = fileNameArr[2];
     
-    Axios.post('http://localhost:8000/api/fileDownload', {
+    Axios.post('http://localhost:8000/board/api/fileDownload', {
       filePath: filePath,
       fileName: fileName
     },

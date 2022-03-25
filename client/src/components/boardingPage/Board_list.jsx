@@ -25,7 +25,7 @@ function Board_list() {
   
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('http://localhost:8000/api/getBoardList',{
+    Axios.get('http://localhost:8000/board/api/getBoardList',{
       params: {
         filter : searchContent.filter === '' ? '' : searchContent.filter,
         // %를 넣어줘야 와일드카드 검색 조건.
