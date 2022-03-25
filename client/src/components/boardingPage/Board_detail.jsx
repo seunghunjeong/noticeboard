@@ -21,7 +21,7 @@ function Board_detail() {
   const [BoardDetail, setBoardDetail] = useState([]);
 
   // 게시판 idx 가져오기
-  let { idx } = useParams();
+  let { idx, category } = useParams();
   useEffect(() => {
     Axios.post('http://localhost:8000/board/api/getBoardDetail', {idx : idx})
     .then(response => {
@@ -41,8 +41,7 @@ function Board_detail() {
    // 수정
    const onGoUpdateHandler = (event) => {
      event.preventDefault();
- 
-     navigate("/board_update/" + BoardDetail.idx);
+     navigate(`/board_update/${BoardDetail.idx}/${category}`);
    }
 
   // 삭제
@@ -58,7 +57,7 @@ function Board_detail() {
       }).then(response => {
           if (response.data === "success") {
             alert("삭제 완료");
-            navigate("/board_list"); //삭제 후 목록으로 이동
+            navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
           } else {
             alert("삭제 실패");
           }
@@ -74,7 +73,7 @@ function Board_detail() {
   const onBoardGoHomeHandler = (event) => {
     event.preventDefault();
 
-    navigate("/board_list");
+    navigate(`/board_list/${category}`);
   }
 
   //date format 수정
@@ -112,7 +111,6 @@ function Board_detail() {
   
   const FilePath = () => {
     let fileName = BoardDetail.file_path;
-    console.log(BoardDetail);
     let fileNameArr = [];
     // 첨부파일 원본이름 표시
     if (fileName == null) {
@@ -164,7 +162,7 @@ function Board_detail() {
           </Tag>
         </div>
       </Card>
-      <Card style={{ width: '100%', height : '70%'}}>
+      <Card style={{ width: '100%', height : '65%'}}>
         <div className='content'>
             {ReactHtmlParser(BoardDetail.content)}
         </div>

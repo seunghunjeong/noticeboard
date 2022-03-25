@@ -38,10 +38,10 @@ function App() {
             <Routes>
               <Route element = {<MainLayout/>}>
                 <Route path="/" element = {<HomePage/>}/>
-                <Route path="/board_list" element = {<BoardingListPage/>}/>
-                <Route path="/board_register" element = {<BoardingRegisterPage/>}/>
-                <Route path="/board_detail/:idx" element = {<BoardingDetailPage/>}/>
-                <Route path="/board_update/:idx" element = {<BoardingUpdatePage/>}/>
+                <Route path="/board_list/:category" element = {<BoardingListPage/>}/>
+                <Route path="/board_register/:category" element = {<BoardingRegisterPage/>}/>
+                <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
+                <Route path="/board_update/:idx/:category" element = {<BoardingUpdatePage/>}/>
               </Route>
               <Route path="/login" element = {<LoginPage/>}/>
               <Route path="/sign-up" element = {<JoinPage/>}/>

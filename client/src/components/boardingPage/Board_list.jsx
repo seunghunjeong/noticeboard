@@ -5,7 +5,7 @@ import 'antd/dist/antd.less';
 import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useParams } from "react-router-dom"
 
 function Board_list() {
   
@@ -13,6 +13,9 @@ function Board_list() {
   const { Content } = Layout;
   const { Search } = Input;
   const { Option } = Select;
+
+  //카테고리 받아오기
+  let {category} = useParams();
 
   // 내용 저장
   const [viewContent, setViewContent] = useState([]);
@@ -29,20 +32,21 @@ function Board_list() {
       params: {
         filter : searchContent.filter === '' ? '' : searchContent.filter,
         // %를 넣어줘야 와일드카드 검색 조건.
-        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%'
+        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
+        category: category
      }
     }).then((response) => {
       setViewContent(response.data);
     })
     // 검색 값이 변경될때마다 랜더링
-  },[searchContent])
+  },[searchContent,category])
 
   // 페이지 이동
   const navigate = useNavigate();
   const onBoardRegisterHandler = (event) => {
     event.preventDefault();
 
-    navigate("/board_register");//board_register router로 이동
+    navigate(`/board_register/${category}`);//board_register router로 이동
   }
 
   // table columns
@@ -59,7 +63,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title', 
-      render: (title, row) => <Link to={'/board_detail/'+ row.idx}>{title}</Link>,
+      render: (title, row) => <Link to={`/board_detail/${row.idx}/${category}`}>{title}</Link>,
       align : 'left'
     },
     {

@@ -63,14 +63,15 @@ router.post("/api/insert", upload.any(), (req, res)=>{
     const title = req.body.title;
     const content = req.body.content;
     const writer = req.body.writer;
+    const category = req.body.category;
     let filePath = null;
 
     if(req.files.length === 1){ 
         filePath = req.files[0].path;
     }
     
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path) VALUES (?,?,?,?)";
-    db.query(sqlQuery, [title,content,writer,filePath], (err,result) => {
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path,category) VALUES (?,?,?,?,?)";
+    db.query(sqlQuery, [title,content,writer,filePath,category], (err,result) => {
         if(err) return res.status(400).send(err);
 
         return res.status(200).send(result);
@@ -84,19 +85,20 @@ router.get("/api/getBoardList", (req, res) => {
     // params 받기
     const filter = req.query.filter;
     const keyword = req.query.keyword;
+    const category = req.query.category;
     
     // select 시작
-    let sqlQuery = "SELECT * FROM board.noticeboard";
+    let sqlQuery = "SELECT * FROM board.noticeboard WHERE category = ?";
 
     // filter에 따른 조건 추가
     switch (filter) {
         case '' : 
             break;
         case 'writer' :
-            sqlQuery += " where writer like ?";
+            sqlQuery += " and writer like ?";
             break;
         case 'title' :
-            sqlQuery += " where title like ?";
+            sqlQuery += " and title like ?";
             break;
     }
 
@@ -104,7 +106,7 @@ router.get("/api/getBoardList", (req, res) => {
     sqlQuery += " order by regist_date desc";
 
     // ?에 키워드 넣기.
-    db.query(sqlQuery, [keyword] , (err, result) => {
+    db.query(sqlQuery, [category, keyword] , (err, result) => {
         res.send(result);
     })
 })
@@ -125,6 +127,7 @@ router.post("/api/updateBoard", upload.any(), (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const idx = req.body.idx;
+    const category = req.body.category;
     let deleteChk = req.body.deleteChk;
 
     if(deleteChk === "true") deleteChk = true;
@@ -150,9 +153,9 @@ router.post("/api/updateBoard", upload.any(), (req, res) => {
     if(filePath === "null") filePath = null;
     
 
-    const sqlQuery = "UPDATE board.noticeboard SET title = ?, content = ?, file_path = ?, update_date = CURRENT_TIMESTAMP WHERE idx = ?";
+    const sqlQuery = "UPDATE board.noticeboard SET title = ?,category = ?, content = ?, file_path = ?, update_date = CURRENT_TIMESTAMP WHERE idx = ?";
 
-    db.query(sqlQuery, [title, content, filePath, idx], (err, result) => {
+    db.query(sqlQuery, [title,category, content, filePath, idx], (err, result) => {
         if(err){
             res.send("error : " + err );
         } else {

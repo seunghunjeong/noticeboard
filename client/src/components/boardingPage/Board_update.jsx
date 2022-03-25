@@ -2,7 +2,7 @@ import React from 'react'
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs, Divider, Tag } from 'antd';
+import { Card, Layout, Button, Input, Tabs, Divider, Tag, Select } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
@@ -12,11 +12,34 @@ function Board_update() {
   // antd 변수
   const { Content } = Layout;
   const { TabPane } = Tabs;
+  const { Option } = Select;
 
-  const [BoardContent, setBoardContent] = useState({});
-  const [BoardUpdateContent, setBoardUpdateContent] = useState({
-    title: BoardContent.title,
-    content: BoardContent.content
+
+  // idx 가져오기
+  let { idx, category } = useParams();
+
+  const [boardCategory, setBoardCategory] = useState([]);
+
+  useEffect(() => {
+    Axios.post('http://localhost:8000/nav/getCategory')
+      .then((res) => {
+        setBoardCategory(res.data);
+      })
+  }, []);
+
+  const getCategory = e => {
+    setBoardContent({
+      ...boardContent,
+      category: e
+    })
+    console.log(boardContent)
+  }
+
+  const [boardContent, setBoardContent] = useState({});
+  const [boardUpdateContent, setBoardUpdateContent] = useState({
+    title: boardContent.title,
+    content: boardContent.content,
+    category: category
   });
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
@@ -32,8 +55,6 @@ function Board_update() {
     setFileDeleteChk(!fileDeleteChk)
   }
 
-  // idx 가져오기
-  let { idx } = useParams();
 
   useEffect(() => {
     Axios.post('http://localhost:8000/board/api/getBoardDetail', { idx: idx })
@@ -53,11 +74,11 @@ function Board_update() {
     const { name, value } = event.target;
 
     setBoardUpdateContent({
-      ...BoardUpdateContent,
+      ...boardUpdateContent,
       [name]: value
     })
     setBoardContent({
-      ...BoardContent,
+      ...boardContent,
       [name]: value
     })
   }
@@ -69,9 +90,9 @@ function Board_update() {
   const onBoardUpdateHandler = (event) => {
 
     let formData = new FormData();
-    let title = BoardUpdateContent.title ?? BoardContent.title;
-    let content = BoardUpdateContent.content;
-
+    let title = boardUpdateContent.title ?? boardContent.title;
+    let content = boardUpdateContent.content;
+    let category = boardContent.category ?? boardUpdateContent.category;
     if (title === "") {
       alert('제목을 입력해주세요.');
       return;
@@ -85,19 +106,20 @@ function Board_update() {
       for (const key of Object.keys(selectedFiles)) {
         formData.append('file', selectedFiles[key]);
       }
-      if(BoardContent.file_path !== undefined){
-        formData.append('filePath', BoardContent.file_path) 
+      if (boardContent.file_path !== undefined) {
+        formData.append('filePath', boardContent.file_path)
       }
     }
 
     // 선택한 파일이 없다면 , 기존에 있던 파일이름을 가져옴
     if (selectedFiles === undefined) {
-      formData.append('filePath', BoardContent.file_path);
+      formData.append('filePath', boardContent.file_path);
     }
     formData.append('title', title);
     formData.append('content', content);
     formData.append('idx', idx);
     formData.append('deleteChk', fileDeleteChk);
+    formData.append('category', category);
 
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
@@ -107,7 +129,7 @@ function Board_update() {
           "Content-Type": "multipart/form-data",
         }
       }).then(() => {
-        navigate('/board_list');
+        navigate(`/board_list/${category}`);
         alert('수정완료');
       })
     } else {
@@ -119,22 +141,22 @@ function Board_update() {
   const onBoardGoHomeHandler = (event) => {
     event.preventDefault();
 
-    navigate("/board_list");
+    navigate(`/board_list/${category}`);
   }
 
   const AttaFile = () => {
-    let fileName = BoardContent.file_path;
+    let fileName = boardContent.file_path;
     let fileNameArr = fileName.split('\\');
     return (
       <>
-      <div className={fileDeleteChk ? "deleteY" : "deleteN"} >
-        <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
-          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-            {fileNameArr[2]}
-          </button>
-        </Tag>
-        <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
-      </div>
+        <div className={fileDeleteChk ? "deleteY" : "deleteN"} >
+          <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
+            <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+              {fileNameArr[2]}
+            </button>
+          </Tag>
+          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
+        </div>
       </>
     )
   }
@@ -161,23 +183,35 @@ function Board_update() {
       </div>
 
       <Card>
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={BoardContent.title} style={{ fontSize: '30px', marginBottom: '16px' }} />
+        <Select
+          onChange={getCategory}
+          placeholder="category"
+          style={{ width: '7%' }}
+          defaultValue={category}
+        >
+          {
+            boardCategory.map(e =>
+              <Option value={e.category}>{e.category}</Option>
+            )
+          }
+        </Select>
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={boardContent.title} style={{ width: '93%', fontSize: '30px', marginBottom: '16px' }} />
         <CKEditor
-          editor={Editor} data={BoardContent.content}
+          editor={Editor} data={boardContent.content}
           onChange={(event, editor) => {
             const data = editor.getData();
             setBoardUpdateContent({
-              ...BoardUpdateContent,
+              ...boardUpdateContent,
               content: data
             })
           }}
         />
         <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider>
         {
-          BoardContent.file_path && <AttaFile />
+          boardContent.file_path && <AttaFile />
         }
         <br></br>
-        <input style={{height:'30px' , marginLeft:'10px'}} type="file" onChange={selectFile} />
+        <input style={{ height: '30px', marginLeft: '10px' }} type="file" onChange={selectFile} />
       </Card>
     </Content>
 

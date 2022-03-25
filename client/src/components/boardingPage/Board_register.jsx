@@ -1,8 +1,9 @@
 import React from 'react'
 import Axios from 'axios';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs, Divider } from 'antd';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Card, Layout, Button, Input, Tabs, Divider, Select } from 'antd';
+
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
@@ -11,11 +12,21 @@ import Auth from '../../hoc/auth'
 
 
 function Board_register() {
-  
+
+  const [boardCategory, setBoardCategory] = useState([]);
+
+  useEffect(() => {
+    Axios.post('http://localhost:8000/nav/getCategory')
+      .then((res) => {
+        setBoardCategory(res.data);
+      })
+  }, []);
+
   //antd
   const { Content } = Layout;
   const { TabPane } = Tabs;
-
+  const { category } = useParams();
+  const { Option } = Select;
 
   //사용자 정보 받아오기
   const userState = useSelector(state => state.user.userData);
@@ -30,16 +41,26 @@ function Board_register() {
 
   const [boardContent, setBoardContent] = useState({
     title: '',
-    content: ''
+    content: '',
+    category: '',
   })
 
   // 에디터에서 입력값 받아오는 함수
   const getValue = e => {
+    console.log(e);
     const { name, value } = e.target;
     setBoardContent({
       ...boardContent,
       [name]: value
     })
+  }
+
+  const getCategory = e => {
+    setBoardContent({
+      ...boardContent,
+      category: e
+    })
+    console.log(boardContent)
   }
 
 
@@ -52,6 +73,7 @@ function Board_register() {
     let content = boardContent.content;
     const title = boardContent.title;
     const writer = userName;
+    const category = boardContent.category;
 
     if (title === "") {
       alert('제목을 입력해주세요.');
@@ -70,13 +92,14 @@ function Board_register() {
     formData.append('title', title);
     formData.append('content', content);
     formData.append('writer', writer);
+    formData.append('category', category);
 
     Axios.post('http://localhost:8000/board/api/insert', formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }
     }).then(() => {
-      navigate('/board_list');
+      navigate(`/board_list/${category}`);
       alert('등록완료');
     })
   };
@@ -85,9 +108,8 @@ function Board_register() {
   const onBoardGoHomeHandler = (event) => {
     event.preventDefault();
 
-    navigate("/board_list");
+    navigate(`/board_list/${category}`);
   }
-
 
   return (
     <div>
@@ -114,7 +136,20 @@ function Board_register() {
           >등록</Button>
         </div>
         <Card>
-          <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ fontSize: '30px', marginBottom: '16px' }} />
+          <div>
+            {/* select css 수정필요 */}
+            <Select
+              onChange={getCategory}
+              placeholder="category"
+              style={{ width: '7%' }}>
+              {
+                boardCategory.map(e =>
+                  <Option value={e.category}>{e.category}</Option>
+                )
+              }
+            </Select>
+            <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ width: '93%', fontSize: '30px', marginBottom: '16px' }} />
+          </div>
           <CKEditor
             editor={Editor}
             data=""
