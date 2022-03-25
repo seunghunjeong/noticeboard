@@ -1,4 +1,3 @@
-import { Axios } from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux'
 import { auth } from '../_actions/user_action'
@@ -7,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function(SpecificComponent, option, adminRoute = null) {
 
-
-    //option 설명
+    // option 설명
     // null => 아무나 출입이 가능한 페이지
     // true => 로그인한 유저만 출입이 가능한 페이지
     // false => 로그인한 유저는 출입 불가능한 페이지
@@ -23,9 +21,13 @@ export default function(SpecificComponent, option, adminRoute = null) {
             dispatch(auth())
             .then(response => {
                 //console.log(response);
+            
+                //회원가입
+                if(!response.payload.isAuth && option === null){
 
+                }
                 //로그인 하지 않은 상태
-                if(!response.payload.isAuth){
+                else if(!response.payload.isAuth){
                     if(option)
                     alert("로그인을 해야합니다.");
                     navigate("/login");

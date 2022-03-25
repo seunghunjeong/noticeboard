@@ -54,7 +54,7 @@ function Login() {
     }
 
     return (
-        <Layout style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
         
             <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
                 <Form.Item name="username" rules={[{ required: true, message: '아이디를 입력하세요.'}]}>
@@ -77,7 +77,7 @@ function Login() {
                 </Form.Item>
             </Form>
         
-        </Layout>
+        </div>
     )
 }
 
