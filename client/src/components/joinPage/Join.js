@@ -73,7 +73,7 @@ function Join() {
             name="basic"
             labelCol={{ span: 10 }}
             wrapperCol={{ span: 16 }}
-            initialValues={{ remember: true }}
+            //initialValues={{ remember: true }}
             onFinish={onSubmitHandler}
             onFinishFailed={onFinishFailed}
             autoComplete="off">

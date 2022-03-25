@@ -119,6 +119,11 @@ function Board_list() {
     });
   };
 
+  //게시판 카테고리 선택
+  const onChangeCategory = value => {
+    console.log(value);
+  };
+
   //render
   return (
 
@@ -126,7 +131,22 @@ function Board_list() {
       <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Breadcrumb style={{ float: 'left' }}>
           <Breadcrumb.Item>Board</Breadcrumb.Item>
-          <Breadcrumb.Item>project</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Select
+              showSearch
+              placeholder="category"
+              optionFilterProp="children"
+              onChange={onChangeCategory}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Option value="notice">notice</Option>
+              <Option value="utils">utils</Option>
+              <Option value="references">references</Option>
+              <Option value="project">project</Option>
+            </Select>
+          </Breadcrumb.Item>
         </Breadcrumb>
         <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
       </div>

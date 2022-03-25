@@ -59,11 +59,11 @@ router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
           if (err) {
             //throw err;
             return res.json({
-              msg: err,
+              msg: "이미 사용하고 있는 아이디입니다.",
             })
           }
           return res.json({
-            msg : "success"
+            msg : "회원가입 성공"
           });
         }
       );
