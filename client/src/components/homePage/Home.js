@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
-import { Calendar, Button, Tag, Divider, Badge } from 'antd';
+import { Calendar, Button, Tag, Divider } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -25,6 +25,7 @@ function Home() {
     const [dailyReportDetail, setDailyReportDetail] = useState({
         idx: "",
         content: "",
+        plan: "",
         date: ""
     });
     // 선택한 셀의 날자를 보관하는 state
@@ -32,7 +33,10 @@ function Home() {
         selectedValue: moment('YYYY-MM-DD')
     });
     // 보고등록 textarea 입력한 값을 보관하는 state
-    const [report, setReport] = useState("");
+    const [report, setReport] = useState({
+        today: "",
+        tomorrow: ""
+    });
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -164,6 +168,7 @@ function Home() {
                 setDailyReportDetail({
                     idx: reportData[i].idx,
                     content: reportData[i].report,
+                    plan: reportData[i].plan,
                     date: moment(reportData[i].regist_date).format("YYYY-MM-DD")
                 })
             }
@@ -178,19 +183,24 @@ function Home() {
 
     // 일일보고 textarea value 가져와서 저장
     const getReport = e => {
-        const { value } = e.target;
-        setReport(value);
+        const { name, value } = e.target;
+        setReport({
+            ...report,
+            [name]: value
+        });
+        console.log(report);
     }
 
     // 일일보고 등록
     const submitReport = () => {
-        const id = userId; 
-        if (report === "") {
+        const id = userId;
+        if (report.today === "") {
             alert("내용을 입력해주세요.");
             return;
         }
         Axios.post('http://localhost:8000/report/insert', {
-            report: report,
+            report: report.today,
+            plan: report.tomorrow,
             writer: userName,
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
@@ -204,8 +214,11 @@ function Home() {
 
     // 수정시 기존에 있던 report 값을 새로운 입력을 받는 report state 에다가 셋팅
     useEffect(() => {
-        setReport(dailyReportDetail.content);
-    }, [dailyReportDetail.content])
+        setReport({
+            today: dailyReportDetail.content,
+            tomorrow: dailyReportDetail.plan
+        });
+    }, [dailyReportDetail])
 
 
     // 보고 수정
@@ -216,7 +229,8 @@ function Home() {
         }
         Axios.post('http://localhost:8000/report/update', {
             idx: dailyReportDetail.idx,
-            content: report,
+            content: report.today,
+            plan: report.tomorrow,
             date: dailyReportDetail.date
         }).then(() => {
             alert("수정완료");
@@ -262,7 +276,7 @@ function Home() {
             <tr key={item.idx}>
                 <td className='writer'>{item.writer}</td>
                 <td><pre>{item.report}</pre></td>
-                <td><pre></pre></td>
+                <td><pre>{item.plan}</pre></td>
             </tr>
             // <div key={item.idx} >
             //     <pre style={{ font: 'initial', fontSize: '12px' }}>
@@ -309,17 +323,40 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="일일보고" insert={submitReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
-                <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
-                <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue="◎"></TextArea>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="ICT 사업부 일일 업무 보고" insert={submitReport}>
+                <div>
+                    <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
+                    <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
+                </div>
+                <table style={{ width: '100%' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>금일 실적</th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>익일 계획</th>
+                        </tr>
+                    </thead>
+                </table>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="일일보고 수정" update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 : {userId}</Tag>
-                <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
-                <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="ICT 사업부 일일 업무 보고" update={updateReport} del={deleteReport}>
+                <div>
+                    <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
+                    <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
+                </div>
+                <table style={{ width: '100%' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>금일 실적</th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>익일 계획</th>
+                        </tr>
+                    </thead>
+                </table>
+                {/* <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea> */}
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={dailyReportDetail.content} name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={dailyReportDetail.plan} name="tomorrow"></TextArea>
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
