@@ -40,6 +40,12 @@ function Home() {
 
     const [readBogoArr, setReadBogoArr] = useState();
 
+    // 수정 확인
+    const [updateBogoArr, setUpdateBogoArr] = useState({
+        reportChk: false,
+        planChk: false
+    })
+
 
     // 로그인한 사용자용 일보 가져오기
     useEffect(() => {
@@ -50,13 +56,6 @@ function Home() {
         }
         ).then((response) => {
             setViewMyDailyReport(response.data);
-            
-            // 사용자 정보 넣기.
-            setDailyReport({
-                ...dailyReport,
-                id: userId,
-                writer: userName
-            })
         })
     }, [state, userId])
 
@@ -150,6 +149,19 @@ function Home() {
     };
     const closeModal = () => {
         setModalOpen(false);
+        
+        // 업데이트 확인 초기화
+        setUpdateBogoArr({
+            reportChk:false,
+            planChk:false
+        })
+        
+        // 일보 초기화
+        setDailyReport({
+            ...dailyReport,
+            report: '@ ',
+            plan: '@ '
+        })
     };
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 조회창 열고닫기
@@ -177,11 +189,20 @@ function Home() {
                     ...dailyReport,
                     report: event.target.value
                 })
+                setUpdateBogoArr({
+                    ...updateBogoArr,
+                    reportChk: true
+                })
                 break;
             case 'tomorrow' :         
                 setDailyReport({
                     ...dailyReport,
                     plan: event.target.value
+                })
+
+                setUpdateBogoArr({
+                    ...updateBogoArr,
+                    planChk: true
                 })
                 break;
             default : 
@@ -191,7 +212,19 @@ function Home() {
 
     // 일보 저장
     const insertBogo = () => {
-        Axios.post('http://localhost:8000/report/insertM', dailyReport
+        if (dailyReport.report === "@ ") {
+            alert("금일 실적을 입력해주세요");
+            return;
+        }
+        
+        Axios.post('http://localhost:8000/report/insertM',
+        {
+            report: dailyReport.report,
+            plan: dailyReport.plan,
+            writer: userName,
+            regist_date: dailyReport.regist_date,
+            id: userId
+        }
         ).then(() => {
             alert('일일보고가 작성되었습니다.');
             closeModal();
@@ -200,22 +233,21 @@ function Home() {
     }
 
     const updateReport = () => {
-        if (dailyReport.report === "") {
-            alert("내용을 입력해주세요");
+        if (dailyReport.report === "@ ") {
+            alert("금일 실적을 입력해주세요.");
             return;
         }
 
         Axios.post('http://localhost:8000/report/updateM', {
             idx: readBogoArr.idx,
-            report: dailyReport.report,
-            plan : dailyReport.plan,
+            report: updateBogoArr ? dailyReport.report : readBogoArr.report,
+            plan : updateBogoArr ? dailyReport.plan : readBogoArr.plan,
             date: dailyReport.regist_date
         }).then(() => {
             alert("수정완료");
             closeModal();
             setState("update");
         })
-
     }
 
     const deleteReport = () => {
@@ -242,6 +274,11 @@ function Home() {
         const resultTxt = filterBogo();
         if (state === 'updateModal') {
             setReadBogoArr(resultTxt[0]);
+            setDailyReport({
+                ...dailyReport,
+                report: resultTxt[0].report,
+                plan: resultTxt[0].plan
+            })
         }
         return resultTxt ? resultTxt[0].report : ' @'
     }
