@@ -22,11 +22,11 @@ function Home() {
     const userName = getUserData === undefined ? null : getUserData.userName; 
     const isAuth = getUserData === undefined ? null : getUserData.isAuth;
 
-    // dailyReport 정보
+    // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
         {
-            id: userId,
-            writer: userName,
+            id: '',
+            writer: '',
             report: '',
             plan: '',
             regist_date: ''
@@ -50,6 +50,13 @@ function Home() {
         }
         ).then((response) => {
             setViewMyDailyReport(response.data);
+            
+            // 사용자 정보 넣기.
+            setDailyReport({
+                ...dailyReport,
+                id: userId,
+                writer: userName
+            })
         })
     }, [state, userId])
 

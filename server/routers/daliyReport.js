@@ -109,6 +109,7 @@ router.post("/delete", (req,res) => {
 // 일일보고
 router.post("/insertM", (req, res)=>{
     /* console.log(req.body.id); */
+    console.log(req.body.id,req.body.writer,req.body.report, req.body.plan,req.body.regist_date);
     
     const sqlQuery = "INSERT INTO dailyReport (id, writer, report, plan, regist_date) VALUES(?, ?, ?, ?, ?);";
     db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report, req.body.plan,req.body.regist_date], (err,result) => {
