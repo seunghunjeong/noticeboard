@@ -43,13 +43,13 @@ function Home() {
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 등록창 열고닫기
     const openRegisterModal = () => { setRegisterModalOpen(true); };
-    const closeRegisterModal = () => { setRegisterModalOpen(false); };
+    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({today:'', tomorrow:''}); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
-    const closeUpdateModal = () => { setUpdateModalOpen(false); };
+    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({today:'', tomorrow:''});};
     // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); };
-    const closeViewModal = () => { setViewModalOpen(false); setReport({today:"",tomorrow:""}) };
+    const openViewModal = () => { setViewModalOpen(true); GetDetailReport();};
+    const closeViewModal = () => { setViewModalOpen(false); setReport({today:'', tomorrow:''}); };
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
@@ -127,32 +127,11 @@ function Home() {
                             height: '80px'
                         }} readOnly defaultValue={item.content}>
                         </textarea>
-
                     </li>
                 ))}
             </ul>
         );
     }
-
-
-    // 년 단위 캘린더 랜더링 할 내용 
-    // function getMonthData(value) {
-    //     if (value.month() === 5) {
-    //         return 1394;
-    //     }
-    // }
-
-    // 년 단위 캘린더 랜더링 위한 함수
-    // function monthCellRender(value) {
-    //     const num = getMonthData(value);
-    //     return num ? (
-    //         <div className="notes-month">
-    //             <section>{num}</section>
-    //             <span>Backlog number</span>
-    //         </div>
-    //     ) : null;
-    // }
-
 
     // 클릭한 셀이 표시하는 일자, 데이터를 받아서 저장
     const onSelect = value => {
@@ -205,7 +184,7 @@ function Home() {
         }).then(() => {
             alert("등록완료");
             closeRegisterModal();
-            setReport("");
+            setReport({today:'', tomorrow:''});
             setState("insert");
         })
     }
@@ -233,7 +212,7 @@ function Home() {
         }).then(() => {
             alert("수정완료");
             closeUpdateModal();
-            setReport("");
+            setReport({today:'', tomorrow:''});
             setState("update");
 
         })
@@ -246,16 +225,12 @@ function Home() {
         }).then(() => {
             alert("삭제완료");
             closeUpdateModal();
-            setReport("");
+            setReport({today:'', tomorrow:''});
             setState("delete");
         })
     }
 
-    // select day 동기화 시킨후 상세보기 실행
-    useEffect(() => {
-        GetDetailReport();
-    }, [viewModalOpen])
-    
+    // 일일보고 상세보기
     let detailReport = [];
     const GetDetailReport = () => {
 
@@ -308,9 +283,7 @@ function Home() {
             }}
                 locale={locale}
                 fullscreen={true}
-                // onPanelChange={onPanelChange}
                 dateCellRender={dateCellRender}
-                // monthCellRender={monthCellRender}
                 onSelect={onSelect}
             />
 

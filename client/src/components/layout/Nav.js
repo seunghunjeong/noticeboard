@@ -6,16 +6,14 @@ function Nav(props) {
 
   const categoryList = props.props;
   const admin = props.admin;
-  console.log(categoryList);
-  console.log(admin);
-  
+
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
 
   return (
     <Sider>
-      
+
       <div className="main-logo" />
       <Menu theme="dark" defaultOpenKeys={['sub1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
@@ -23,15 +21,16 @@ function Nav(props) {
         </Menu.Item>
         <SubMenu key="sub1" icon={<ProfileOutlined />} title="Board">
           {
-            categoryList.map((e)=>
-              <Menu.Item key={'board_'+e.idx}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
+            categoryList.map((e) =>
+              <Menu.Item key={'board_' + e.idx}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
             )
           }
         </SubMenu>
-        {admin === true ? <SubMenu key="sub2" icon={<ProfileOutlined />} title="Setting">
-                            <Menu.Item key="2"><Link to={""}>가입승인</Link></Menu.Item>   
-                            <Menu.Item key="3"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>   
-                          </SubMenu> : null
+        {admin === true ?
+          <SubMenu key="sub2" icon={<SettingOutlined />} title="Setting">
+            <Menu.Item key="2"><Link to={""}>가입승인</Link></Menu.Item>
+            <Menu.Item key="3"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>
+          </SubMenu> : null
         }
 
       </Menu>
