@@ -7,6 +7,7 @@ import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from '../../components/modals/DailyReportPopup_mobile';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import ReportViewModal from '../modals/DailyReportView';
 
 import MobileStyle from '../../App_mobile.module.css';
 
@@ -121,6 +122,7 @@ function Home() {
     // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
     const [modalOpen, setModalOpen] = useState(false);
     const openModal = (e) => {
+        e.stopPropagation();
         setModalOpen(true);
         // 버튼 상태 가져오기
         setState(e.currentTarget.getAttribute('state'));
@@ -128,6 +130,10 @@ function Home() {
     const closeModal = () => {
         setModalOpen(false);
     };
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    // 조회창 열고닫기
+    const openViewModal = () => { setViewModalOpen(true); };
+    const closeViewModal = () => { setViewModalOpen(false);};
 
     // 클릭한 셀이 표시하는 일자를 받아옴
     const onSelect = value => {
@@ -136,6 +142,7 @@ function Home() {
             ...dailyReport,
             regist_date: value.format('YYYY-MM-DD')
         })
+        openViewModal();
     };
 
     // 일보 내용 저장
@@ -223,6 +230,44 @@ function Home() {
         return resultTxt ? resultTxt[0].plan : ' @'
     }
 
+    // 전체 보기
+    const GetDetailReport = () => {
+
+        const day = dailyReport.regist_date;
+        let detailReportList = viewDailyReport;
+
+        detailReportList = detailReportList.filter(
+            (node) => moment(node.regist_date).format("YYYY-MM-DD") === day
+        ) 
+
+        const reportList = detailReportList.map((item) => (
+            <tr key={item.idx}>
+                <td className='writer'>{item.writer}</td>
+                <td><pre>{item.report}</pre></td>
+                <td><pre>{item.plan}</pre></td>
+            </tr>
+            
+        ));
+
+        return (
+            <>
+                <table className="type11">
+                    <thead>
+                        <tr>
+                            <th scope="cols" className='title'>이름</th>
+                            <th scope="cols" className='today'>금일 실적</th>
+                            <th scope="cols" className='tomorrow'>익일 계획</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {reportList}
+                    </tbody>
+                </table>
+                {/* {reportList} */}
+            </>
+        )
+    }
+
     return (
         <Fragment>
             <Calendar style={{
@@ -244,6 +289,11 @@ function Home() {
                 <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 익일 계획 <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readPlan} name='tomorrow'></TextArea>
             </Modal>
+
+            {/* 조회팝업 */}
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={dailyReport.regist_date}>
+                <GetDetailReport />
+            </ReportViewModal>
         </Fragment>
     )
 }
