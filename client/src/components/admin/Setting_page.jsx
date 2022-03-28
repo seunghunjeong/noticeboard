@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Link, useOutletContext } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom';
 import { List, Button, Input } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
@@ -67,7 +67,6 @@ const Setting_page = () => {
 
     // 카테고리 삭제
     const categoryDelete = (name) => {
-        console.log(name);
 
         const confirmAction = window.confirm("삭제시 해당카테고리의 모든 글이 삭제됩니다. \n삭제하시겠습니까?");
 
