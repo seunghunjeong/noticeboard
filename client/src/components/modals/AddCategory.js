@@ -19,7 +19,7 @@ const AddCategory = (props) => {
                     <main>{props.children}</main>
                     <footer>
                         <button className="insert" onClick={insert}>
-                            등록
+                            추가
                         </button>
                         <button className="close" onClick={close}>
                             취소
