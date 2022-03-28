@@ -57,9 +57,9 @@ function Login() {
     }
 
     return (
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
-        
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', color : ""}}>
             <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
+                <div className="login-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px"}}>LOGIN</div>
                 <Form.Item name="username" rules={[{ required: true, message: '아이디를 입력하세요.'}]}>
                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" value={Id} onChange={onIdHandler}/>
                 </Form.Item>

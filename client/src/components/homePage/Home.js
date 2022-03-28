@@ -55,7 +55,6 @@ function Home() {
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName; 
-    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
 
     // 자신이 작성한 전체 일일보고 받아오기
     useEffect(() => {

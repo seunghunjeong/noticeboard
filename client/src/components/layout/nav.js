@@ -1,10 +1,15 @@
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function Nav() {
+ 
+  //antd 
+  const { Sider } = Layout;
+  const { SubMenu } = Menu;
 
   const [boardCategory, setBoardCategory] = useState([]);
 
@@ -15,11 +20,11 @@ function Nav() {
     })
   },[]);
 
-
-  
-  //antd 
-  const { Sider } = Layout;
-  const { SubMenu } = Menu;
+  //사용자 정보 받아오기
+  const getUserData = useSelector(state => state.user.userData);
+  //관리자가 1일때 관리자 메뉴보이기(관리자 : 1 / 나머지 : null)
+  const admin = getUserData === undefined ? null : getUserData.admin;
+  console.log(admin);
 
   return (
     <Sider>
@@ -36,6 +41,12 @@ function Nav() {
             )
           }
         </SubMenu>
+        {admin === true ? <SubMenu key="sub2" icon={<ProfileOutlined />} title="Setting">
+                        <Menu.Item key="2"><Link to={""}>가입승인</Link></Menu.Item>   
+                        <Menu.Item key="3"><Link to={""}>게시판관리</Link></Menu.Item>   
+                      </SubMenu> : null
+        }
+        
       </Menu>
     </Sider>
   )
