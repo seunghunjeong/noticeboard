@@ -32,6 +32,9 @@ const loginRouter = require('./routers/loginRouter');
 const dailyReportRouter = require('./routers/daliyReport');
 const boardRouter = require('./routers/board');
 const navRouter = require('./routers/nav');
+const adminRouter = require('./routers/admin');
+
+app.use('/admin', adminRouter);
 app.use('/nav', navRouter);
 app.use('/board', boardRouter);
 app.use('/report', dailyReportRouter);
