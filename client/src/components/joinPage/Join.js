@@ -53,7 +53,7 @@ function Join() {
         dispatch(registerUser(body))
         .then(response => {
             if(response.payload.msg === "success"){
-                alert("회원가입 성공");
+                alert("회원가입 신청완료");
                 navigate("/login");
             }
             else { 
@@ -112,7 +112,7 @@ function Join() {
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Link to={'/login'}>뒤로가기</Link>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">
-              회원가입
+              회원가입신청
             </Button>
           </Form.Item>
         </Form>

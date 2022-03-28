@@ -24,7 +24,7 @@ export function loginUser(dataToSubmit){
 //회원가입 action
 export function registerUser(dataToSubmit){//post는 바디부분이 필요하다
 
-    const request = axios.post('http://localhost:8000/api/sign-up', dataToSubmit)
+    const request = axios.post('http://localhost:8000/api/standby-signup', dataToSubmit)
     .then(response => response.data)
 
     return {

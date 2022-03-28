@@ -7,6 +7,7 @@ import BoardingDetailPage from './components/boardingPage/Board_detail';
 import BoardingRegisterPage from './components/boardingPage/Board_register';
 import BoardingUpdatePage from './components/boardingPage/Board_update';
 import AdminSetting from './components/admin/Setting_page';
+import ApproveSignup from './components/admin/Approve_signup';
 
 import HomePage from './components/homePage/Home';
 import LoginPage from '../src/components/loginPage/Login';
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
                 <Route path="/board_update/:idx/:category" element = {<BoardingUpdatePage/>}/>
                 <Route path="/setting_page" element={<AdminSetting/>}/>
+                <Route path="/approve_signup" element={<ApproveSignup/>}/>
               </Route>
               <Route path="/login" element = {<LoginPage/>}/>
               <Route path="/sign-up" element = {<JoinPage/>}/>

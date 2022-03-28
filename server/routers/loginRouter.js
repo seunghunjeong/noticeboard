@@ -43,8 +43,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10; //암호화를 몇 번시킬지 정하는 숫자
 
 
-//회원가입
-router.post('/sign-up', (req, res, next) => {
+//회원가입 신청
+router.post('/standby-signup', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
@@ -68,6 +68,37 @@ router.post('/sign-up', (req, res, next) => {
       );
     });      
   });
+});
+
+//회원가입신청 목록 불러오기
+router.get("/getStandby_signup", (req, res) => {
+    
+  const sqlQuery = `SELECT * FROM board.users WHERE status  = 'N'`;
+
+  db.query(sqlQuery, (err, result) => {
+      res.send(result);
+  });
+
+})
+
+//회원가입 승인
+router.post('/approve-sign-up', (req, res, next) => {
+
+  const id = req.body.id;
+  const sqlQuery = "UPDATE board.users SET status = 'Y' WHERE id = ?"
+  
+  db.query(sqlQuery, [id], (err, result) => {
+      if (err) {
+        //throw err;
+        return res.json({
+          msg: "가입승인오류.",
+        })
+      }
+      return res.json({
+        msg : "success"
+      });
+    }
+  );
 });
 
 //로그인
