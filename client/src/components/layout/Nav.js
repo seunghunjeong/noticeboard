@@ -28,7 +28,7 @@ function Nav(props) {
             )
           }
         </SubMenu>
-        {admin === true ? <SubMenu key="sub2" icon={<ProfileOutlined />} title="Setting">
+        {admin === true ? <SubMenu key="sub2" icon={<SettingOutlined />} title="Setting">
                             <Menu.Item key="2"><Link to={""}>가입승인</Link></Menu.Item>   
                             <Menu.Item key="3"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>   
                           </SubMenu> : null

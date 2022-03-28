@@ -75,7 +75,7 @@ router.post('/login', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
-  const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
+  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ?'
   
   db.query(sqlLogin, [id], (err, result) => {
       // 유저 존재하지않음
