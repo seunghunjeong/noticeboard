@@ -36,4 +36,4 @@ function Nav(props) {
   )
 }
 
-export default Navult Nav
+export default Nav
