@@ -23,27 +23,57 @@ router.use(function(req, res, next) {
 
 // 카테고리 추가
 router.post("/addCategory",(req,res) => {
-    
-    const sqlQuery = `
-        INSERT INTO
+
+    let check;
+
+    const checkQuety = `
+        SELECT COUNT(*) as COUNT 
+        FROM
             boardCategory
-            (
-                category,
-                idx
-            )
-            VALUES
-            (
-                '${req.body.category}',
-                (select idx from (select ifnull(max(idx),0)+1 as idx from boardCategory) tmp)
-            )
-        `;
+        WHERE
+            category = '${req.body.category}'
+    ` 
+    db.query(checkQuety, (err,result) => {
+        check = result[0].COUNT === 1 ? false : true ;
+        
+        if(check){
+            const sqlQuery = `
+                INSERT INTO
+                    boardCategory
+                    (
+                        category,
+                        idx
+                    )
+                    VALUES
+                    (
+                        '${req.body.category}',
+                        (select idx from (select ifnull(max(idx),0)+1 as idx from boardCategory) tmp)
+                    )
+                `;
+        
+            db.query(sqlQuery, (err,result) => {
+                res.send(result);
+            });
+        } else {
+            res.send('중복');
+        }
+        
+    })
+
+})
+
+// 카테고리 삭제
+router.post('/delCategory',(req,res)=> {
+    const sqlQuery = `
+        DELETE FROM
+            boardCategory
+        WHERE
+            category = '${req.body.category}'
+    `
 
     db.query(sqlQuery, (err,result) => {
-        console.log(result);
-        console.log(err);
         res.send(result);
     });
-
 })
 
 module.exports = router;
