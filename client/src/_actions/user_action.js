@@ -35,9 +35,9 @@ export function registerUser(dataToSubmit){//post는 바디부분이 필요하�
 }
 
 //사용자별 권한 action
-export function auth(){
-                               //get은 바디부분이 필요없다
-    const request = axios.get('http://localhost:8000/api/auth')
+export function auth(dataToSubmit){
+                              
+    const request = axios.post('http://localhost:8000/api/auth', dataToSubmit)
     .then(response => response.data)
 
     return {
@@ -49,13 +49,26 @@ export function auth(){
 
 //로그아웃 action
 export function logout(){
-    
-    const request = axios.get('http://localhost:8000/api/logout')
-    .then(response => response.data)
+                            
+   
 
-    return {
-        type : LOGOUT,
-        payload : request
+    if (localStorage.getItem("userId") === null){
+        alert("로그아웃 실패")
+        return false;
     }
+    else {
+        
+        localStorage.removeItem("userId"); 
+        
+        const request = axios.get('http://localhost:8000/api/logout')
+        .then(response => response.data)
+        
+        return {
+            type : LOGOUT,
+            payload : request
+        }
+    }
+  
+   
 
 }

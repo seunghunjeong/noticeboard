@@ -3,7 +3,7 @@ const router = express.Router();
 const cors = require('cors');
 
 const db = require('../config/db');
-const userMiddleware = require('../middleware/users.js');
+//const userMiddleware = require('../middleware/users.js');
 
 const cookieParser = require("cookie-parser");
 router.use(cookieParser());
@@ -39,12 +39,12 @@ router.use(function(req, res, next) {
 
 // 비밀번호 암호화
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+//const jwt = require('jsonwebtoken');
 const saltRounds = 10; //암호화를 몇 번시킬지 정하는 숫자
 
 
 //회원가입
-router.post('/sign-up', userMiddleware.validateRegister, (req, res, next) => {
+router.post('/sign-up', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
@@ -108,8 +108,8 @@ router.post('/login', (req, res, next) => {
           //토큰생성
           if (bResult) {
             // jwt
-            const token = jwt.sign( {token : result[0].id},
-              'SECRETKEY', { expiresIn : '86400' });//만료기간24 hours
+            // const token = jwt.sign( {token : result[0].id},
+            //   'SECRETKEY', { expiresIn : '86400' });//만료기간24 hours
 
             //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
             //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
@@ -128,8 +128,8 @@ router.post('/login', (req, res, next) => {
                
             return res.json({
                msg: '로그인 성공',
-               accessToken: token,
-               //user : result[0],
+               //accessToken: token,
+               userId : result[0].id,
                loginSuccess : true
             });
           }
@@ -143,36 +143,57 @@ router.post('/login', (req, res, next) => {
   );
 });
 
-//router.get('/auth', userMiddleware.isLoggedIn, (req, res, next) => {
-router.get('/auth', (req, res, next) => {
-   
-  if(res.statusCode == 200){
-    return res.json({
-      userName : req.userName,
-      id : req.id,
-      isAuth : false
+
+//페이지로딩시 로그인 유무 권한 체크
+router.post('/auth', (req, res, next) => {
+  
+  const userId = req.body.userId;
+  const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
+  console.log(userId)
+
+  db.query(sqlLogin, [userId], (err, result) => {
+    // 인증실패
+    if (err) {
+      return res.json({
+        userName : ' ',
+        id : ' ',
+        isAuth : false
+      });
+    }
+    // 인증실패
+    if (!result.length) {
+      return res.json({
+        userName : ' ',
+        id : ' ',
+        isAuth : false
+      });
+    }
+    // 인증성공
+    else {
+      return res.json({
+        userName : result[0].username,
+        id : result[0].id,
+        isAuth : true
     });
-  }  
+    }
+  });
+ 
 })
 
+//로그아웃
 router.get('/logout', (req, res) => {
   
-  if(req.session.isLogin){
-    req.session.destroy(error => {
-      if(error) console.log(error) 
-    })
-    console.log(req.session)
+  try{   
     return res.json({  
-      isAdmin : false, 
       isAuth : false ,
       id : ' ',
       userName : ' ',
       logoutSuccess : true
     })
-  } else {
-    res.json({ logoutSuccess : false})
   }
-  
+  catch(err) {
+    res.json({ logoutSuccess : err})
+  }
 })
 
 module.exports = router;

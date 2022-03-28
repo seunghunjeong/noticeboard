@@ -15,10 +15,15 @@ export default function(SpecificComponent, option, adminRoute = null) {
 
         const navigate = useNavigate();
         const dispatch = useDispatch();
+        const userId = localStorage.getItem("userId");
 
+        let body = {
+            userId : userId
+        }
+        
         useEffect(() => {
 
-            dispatch(auth())
+            dispatch(auth(body))
             .then(response => {
                 //console.log(response);
             

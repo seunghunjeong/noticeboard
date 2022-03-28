@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const db = require('../config/db');
 
+
+//****************************************************************사용안하는 페이지
 module.exports = {
   //회원가입 체크
   validateRegister: (req, res, next) => {

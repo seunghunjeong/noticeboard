@@ -42,12 +42,11 @@ function Login() {
         dispatch(loginUser(body))
         .then(response => {
             if(response.payload.loginSuccess === true){
-                const accessToken = response.payload.accessToken;
-                console.log(accessToken);
-
+                //const accessToken = response.payload.accessToken;
                 // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-		        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-               
+		        //axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+                const userId = response.payload.userId
+                localStorage.setItem("userId", userId);
                 navigate("/");
             }
             else { 
