@@ -62,7 +62,7 @@ router.post('/sign-up', (req, res, next) => {
             })
           }
           return res.json({
-            msg : "회원가입 성공"
+            msg : "success"
           });
         }
       );
@@ -75,7 +75,7 @@ router.post('/login', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
-  const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
+  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ?'
   
   db.query(sqlLogin, [id], (err, result) => {
       // 유저 존재하지않음
@@ -155,17 +155,19 @@ router.post('/auth', (req, res, next) => {
     // 인증실패
     if (err) {
       return res.json({
-        userName : ' ',
-        id : ' ',
-        isAuth : false
+        userName : null,
+        id : null,
+        isAuth : false,
+        admin : false
       });
     }
     // 인증실패
     if (!result.length) {
       return res.json({
-        userName : ' ',
-        id : ' ',
-        isAuth : false
+        userName : null,
+        id : null,
+        isAuth : false,
+        admin : false
       });
     }
     // 인증성공
@@ -173,7 +175,8 @@ router.post('/auth', (req, res, next) => {
       return res.json({
         userName : result[0].username,
         id : result[0].id,
-        isAuth : true
+        isAuth : true,
+        admin : result[0].auth === 1 ? true : false
     });
     }
   });

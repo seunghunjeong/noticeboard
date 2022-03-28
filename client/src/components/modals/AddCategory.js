@@ -1,7 +1,7 @@
 import React from 'react';
 import './DailyReport.css'
 
-const ReportRegisterModal = (props) => {
+const AddCategory = (props) => {
     // 부모로부터 값을 받아옴
     const { display, close, header, insert } = props;
 
@@ -19,7 +19,7 @@ const ReportRegisterModal = (props) => {
                     <main>{props.children}</main>
                     <footer>
                         <button className="insert" onClick={insert}>
-                            등록
+                            추가
                         </button>
                         <button className="close" onClick={close}>
                             취소
@@ -31,4 +31,4 @@ const ReportRegisterModal = (props) => {
     );
 };
 
-export default ReportRegisterModal;
+export default AddCategory;

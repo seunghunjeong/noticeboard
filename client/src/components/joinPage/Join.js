@@ -77,6 +77,7 @@ function Join() {
             onFinish={onSubmitHandler}
             onFinishFailed={onFinishFailed}
             autoComplete="off">
+          <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px"}}>SIGN-UP</div>
           <Form.Item
             label="ID"
             name="ID"

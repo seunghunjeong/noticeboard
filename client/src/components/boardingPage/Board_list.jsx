@@ -6,6 +6,7 @@ import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams } from "react-router-dom"
+import Auth from '../../hoc/auth'
 
 function Board_list() {
   
@@ -38,7 +39,7 @@ function Board_list() {
     }).then((response) => {
       setViewContent(response.data);
     })
-    // 검색 값이 변경될때마다 랜더링
+    // 검색 값, 카테고리 변경될때마다 랜더링
   },[searchContent,category])
 
   // 페이지 이동
@@ -122,11 +123,7 @@ function Board_list() {
       keyword : value
     });
   };
-
-  //게시판 카테고리 선택
-  const onChangeCategory = value => {
-    console.log(value);
-  };
+ 
 
   //render
   return (
@@ -136,20 +133,7 @@ function Board_list() {
         <Breadcrumb style={{ float: 'left' }}>
           <Breadcrumb.Item>Board</Breadcrumb.Item>
           <Breadcrumb.Item>
-            <Select
-              showSearch
-              placeholder="category"
-              optionFilterProp="children"
-              onChange={onChangeCategory}
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              <Option value="notice">notice</Option>
-              <Option value="utils">utils</Option>
-              <Option value="references">references</Option>
-              <Option value="project">project</Option>
-            </Select>
+            {category}
           </Breadcrumb.Item>
         </Breadcrumb>
         <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
@@ -176,4 +160,4 @@ function Board_list() {
   )
 }
 
-export default Board_list
+export default Auth(Board_list, null)
