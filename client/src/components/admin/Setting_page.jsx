@@ -48,14 +48,20 @@ const Setting_page = () => {
             [name]: value
         })
     }
+    // 카테고리 추가
     const categoryRegister = () => {
         const category = addCategory.category;
         Axios.post('http://localhost:8000/admin/addCategory', {
             category: category
         }).then((res)=>{
-            alert('추가완료');
-            setState(res.data);
-            closeModal();
+            console.log(res);
+            if(res.data === "중복"){
+                alert('이미 존재하는 카테고리명입니다.');
+            } else {
+                alert('추가완료');
+                setState(res.data);
+                closeModal();
+            }
         })
     }
 
