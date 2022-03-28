@@ -8,26 +8,32 @@ import Modal from '../../components/modals/DailyReportPopup_mobile';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import ReportViewModal from '../modals/DailyReportView';
-
 import MobileStyle from '../../App_mobile.module.css';
 
-function Home() {
-    
-    // 유저 아이디 들어갈곳
-    const userId = "test";
+// 사용자 정보 가져오기
+import { useSelector } from 'react-redux';
+import Auth from '../../hoc/auth'
 
-    // dailyReport 정보
+function Home() {
+
+    //사용자 정보 받아오기
+    const getUserData = useSelector(state => state.user.userData);
+    const userId = getUserData === undefined ? null : getUserData.id;
+    const userName = getUserData === undefined ? null : getUserData.userName; 
+    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
+
+    // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
         {
-            id: userId,
-            writer: '임시작성자',
+            id: '',
+            writer: '',
             report: '',
             plan: '',
             regist_date: ''
         }
     );
     const [state, setState] = useState();
-
+    
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     const [viewDailyReport, setViewDailyReport] = useState([]);
@@ -35,18 +41,24 @@ function Home() {
     const [readBogoArr, setReadBogoArr] = useState();
 
 
-    // 회원관리 기능 완성 후 작성자 id 값 넘겨서 자기가 쓴것만 받아오도록 수정필요
+    // 로그인한 사용자용 일보 가져오기
     useEffect(() => {
-        const id = userId; // 임시 id 
         Axios.get('http://localhost:8000/report/getMyReport', {
             params: {
-                id: id
+                id: userId
             }
         }
         ).then((response) => {
             setViewMyDailyReport(response.data);
+            
+            // 사용자 정보 넣기.
+            setDailyReport({
+                ...dailyReport,
+                id: userId,
+                writer: userName
+            })
         })
-    }, [state])
+    }, [state, userId])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
@@ -84,13 +96,14 @@ function Home() {
     // 월 단위 캘린더 랜더링하는 함수 
     function dateCellRender(value) {
         const listData = getListData(value);
+        const date = value.format("YYYY-MM-DD");
 
         return (
             <ul className='events'>
                 {/* 데이터에 따른 버튼 변경 */}
                 {listData.length === 0 ?
-                    <PlusOutlined className={MobileStyle.bogo} onClick={openModal} state='insertModal' />
-                    : <EditOutlined className={MobileStyle.bogo} onClick={openModal} state='updateModal' />}
+                    <PlusOutlined className={MobileStyle.bogo} onClick={openModal} state='insertModal' date={date}/>
+                    : <EditOutlined className={MobileStyle.bogo} onClick={openModal} state='updateModal' date={date}/>}
                 {listData.map(item => (
                     <li key={item.index}>
                         <Badge status={item.type} /* text={item.content} */ />
@@ -122,7 +135,15 @@ function Home() {
     // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
     const [modalOpen, setModalOpen] = useState(false);
     const openModal = (e) => {
+        // 이벤트 전파 방지
         e.stopPropagation();
+        // 버튼에 저장한 날짜 가져오기.
+        const date = e.currentTarget.getAttribute('date');
+        // 등록일 저장
+        setDailyReport({
+            ...dailyReport,
+            regist_date: date
+        })
         setModalOpen(true);
         // 버튼 상태 가져오기
         setState(e.currentTarget.getAttribute('state'));
@@ -133,7 +154,9 @@ function Home() {
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 조회창 열고닫기
     const openViewModal = () => { setViewModalOpen(true); };
-    const closeViewModal = () => { setViewModalOpen(false);};
+    const closeViewModal = () => {
+        setViewModalOpen(false);
+    };
 
     // 클릭한 셀이 표시하는 일자를 받아옴
     const onSelect = value => {
@@ -168,7 +191,6 @@ function Home() {
 
     // 일보 저장
     const insertBogo = () => {
-        console.log(dailyReport);
         Axios.post('http://localhost:8000/report/insertM', dailyReport
         ).then(() => {
             alert('일일보고가 작성되었습니다.');
@@ -282,7 +304,7 @@ function Home() {
                 onSelect={onSelect}
             />
             <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport}>
-                <Tag style={{ marginBottom: '5px' }}>작성자 :이름</Tag>
+                <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
                 <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 금일 실적 <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readBogo} name='today'></TextArea>
@@ -298,4 +320,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Auth(Home, true)
