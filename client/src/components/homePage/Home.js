@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
-import { Calendar, Button, Tag, Divider } from 'antd';
+import { Calendar, Button, Tag, Badge } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -16,7 +16,7 @@ import Auth from '../../hoc/auth'
 function Home() {
 
     // 캘린더 셀 렌더링을 위한 state
-    const [state, setState] = useState("first");
+    const [state, setState] = useState();
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     // 일일보고 전체내용을 받기위한 state // 모든 사람것
@@ -43,18 +43,18 @@ function Home() {
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 등록창 열고닫기
     const openRegisterModal = () => { setRegisterModalOpen(true); };
-    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({today:'', tomorrow:''}); };
+    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
-    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({today:'', tomorrow:''});};
+    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); GetDetailReport();};
-    const closeViewModal = () => { setViewModalOpen(false); setReport({today:'', tomorrow:''}); };
+    const openViewModal = () => { setViewModalOpen(true); GetDetailReport(); };
+    const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
-    const userName = getUserData === undefined ? null : getUserData.userName; 
+    const userName = getUserData === undefined ? null : getUserData.userName;
 
     // 자신이 작성한 전체 일일보고 받아오기
     useEffect(() => {
@@ -66,7 +66,7 @@ function Home() {
         }
         ).then((response) => {
             setViewMyDailyReport(response.data);
-        }) 
+        })
     }, [state, userId])
 
     // 전체 일일보고 데이터 불러오기
@@ -117,16 +117,9 @@ function Home() {
                 </li>
                 {listData.map(item => (
                     <li key={"report" + item.idx}>
-                        <textarea className='reportView' style={{
-                            border: 'none',
-                            fontSize: '12px',
-                            background: 'none',
-                            resize: 'none',
-                            cursor: 'pointer',
-                            width: '100%',
-                            height: '80px'
-                        }} readOnly defaultValue={item.content}>
-                        </textarea>
+                        <pre style={{fontFamily: 'inherit'}}>
+                            {item.content}
+                        </pre>
                     </li>
                 ))}
             </ul>
@@ -135,7 +128,6 @@ function Home() {
 
     // 클릭한 셀이 표시하는 일자, 데이터를 받아서 저장
     const onSelect = value => {
-        setState("");
         const reportData = viewMyDailyReport;
         let calendarMoment;
 
@@ -165,7 +157,6 @@ function Home() {
             ...report,
             [name]: value
         });
-        console.log(report);
     }
 
     // 일일보고 등록
@@ -181,11 +172,11 @@ function Home() {
             writer: userName,
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
-        }).then(() => {
+        }).then((res) => {
             alert("등록완료");
             closeRegisterModal();
-            setReport({today:'', tomorrow:''});
-            setState("insert");
+            setReport({ today: '', tomorrow: '' });
+            setState(res);
         })
     }
 
@@ -209,25 +200,30 @@ function Home() {
             content: report.today,
             plan: report.tomorrow,
             date: dailyReportDetail.date
-        }).then(() => {
+        }).then((res) => {
             alert("수정완료");
             closeUpdateModal();
-            setReport({today:'', tomorrow:''});
-            setState("update");
+            setReport({ today: '', tomorrow: '' });
+            setState(res);
 
         })
 
     }
     // 보고 삭제
     const deleteReport = () => {
-        Axios.post('http://localhost:8000/report/delete', {
-            idx: dailyReportDetail.idx,
-        }).then(() => {
-            alert("삭제완료");
-            closeUpdateModal();
-            setReport({today:'', tomorrow:''});
-            setState("delete");
-        })
+
+        const confirmAction = window.confirm("삭제하시겠습니까?");
+
+        if (confirmAction) { //yes 선택
+            Axios.post('http://localhost:8000/report/delete', {
+                idx: dailyReportDetail.idx,
+            }).then((res) => {
+                alert("삭제완료");
+                closeUpdateModal();
+                setReport({ today: '', tomorrow: '' });
+                setState(res);
+            })
+        }
     }
 
     // 일일보고 상세보기
@@ -252,7 +248,7 @@ function Home() {
                 <td><pre>{item.report}</pre></td>
                 <td><pre>{item.plan}</pre></td>
             </tr>
-            
+
         ));
 
         return (
