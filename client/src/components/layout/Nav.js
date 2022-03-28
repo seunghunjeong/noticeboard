@@ -1,13 +1,13 @@
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Axios from 'axios';
 
 function Nav(props) {
 
   const categoryList = props.props;
+  const admin = props.admin;
   console.log(categoryList);
+  console.log(admin);
   
   //antd 
   const { Sider } = Layout;
@@ -28,9 +28,11 @@ function Nav(props) {
             )
           }
         </SubMenu>
-        <Menu.Item key="3" icon={<SettingOutlined />}>
-          <Link to={`/setting_page`}>Setting</Link>
-        </Menu.Item>
+        {admin === true ? <SubMenu key="sub2" icon={<ProfileOutlined />} title="Setting">
+                            <Menu.Item key="2"><Link to={""}>가입승인</Link></Menu.Item>   
+                            <Menu.Item key="3"><Link to={""}>게시판관리</Link></Menu.Item>   
+                          </SubMenu> : null
+        }
       </Menu>
     </Sider>
   )
