@@ -1,5 +1,5 @@
 import { Layout, Menu, Button } from 'antd';
-import { HomeOutlined, ProfileOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
@@ -7,7 +7,6 @@ import Axios from 'axios';
 function Nav() {
 
   const [boardCategory, setBoardCategory] = useState([]);
-
   useEffect(() => {
     Axios.post('http://localhost:8000/nav/getCategory')
     .then((res) => {
@@ -15,7 +14,12 @@ function Nav() {
     })
   },[]);
 
+  // const [state, setState] = useState();
 
+  // const handleClick = (e) => {
+  //   console.log(e);
+  //   setState(e.key);
+  // }
   
   //antd 
   const { Sider } = Layout;
@@ -36,6 +40,9 @@ function Nav() {
             )
           }
         </SubMenu>
+        <Menu.Item key="3" icon={<SettingOutlined />}>
+          <Link to={`/setting_page`}>Setting</Link>
+        </Menu.Item>
       </Menu>
     </Sider>
   )
