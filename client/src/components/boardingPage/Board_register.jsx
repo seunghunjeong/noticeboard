@@ -47,7 +47,7 @@ function Board_register() {
 
   // 에디터에서 입력값 받아오는 함수
   const getValue = e => {
-    console.log(e);
+    console.log(boardContent);
     const { name, value } = e.target;
     setBoardContent({
       ...boardContent,
@@ -144,11 +144,11 @@ function Board_register() {
               style={{ width: '7%' }}>
               {
                 boardCategory.map(e =>
-                  <Option value={e.category}>{e.category}</Option>
+                  <Option key={e.idx} value={e.category}>{e.category}</Option>
                 )
               }
             </Select>
-            <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ width: '93%', fontSize: '30px', marginBottom: '16px' }} />
+            <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ width: '93%', fontSize: '14px', marginBottom: '16px' }} />
           </div>
           <CKEditor
             editor={Editor}

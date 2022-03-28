@@ -136,7 +136,6 @@ router.post("/api/updateBoard", upload.any(), (req, res) => {
     // 원래 등록되있던 파일명을 받아옴
     let filePath = req.body.filePath; 
     if(deleteChk) {
-        console.log(filePath);
         if(fs.existsSync(filePath)){
             fs.unlinkSync(filePath);
         }
@@ -204,7 +203,6 @@ router.post("/api/fileDownload", (req, res)=> {
         }
  
     } catch (e) {
-        console.log(e);
         res.send('파일을 다운로드하는 중 에러가 발생하였습니다.');
         return;
     }

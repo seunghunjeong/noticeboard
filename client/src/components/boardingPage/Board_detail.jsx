@@ -109,7 +109,6 @@ function Board_detail() {
     },
     )
       .then (response => {
-        console.log(response);
 
         if(response.data === false){
           alert("파일이 존재하지 않습니다.");
