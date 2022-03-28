@@ -62,7 +62,7 @@ router.post('/sign-up', (req, res, next) => {
             })
           }
           return res.json({
-            msg : "회원가입 성공"
+            msg : "success"
           });
         }
       );
