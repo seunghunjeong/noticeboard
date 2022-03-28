@@ -6,6 +6,7 @@ import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams } from "react-router-dom"
+import Auth from '../../hoc/auth'
 
 function Board_list() {
   
@@ -176,4 +177,4 @@ function Board_list() {
   )
 }
 
-export default Board_list
+export default Auth(Board_list, null)

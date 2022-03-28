@@ -7,6 +7,7 @@ import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import '../../App.css';
+import Auth from '../../hoc/auth'
 
 function Board_update() {
   // antd 변수
@@ -218,4 +219,4 @@ function Board_update() {
   )
 }
 
-export default Board_update
+export default Auth(Board_update, true)
