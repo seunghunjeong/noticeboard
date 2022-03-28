@@ -27,7 +27,7 @@ function Nav() {
       <div className="main-logo" />
       <Menu theme="dark" defaultOpenKeys={['sub1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
-          <Link to={'/'}>HOME</Link>
+          <Link to={'/'}>DailyReport</Link>
         </Menu.Item>
         <SubMenu key="sub1" icon={<ProfileOutlined />} title="Board">
           {

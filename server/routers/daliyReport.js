@@ -105,4 +105,36 @@ router.post("/delete", (req,res) => {
     });
 })
 
+// 모바일
+// 일일보고
+router.post("/insertM", (req, res)=>{
+    /* console.log(req.body.id); */
+    
+    const sqlQuery = "INSERT INTO dailyReport (id, writer, report, plan, regist_date) VALUES(?, ?, ?, ?, ?);";
+    db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report, req.body.plan,req.body.regist_date], (err,result) => {
+        if(err) return res.status(400).send(err);
+
+        return res.status(200).send(result);
+    }) 
+})
+
+// 일일보고 업데이트
+router.post("/updateM", (req, res) => {
+
+    const sqlQuery = `
+        UPDATE board.dailyReport
+        SET
+            report = '${req.body.report}',
+            plan = '${req.body.plan}',
+            regist_date = '${req.body.date}'
+        WHERE
+            idx = '${req.body.idx}'
+    `;
+
+    db.query(sqlQuery, (err, result) => {
+        res.send(result);
+    });
+
+})
+
 module.exports = router;

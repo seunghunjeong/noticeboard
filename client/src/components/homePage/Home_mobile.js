@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
 import 'antd/dist/antd.less';
-import { Calendar, Badge, Tag } from 'antd';
-import { PlusOutlined, EditOutlined } from '@ant-design/icons';
+import { Calendar, Badge, Tag, Divider } from 'antd';
+import { PlusOutlined, EditOutlined,FormOutlined } from '@ant-design/icons';
 import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from '../../components/modals/DailyReportPopup_mobile';
 import TextArea from 'antd/lib/input/TextArea';
@@ -13,7 +13,7 @@ import MobileStyle from '../../App_mobile.module.css';
 function Home() {
     
     // 유저 아이디 들어갈곳
-    const userId = "123";
+    const userId = "test";
 
     // dailyReport 정보
     const [dailyReport, setDailyReport] = useState(
@@ -21,6 +21,7 @@ function Home() {
             id: userId,
             writer: '임시작성자',
             report: '',
+            plan: '',
             regist_date: ''
         }
     );
@@ -69,7 +70,7 @@ function Home() {
                 listData = [
                     {
                         key: reportData[i].idx,
-                        content: reportData[i].report,
+                        /* content: reportData[i].report, */
                         type: type
                     },
                 ];
@@ -91,7 +92,7 @@ function Home() {
                     : <EditOutlined className={MobileStyle.bogo} onClick={openModal} state='updateModal' />}
                 {listData.map(item => (
                     <li key={item.index}>
-                        <Badge status={item.type} text={item.content} />
+                        <Badge status={item.type} /* text={item.content} */ />
                     </li>
                 ))}
             </ul>
@@ -139,16 +140,29 @@ function Home() {
 
     // 일보 내용 저장
     const textAreaHandleChange = (event) => {
-        setDailyReport({
-            ...dailyReport,
-            report: event.target.value
-        })
+        const textAreaName = event.currentTarget.name;
+        switch(textAreaName) {
+            case 'today' :
+                setDailyReport({
+                    ...dailyReport,
+                    report: event.target.value
+                })
+                break;
+            case 'tomorrow' :         
+                setDailyReport({
+                    ...dailyReport,
+                    plan: event.target.value
+                })
+                break;
+            default : 
+            break;
+        } 
     }
 
     // 일보 저장
     const insertBogo = () => {
         console.log(dailyReport);
-        Axios.post('http://localhost:8000/api/insertR', dailyReport
+        Axios.post('http://localhost:8000/report/insertM', dailyReport
         ).then(() => {
             alert('일일보고가 작성되었습니다.');
             closeModal();
@@ -162,10 +176,10 @@ function Home() {
             return;
         }
 
-        Axios.post('http://localhost:8000/report/update', {
+        Axios.post('http://localhost:8000/report/updateM', {
             idx: readBogoArr.idx,
-            // 수정 확인용
-            content: dailyReport.report,
+            report: dailyReport.report,
+            plan : dailyReport.plan,
             date: dailyReport.regist_date
         }).then(() => {
             alert("수정완료");
@@ -185,18 +199,28 @@ function Home() {
         })
     }
 
-
+    // 일일보고 필터링
+    const filterBogo = () => {
+        if (state === 'updateModal') {
+            return viewMyDailyReport.filter(
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === dailyReport.regist_date
+            )
+        }
+    }
 
     // 일보 읽기
     const readBogo = () => {
-        let resultTxt;
+        const resultTxt = filterBogo();
         if (state === 'updateModal') {
-            resultTxt = viewMyDailyReport.filter(
-                (node) => moment(node.regist_date).format("YYYY-MM-DD") === dailyReport.regist_date
-            )
             setReadBogoArr(resultTxt[0]);
         }
         return resultTxt ? resultTxt[0].report : ' @'
+    }
+    
+    // 익일 계획 읽기
+    const readPlan = () => {
+        const resultTxt = filterBogo();
+        return resultTxt ? resultTxt[0].plan : ' @'
     }
 
     return (
@@ -215,7 +239,10 @@ function Home() {
             <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :이름</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
-                <TextArea style={{ height: '300px' }} onChange={textAreaHandleChange} defaultValue={readBogo}></TextArea>
+                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 금일 실적 <FormOutlined /></Divider>
+                <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readBogo} name='today'></TextArea>
+                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 익일 계획 <FormOutlined /></Divider>
+                <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readPlan} name='tomorrow'></TextArea>
             </Modal>
         </Fragment>
     )

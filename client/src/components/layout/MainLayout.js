@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'; //보여져야할 화면
 import { useSelector } from 'react-redux';
 
 // components layout
-import NavLayout from './nav';
+import NavLayout from './Nav';
 import HeaderLayout from './HeaderLayout';
 import FooterLayout from './footer';
 
