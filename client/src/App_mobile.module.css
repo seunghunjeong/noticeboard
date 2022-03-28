@@ -27,3 +27,7 @@
 .bogoTxt {
   font-size: 0.9em  !important;
 }
+
+.detailModal {
+  height: 40vh !important;
+}

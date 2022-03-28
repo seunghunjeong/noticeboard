@@ -3,4 +3,8 @@
   .ant-picker-calendar-date {
     height: 10vh !important;
   }
+
+  .modalView > section > main {
+    height: 60vh;
+  }
 }
