@@ -53,9 +53,9 @@ const Setting_page = () => {
         const category = addCategory.category;
         Axios.post('http://localhost:8000/admin/addCategory', {
             category: category
-        }).then((res)=>{
+        }).then((res) => {
             console.log(res);
-            if(res.data === "중복"){
+            if (res.data === "중복") {
                 alert('이미 존재하는 카테고리명입니다.');
             } else {
                 alert('추가완료');
@@ -63,6 +63,23 @@ const Setting_page = () => {
                 closeModal();
             }
         })
+    }
+
+    // 카테고리 삭제
+    const categoryDelete = (name) => {
+        console.log(name);
+
+        const confirmAction = window.confirm("삭제시 해당카테고리의 모든 글이 삭제됩니다. \n삭제하시겠습니까?");
+
+        if (confirmAction) { //yes 선택
+            Axios.post('http://localhost:8000/admin/delCategory', {
+                category: name
+            }).then(res => {
+                alert("삭제완료");
+                setState(res.data);
+            })
+        }
+
     }
 
     return (
@@ -84,7 +101,10 @@ const Setting_page = () => {
                 dataSource={data}
                 renderItem={item => (
                     <List.Item>
-                        {item.category}<Link to='/'><CloseOutlined style={{ marginLeft: "3px", color: 'red' }} /></Link>
+                        {item.category}
+                        <CloseOutlined style={{ marginLeft: "3px", color: 'red' }} onClick={() => {
+                            categoryDelete(item.category);
+                        }} />
                     </List.Item>
                 )}
             />
