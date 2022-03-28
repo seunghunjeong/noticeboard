@@ -30,7 +30,7 @@ function MainLayout(props) {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <NavLayout props={[boardCategory, admin]}/>
+      <NavLayout props={boardCategory} admin = {admin}/>
       {/* 본문 */}
       <Layout className="site-layout">
         <HeaderLayout props={[isAuth, userName]} />
