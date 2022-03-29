@@ -19,7 +19,7 @@ function Nav(props) {
         tmpUrl = url.split('/');
         tmpUrl = tmpUrl[tmpUrl.length-1];
       } else {
-        tmpUrl = '1';
+        tmpUrl = 'home';
       }
       return tmpUrl;
     }
@@ -42,7 +42,7 @@ function Nav(props) {
     <Sider>
       <div className="main-logo" />
       <Menu theme="dark" defaultOpenKeys={returnSub} defaultSelectedKeys={returnTab} mode="inline">
-        <Menu.Item key="1" icon={<HomeOutlined />}>
+        <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link to={'/'}>HOME</Link>
         </Menu.Item>
         <SubMenu key="board_list" icon={<ProfileOutlined />} title="Board">
@@ -52,7 +52,7 @@ function Nav(props) {
             )
           }
         </SubMenu>
-        {admin === true ? <SubMenu key="sub2" icon={<SettingOutlined />} title="Setting">
+        {admin === true ? <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
                             <Menu.Item key="approve_signup"><Link to={`/approve_signup`}>가입승인</Link></Menu.Item>   
                             <Menu.Item key="setting_page"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>   
                           </SubMenu> : null
