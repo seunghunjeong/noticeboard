@@ -40,7 +40,7 @@ function Nav(props) {
 
   return (
     <Sider>
-      <div className="main-logo" />
+     <Link to={'/'}> <div className="main-logo" onClick={tmpUrl='home'}/></Link>
       <Menu theme="dark" defaultSelectedKeys={returnTab} defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link to={'/'}>HOME</Link>
