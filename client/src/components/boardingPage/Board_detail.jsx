@@ -26,7 +26,8 @@ function Board_detail() {
   //사용자 정보 받아오기
   const getUserData = useSelector(state => state.user.userData);
   const userId = getUserData === undefined ? null : getUserData.id;
-  
+  const userName = getUserData === undefined ? null : getUserData.userName;
+  const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
   const [BoardDetail, setBoardDetail] = useState([]);
 
@@ -48,8 +49,10 @@ function Board_detail() {
 
   //작성한 사람만 수정/삭제할 수 있도록
   //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
-  const userIdConfrim = userId === BoardDetail.writer ? true : false;
-  console.log(userIdConfrim)
+  let userIdConfrim = userName === BoardDetail.writer ? true : false;
+  if (isAdmin){
+    userIdConfrim = true;
+  }
 
   // 수정
   const onGoUpdateHandler = (event) => {
@@ -106,7 +109,6 @@ function Board_detail() {
     },
     )
       .then (response => {
-        console.log(response);
 
         if(response.data === false){
           alert("파일이 존재하지 않습니다.");

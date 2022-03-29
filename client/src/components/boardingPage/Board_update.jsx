@@ -196,7 +196,7 @@ function Board_update() {
             )
           }
         </Select>
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={boardContent.title} style={{ width: '93%', fontSize: '30px', marginBottom: '16px' }} />
+        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={boardContent.title} style={{ width: '93%', fontSize: '14px', marginBottom: '16px' }} />
         <CKEditor
           editor={Editor} data={boardContent.content}
           onChange={(event, editor) => {
