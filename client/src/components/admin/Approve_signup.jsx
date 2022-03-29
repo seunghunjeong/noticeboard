@@ -22,7 +22,7 @@ const Approve_signup = () => {
     },[])
         
     const approveHandler = (event) =>{  
-
+        console.log()
         event.preventDefault();
         // Axios.post('http://localhost:8000/api/approve-sign-up', {id : key})
         // .then((response) => {
@@ -69,14 +69,19 @@ const Approve_signup = () => {
             dataIndex: 'status',
             key: 'x',
             align : 'center',
-            render: (id) => <Button onClick={approveHandler}>가입승인</Button>
+            width : 300,
+            render: (row, id) => <div>
+                                    <Button onClick={approveHandler}>가입승인</Button>
+                                    <Button onClick={approveHandler}>가입거절</Button>
+                                 </div>
         },
         {
             title: '권한부여',
             dataIndex: 'auth',
             key: 'y',
             align : 'center',
-            render: (id) => <Button onClick={adminHandler}>관리자지정</Button>
+            width : 100,
+            render: (row) => <Button onClick={adminHandler}>관리자지정</Button>
         },
       ];
       

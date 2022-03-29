@@ -106,7 +106,7 @@ router.post('/login', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
-  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ?'
+  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ? AND status = "Y"'
   
   db.query(sqlLogin, [id], (err, result) => {
       // 유저 존재하지않음
@@ -119,7 +119,7 @@ router.post('/login', (req, res, next) => {
 
       if (!result.length) {
         return res.json({
-          msg: '아이디와 패스워드가 틀렸습니다.',
+          msg: '아이디가 존재하지않습니다.',
           loginSuccess : false
         });
         

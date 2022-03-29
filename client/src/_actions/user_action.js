@@ -52,7 +52,7 @@ export function logout(){
                             
    
 
-    if (localStorage.getItem("userId") === null){
+    if (sessionStorage.getItem("userId") === null){
         alert("로그아웃 실패")
         return false;
     }
