@@ -17,9 +17,7 @@ function Nav(props) {
     const url = window.location.pathname;
       if(url !== '/') {
         tmpUrl = url.split('/');
-        console.log( tmpUrl)
         tmpUrl = tmpUrl[tmpUrl.length-1];
-        console.log( tmpUrl)
       } else {
         tmpUrl = 'home';
       }
@@ -32,11 +30,10 @@ function Nav(props) {
     if(url !== '/') {
       tmpUrl = url.split('/');
       tmpUrl = tmpUrl[1];
-      tmpUrl.includes('board') ? tmpUrl = ['board'] : tmpUrl = ['setting']
-    } else {
-      tmpUrl = ['board'];
+      if(tmpUrl.includes('board'))
+       tmpUrl = 'board'
     }
-    return tmpUrl;
+    return [tmpUrl];
   }
 
 
@@ -56,10 +53,11 @@ function Nav(props) {
           }
         </SubMenu>
         {admin === true ? <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
-                            <Menu.Item key="setting/approve_signup"><Link to={`/setting/approve_signup`}>가입승인</Link></Menu.Item>   
-                            <Menu.Item key="setting/setting_page"><Link to={`/setting/setting_page`}>게시판관리</Link></Menu.Item>   
+                            <Menu.Item key="approve_signup"><Link to={`/setting/approve_signup`}>가입승인</Link></Menu.Item>   
+                            <Menu.Item key="setting_page"><Link to={`/setting/setting_page`}>게시판관리</Link></Menu.Item>   
                           </SubMenu> : null
         }
+
       </Menu>
     </Sider>
   )
