@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 // components views
-import LoginPage from '../src/components/loginPage/Login';
-import JoinPage from '../src/components/joinPage/Join';
+import LoginPage from '../loginPage/Login';
+import JoinPage from '../joinPage/Join';
 
 import MainLayoutMobile from '../layout/MainLayout_mobile';
 import HomePageMobile from '../homePage/Home_mobile';

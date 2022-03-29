@@ -2,7 +2,7 @@ import React from 'react';
 
 // components views
 import BrowserComponent from './components/layout/BrowserComponent';
-import MobileComponent from './components/layout/BrowserComponent';
+import MobileComponent from './components/layout/MobileComponent';
 
 // divide Browser, Mobile
 import {BrowserView, MobileView} from "react-device-detect";
