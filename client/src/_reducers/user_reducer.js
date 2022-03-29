@@ -5,8 +5,7 @@ import {
     LOGOUT
 } from "../_actions/types";
 
-
-export default function(state = {}, action){
+function user_reducer(state = {}, action){
 
     switch(action.type) {
 
@@ -30,3 +29,5 @@ export default function(state = {}, action){
             return state;
     }
 }
+
+export default user_reducer

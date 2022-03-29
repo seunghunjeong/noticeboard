@@ -1,41 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const cors = require('cors');
-
 const db = require('../config/db');
-//const userMiddleware = require('../middleware/users.js');
-
-const cookieParser = require("cookie-parser");
-router.use(cookieParser());
-var session = require("express-session"); 
-
-var corsOptions = {
-  origin: "http://localhost:3000",
-  methods: ['GET', 'POST', 'OPTIONS'],
-  credentials: true
-};
-router.use(cors(corsOptions))
-router.use(session({ 
-  //key : "isLogin",
-  secret : "secret", 
-  resave : false, 
-  saveUninitialized : false,
-  cookie : {
-    expires : 60*60*24
-  } 
-}))
-/* option - secret : 필수, 세션 암호화에 사용 
-- resave : 세션이 변경되지 않아도 저장이 됨, false 권장 
-- saveUninitialized : 세션 초기화시 미리 만들지를 설정 
-*/
-router.use(function(req, res, next) {
-  res.header(
-    "Access-Control-Allow-Headers",
-    //"x-access-token, Origin, Content-Type, Accept"
-    "http://localhost:3000"
-  );
-  next();
-});
 
 // 비밀번호 암호화
 const bcrypt = require('bcrypt');
@@ -298,5 +263,51 @@ router.get('/logout', (req, res) => {
     res.json({ logoutSuccess : err})
   }
 })
+
+//로그인 권한체크 사용안함
+// isLoggedIn : (req, res, next) => {    
+
+//   try {
+   
+//     //token decoded
+//     const token = req.headers.authorization.split('Bearer ')[1];
+//     //console.log(token)
+//     const decoded = jwt.verify(token, 'SECRETKEY');
+//     //console.log(decoded.token)
+//     const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
+    
+//     db.query(sqlLogin, [decoded.token], (err, result) => {
+//       // 인증실패
+//       if (err) {
+//         return res.json({
+//           status: "FAILED",
+//           statusCode: err,
+//           msg: '유효하지않은 토큰.',
+//           userName : ' ',
+//           id : ' ',
+//           isAuth : false
+//         });
+//       }
+//       // 인증성공
+//       if (!result.length) {
+//         const userName = result[0].username
+//         return res.json({
+//             status: "SUCCESS",
+//             statusCode: 200,
+//             userName : userName,
+//             id : decoded.token
+//         });
+//       }
+//     });
+//    } catch (err) {
+//      return res.json({
+//        status: "토큰에러",
+//        statusCode: err,
+//        msg: '접근권한이 없습니다.',
+//        userName : ' ',
+//        id : ' ',
+//        isAuth : false
+//      });
+//    }
 
 module.exports = router;

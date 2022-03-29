@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { registerUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import Logo from '../layout/cmworld-logo.png';

@@ -12,7 +12,7 @@ import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 function Home() {
 
@@ -92,7 +92,7 @@ function Home() {
 
     // 로그인한 사용자용 일보 가져오기
     useEffect(() => {
-        Axios.get('http://localhost:8000/report/getMyReport', {
+        Axios.get('/report/getMyReport', {
             params: {
                 id: userId
             }
@@ -104,7 +104,7 @@ function Home() {
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
-        Axios.get('http://localhost:8000/report/getReportDetail'
+        Axios.get('/report/getReportDetail'
         ).then((res) => {
             setViewDailyReport(res.data);
         })
@@ -204,7 +204,7 @@ function Home() {
             return;
         }
         
-        Axios.post('http://localhost:8000/report/insertM',
+        Axios.post('/report/insertM',
         {
             report: dailyReport.report,
             plan: dailyReport.plan,
@@ -227,7 +227,7 @@ function Home() {
             return;
         }
 
-        Axios.post('http://localhost:8000/report/updateM', {
+        Axios.post('/report/updateM', {
             idx: readBogoArr.idx,
             report: updateBogoArr ? dailyReport.report : readBogoArr.report,
             plan : updateBogoArr ? dailyReport.plan : readBogoArr.plan,
@@ -241,7 +241,7 @@ function Home() {
 
     const deleteReport = () => {
         setLoading(true);
-        Axios.post('http://localhost:8000/report/delete', {
+        Axios.post('/report/delete', {
             idx: readBogoArr.idx,
         }).then(() => {
             alert("삭제완료");

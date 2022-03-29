@@ -8,7 +8,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 
 function Board_register() {
@@ -16,7 +16,7 @@ function Board_register() {
   const [boardCategory, setBoardCategory] = useState([]);
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/nav/getCategory')
+    Axios.post('/nav/getCategory')
       .then((res) => {
         setBoardCategory(res.data);
       })
@@ -98,7 +98,7 @@ function Board_register() {
     formData.append('writer', writer);
     formData.append('category', category);
 
-    Axios.post('http://localhost:8000/board/api/insert', formData, {
+    Axios.post('/board/api/insert', formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       }

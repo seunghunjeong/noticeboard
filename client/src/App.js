@@ -14,9 +14,7 @@ import LoginPage from '../src/components/loginPage/Login';
 import JoinPage from '../src/components/joinPage/Join';
 
 // components layout
-//import Nav from './components/layout/nav';
-//import Header from './components/layout/header';
-//import Footer from './components/layout/footer';
+
 import MainLayout from './components/layout/MainLayout';
 
 // components layout mobile

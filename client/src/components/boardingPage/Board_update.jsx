@@ -7,7 +7,7 @@ import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import '../../App.css';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 function Board_update() {
   // antd 변수
@@ -22,7 +22,7 @@ function Board_update() {
   const [boardCategory, setBoardCategory] = useState([]);
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/nav/getCategory')
+    Axios.post('/nav/getCategory')
       .then((res) => {
         setBoardCategory(res.data);
       })
@@ -58,7 +58,7 @@ function Board_update() {
 
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/board/api/getBoardDetail', { idx: idx })
+    Axios.post('/board/api/getBoardDetail', { idx: idx })
       .then(response => {
         if (response.data) {
           setBoardContent(response.data[0])
@@ -125,7 +125,7 @@ function Board_update() {
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
     if (confirmAction) { //yes 선택
-      Axios.post('http://localhost:8000/board/api/updateBoard', formData, {
+      Axios.post('/board/api/updateBoard', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }

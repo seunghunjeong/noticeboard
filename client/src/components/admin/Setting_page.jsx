@@ -58,7 +58,7 @@ const Setting_page = () => {
             return;
         }
 
-        Axios.post('http://localhost:8000/admin/addCategory', {
+        Axios.post('/admin/addCategory', {
             category: category
         }).then((res) => {
             console.log(res);
@@ -79,7 +79,7 @@ const Setting_page = () => {
         const confirmAction = window.confirm("삭제시 해당카테고리의 모든 글이 삭제됩니다. \n삭제하시겠습니까?");
 
         if (confirmAction) { //yes 선택
-            Axios.post('http://localhost:8000/admin/delCategory', {
+            Axios.post('/admin/delCategory', {
                 category: name
             }).then(res => {
                 alert("삭제완료");
@@ -97,7 +97,7 @@ const Setting_page = () => {
     // 카테고리 수정
     const categoryUpdate = () => {
         setLoading(true);
-        Axios.post('http://localhost:8000/admin/udtCategory', {
+        Axios.post('/admin/udtCategory', {
             category : addCategory.category,
             idx : addCategory.idx
         }).then( res => {

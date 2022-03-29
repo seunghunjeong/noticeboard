@@ -12,7 +12,7 @@ import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 function header() {
     const { Header } = Layout;

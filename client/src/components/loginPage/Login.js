@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
