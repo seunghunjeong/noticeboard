@@ -73,7 +73,8 @@ router.post('/standby-signup', (req, res, next) => {
 //회원가입신청 목록 불러오기
 router.get("/getStandby_signup", (req, res) => {
     
-  const sqlQuery = `SELECT * FROM board.users WHERE status  = 'N'`;
+  //const sqlQuery = `SELECT * FROM board.users WHERE status  = 'N'`;
+  const sqlQuery = `SELECT * FROM board.users ORDER BY registered DESC;`;
 
   db.query(sqlQuery, (err, result) => {
       res.send(result);
@@ -91,7 +92,7 @@ router.post('/approve-sign-up', (req, res, next) => {
       if (err) {
         //throw err;
         return res.json({
-          msg: "가입승인오류.",
+          msg: "가입승인오류. 관리자에게 문의해주세요.",
         })
       }
       return res.json({
@@ -101,6 +102,67 @@ router.post('/approve-sign-up', (req, res, next) => {
   );
 });
 
+//회원가입 거절
+router.post('/reject-sign-up', (req, res, next) => {
+
+  const id = req.body.id;
+  const sqlQuery = "DELETE FROM board.users WHERE id = ?"
+  
+  db.query(sqlQuery, [id], (err, result) => {
+      if (err) {
+        //throw err;
+        return res.json({
+          msg: "가입거절오류. 관리자에게 문의해주세요.",
+        })
+      }
+      return res.json({
+        msg : "success"
+      });
+    }
+  );
+});
+
+//관리자 지정
+router.post('/admin-appoint', (req, res, next) => {
+
+  const id = req.body.id;
+  const sqlQuery = "UPDATE board.users SET auth = 1 WHERE id = ?"
+  
+  db.query(sqlQuery, [id], (err, result) => {
+      if (err) {
+        //throw err;
+        return res.json({
+          msg: "관리자 지정 오류. 관리자에게 문의해주세요.",
+        })
+      }
+      return res.json({
+        msg : "success"
+      });
+    }
+  );
+});
+
+//관리자 해지
+router.post('/admin-remove', (req, res, next) => {
+
+  const id = req.body.id;
+  const sqlQuery = "UPDATE board.users SET auth = null WHERE id = ?"
+  
+  db.query(sqlQuery, [id], (err, result) => {
+      if (err) {
+        //throw err;
+        return res.json({
+          msg: "관리자 해지 오류. 관리자에게 문의해주세요.",
+        })
+      }
+      return res.json({
+        msg : "success"
+      });
+    }
+  );
+});
+
+
 //로그인
 router.post('/login', (req, res, next) => {
 
@@ -109,7 +171,7 @@ router.post('/login', (req, res, next) => {
   const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ? AND status = "Y"'
   
   db.query(sqlLogin, [id], (err, result) => {
-      // 유저 존재하지않음
+      // 유저 확인 x
       if (err) {
         return res.json({
           msg: err,
@@ -124,7 +186,7 @@ router.post('/login', (req, res, next) => {
         });
         
       }
-
+      // 유저 확인 o
       //암호화된 비밀번호를 바로 복호화시킬순 없기때문에
       //원래의 비밀번호를 암호화시킨후 맞는지 확인해야한다.
       bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
@@ -179,7 +241,7 @@ router.post('/login', (req, res, next) => {
 router.post('/auth', (req, res, next) => {
   
   const userId = req.body.userId;
-  const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
+  const sqlLogin = 'SELECT * FROM board.users WHERE id = ? AND status = "Y"'
 
   db.query(sqlLogin, [userId], (err, result) => {
     // 인증실패
