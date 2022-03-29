@@ -111,7 +111,8 @@ function Home() {
                     {
                         listData.length === 1 ?
                             <>
-                                <CheckOutlined style={{ color: 'green', marginRight: '5px' }} /><Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
+                                <CheckOutlined style={{ color: 'green', marginRight: '5px' }} />
+                                <Button className="bogo_update" onClick={openUpdateModal}><EditOutlined /></Button>
                             </>
                             : <Button className="bogo_register" onClick={openRegisterModal}><PlusSquareOutlined /></Button>
                     }
@@ -119,7 +120,7 @@ function Home() {
                 </li>
                 {listData.map(item => (
                     <li key={"report" + item.idx}>
-                        <pre style={{fontFamily: 'inherit'}}>
+                        <pre style={{ fontFamily: 'inherit' }}>
                             {item.content}
                         </pre>
                     </li>
@@ -218,7 +219,7 @@ function Home() {
     // 보고 삭제
     const deleteReport = () => {
         const confirmAction = window.confirm("삭제하시겠습니까?");
-        
+
         if (confirmAction) { //yes 선택
             setLoading(true);
             Axios.post('/report/delete', {
