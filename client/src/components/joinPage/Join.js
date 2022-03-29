@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
 import { Form, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import Logo from '../layout/cmworld-logo.png';
 
 function Join() {
 
@@ -68,7 +69,7 @@ function Join() {
     };
 
     return (
-      <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh'}}>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', background:'#001529'}}>
         <Form
             name="basic"
             labelCol={{ span: 10 }}
@@ -77,7 +78,10 @@ function Join() {
             onFinish={onSubmitHandler}
             onFinishFailed={onFinishFailed}
             autoComplete="off">
-          <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px"}}>SIGN-UP</div>
+          <div className='login-logo'>
+            <img src={Logo} width="99px" height='26px'/>
+          </div>
+          <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>SIGN-UP</div>
           <Form.Item
             label="ID"
             name="ID"

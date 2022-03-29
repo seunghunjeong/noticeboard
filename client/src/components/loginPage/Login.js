@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
@@ -7,6 +8,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import Logo from '../layout/cmworld-logo.png';
 
 function Login() {
 
@@ -57,9 +59,12 @@ function Login() {
     }
 
     return (
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', color : ""}}>
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', background: '#001529', color: '#fff'}}>
             <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
-                <div className="login-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px"}}>LOGIN</div>
+                <div className='login-logo'>
+                    <img src={Logo} width="99px" height='26px'/>
+                </div>
+                <div className="login-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>LOGIN</div>
                 <Form.Item name="username" rules={[{ required: true, message: '아이디를 입력하세요.'}]}>
                     <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" value={Id} onChange={onIdHandler}/>
                 </Form.Item>
@@ -68,7 +73,7 @@ function Login() {
                 </Form.Item>
                 <Form.Item>
                     <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>아이디/비밀번호 저장</Checkbox>
+                        <Checkbox style={{color : 'white'}}>아이디/비밀번호 저장</Checkbox>
                     </Form.Item>
                         {/* <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link> */}
                 </Form.Item>
@@ -76,7 +81,7 @@ function Login() {
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight : "10px"}}>
                         로그인
                     </Button>
-                        Or <Link to={'/sign-up'}>회원가입</Link>
+                    <Button type="dashed" href='/sign-up' style={{float:'right'}}> 회원가입</Button>
                 </Form.Item>
             </Form>
         

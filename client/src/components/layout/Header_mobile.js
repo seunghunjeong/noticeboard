@@ -54,8 +54,6 @@ function header() {
                                     </LoginOutlined>
                                     </div> : ''
             }
-            
-            
             {/* <BarsOutlined className={MobileStyle.btnHeader} /> */}
         </Header>
     )
