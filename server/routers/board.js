@@ -64,14 +64,15 @@ router.post("/api/insert", upload.any(), (req, res)=>{
     const content = req.body.content;
     const writer = req.body.writer;
     const category = req.body.category;
+    const userId = req.body.userId;
     let filePath = null;
 
     if(req.files.length === 1){ 
         filePath = req.files[0].path;
     }
     
-    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path,category) VALUES (?,?,?,?,?)";
-    db.query(sqlQuery, [title,content,writer,filePath,category], (err,result) => {
+    const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path,category,userId) VALUES (?,?,?,?,?,?)";
+    db.query(sqlQuery, [title,content,writer,filePath,category,userId], (err,result) => {
         if(err) return res.status(400).send(err);
 
         return res.status(200).send(result);

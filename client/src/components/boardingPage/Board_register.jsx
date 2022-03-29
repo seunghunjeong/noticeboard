@@ -73,6 +73,7 @@ function Board_register() {
     let content = boardContent.content;
     const title = boardContent.title;
     const writer = userName;
+    const id = userId;
     const category = boardContent.category;
 
     if (category === ""){
@@ -96,6 +97,7 @@ function Board_register() {
     formData.append('title', title);
     formData.append('content', content);
     formData.append('writer', writer);
+    formData.append('userId', id);
     formData.append('category', category);
 
     Axios.post('/board/api/insert', formData, {
