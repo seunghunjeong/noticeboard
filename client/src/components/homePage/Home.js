@@ -167,6 +167,7 @@ function Home() {
         const id = userId;
         if (report.today === "") {
             alert("내용을 입력해주세요.");
+            setLoading(false);
             return;
         }
         Axios.post('http://localhost:8000/report/insert', {
