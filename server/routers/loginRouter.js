@@ -74,7 +74,7 @@ router.post('/standby-signup', (req, res, next) => {
 router.get("/getStandby_signup", (req, res) => {
     
   //const sqlQuery = `SELECT * FROM board.users WHERE status  = 'N'`;
-  const sqlQuery = `SELECT * FROM board.users ORDER BY registered DESC;`;
+  const sqlQuery = `SELECT * FROM board.users ORDER BY registered DESC, status ASC`;
 
   db.query(sqlQuery, (err, result) => {
       res.send(result);
@@ -86,7 +86,7 @@ router.get("/getStandby_signup", (req, res) => {
 router.post('/approve-sign-up', (req, res, next) => {
 
   const id = req.body.id;
-  const sqlQuery = "UPDATE board.users SET status = 'Y' WHERE id = ?"
+  const sqlQuery = "UPDATE board.users SET status = 'Y', approved = CURRENT_TIMESTAMP WHERE id = ?"
   
   db.query(sqlQuery, [id], (err, result) => {
       if (err) {
@@ -168,7 +168,7 @@ router.post('/login', (req, res, next) => {
 
   const id = req.body.id;
   const password = req.body.password;
-  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ? AND status = "Y"'
+  const sqlLogin = 'SELECT * FROM board.users WHERE BINARY(id) = ?'
   
   db.query(sqlLogin, [id], (err, result) => {
       // 유저 확인 x
@@ -187,51 +187,59 @@ router.post('/login', (req, res, next) => {
         
       }
       // 유저 확인 o
-      //암호화된 비밀번호를 바로 복호화시킬순 없기때문에
-      //원래의 비밀번호를 암호화시킨후 맞는지 확인해야한다.
-      bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
-          // wrong password
-          if (bErr) {
+      if(result[0].status === "N"){
+        return res.json({
+          msg: '가입승인 대기중입니다.',
+          loginSuccess : false
+        });
+      } 
+      else {
+          //암호화된 비밀번호를 바로 복호화시킬순 없기때문에
+          //원래의 비밀번호를 암호화시킨후 맞는지 확인해야한다.
+          bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
+            // wrong password
+            if (bErr) {
+              return res.json({
+                msg: "패스워드가 틀렸습니다.",
+                loginSuccess : false
+              });
+            }
+            //아이디와 패스워드가 같아서 결과값이 나왔다면
+            //토큰생성
+            if (bResult) {
+              // jwt
+              // const token = jwt.sign( {token : result[0].id},
+              //   'SECRETKEY', { expiresIn : '86400' });//만료기간24 hours
+
+              //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
+              //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
+              // res.cookie("test", "test");
+              // res.cookie("accessToken", token, {
+              //   maxAge: 10000, 
+              //   expires  : new Date(Date.now() + 9999999), 
+              //   httpOnly :false
+              // });
+              // 로그인 후 사용자 정보를 세션에 저장 
+              // req.session.isLogin = result[0].id
+              // req.session.userName = result[0].username
+              // req.session.save(error => {
+              //   if(error) console.log(error)
+              // })
+                
+              return res.json({
+                msg: '로그인 성공',
+                //accessToken: token,
+                userId : result[0].id,
+                loginSuccess : true
+              });
+            }
             return res.json({
-              msg: "패스워드가 틀렸습니다.",
+              msg: '아이디나 패스워드가 틀렸습니다.',
               loginSuccess : false
             });
           }
-          //아이디와 패스워드가 같아서 결과값이 나왔다면
-          //토큰생성
-          if (bResult) {
-            // jwt
-            // const token = jwt.sign( {token : result[0].id},
-            //   'SECRETKEY', { expiresIn : '86400' });//만료기간24 hours
-
-            //토큰을 저장한다. where ? 쿠키 or 로컬스토리지
-            //쿠키에 저장할 것-> cookie-parser 라이브러리 설치
-            // res.cookie("test", "test");
-            // res.cookie("accessToken", token, {
-            //   maxAge: 10000, 
-            //   expires  : new Date(Date.now() + 9999999), 
-            //   httpOnly :false
-            // });
-            // 로그인 후 사용자 정보를 세션에 저장 
-            // req.session.isLogin = result[0].id
-            // req.session.userName = result[0].username
-            // req.session.save(error => {
-            //   if(error) console.log(error)
-            // })
-               
-            return res.json({
-               msg: '로그인 성공',
-               //accessToken: token,
-               userId : result[0].id,
-               loginSuccess : true
-            });
-          }
-          return res.json({
-            msg: '아이디나 패스워드가 틀렸습니다.',
-            loginSuccess : false
-          });
-        }
-      );
+        ); 
+      }
     }
   );
 });

@@ -22,6 +22,7 @@ const Approve_signup = () => {
     const approveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
 
         Axios.post('http://localhost:8000/api/approve-sign-up', {id : userId})
         .then((response) => {
@@ -38,6 +39,7 @@ const Approve_signup = () => {
     const rejectHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("가입을 거절하시겠습니까? 해당 사용자는 가입승인 대기열에서 삭제됩니다.");
         
         if(confirmAction) { //yes 선택
@@ -60,6 +62,7 @@ const Approve_signup = () => {
      const adminAppointHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("해당 유저를 관리자로 지정하시겠습니까?");
         
         if(confirmAction) { //yes 선택
@@ -82,6 +85,7 @@ const Approve_signup = () => {
     const adminRemoveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("해당 관리자를 해지하시겠습니까?");
         
         if(confirmAction) { //yes 선택
@@ -126,8 +130,8 @@ const Approve_signup = () => {
             align : 'center'
         },
         {   title: '가입승인일', 
-            dataIndex: 'tmp', 
-            key: 'tmp',
+            dataIndex: 'approved', 
+            key: 'approved',
             align : 'center'
         },
         {
@@ -178,7 +182,8 @@ const Approve_signup = () => {
           name : element.username,
           auth : element.auth === 1 ? "관리자" : null,
           registered : moment(element.registered).format('YYYY-MM-DD, HH:mm:ss'),
-          status : element.status
+          status : element.status,
+          approved : element.approved !==null ? moment(element.approved).format('YYYY-MM-DD, HH:mm:ss') : null
         });
         return data;
     });
