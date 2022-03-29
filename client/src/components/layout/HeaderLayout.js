@@ -5,20 +5,19 @@ import { Link } from 'react-router-dom';
 import { logout} from '../../_actions/user_action';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+// 사용자 정보 가져오기
+import { useSelector } from 'react-redux';
 
 
-
-function HeaderLayout(props) {
+function HeaderLayout() {
     
     //antd 
     const { Header } = Layout;
 
-    // props 값 받아오기
-    const propsValue = props.props;
-
-    //props값 그대로 변수로 넣으면 렌더링이 안되서 따로 string값으로 변경해준것
-    let isAuth = propsValue[0] === true ? "true" : "false";
-    let userName = propsValue[1] ;
+    //사용자 정보 받아오기
+    const getUserData = useSelector(state => state.user.userData);
+    const userName = getUserData === undefined ? null : getUserData.userName;
+    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
 
     //페이지이동
     const navigate = useNavigate();
@@ -45,7 +44,7 @@ function HeaderLayout(props) {
             {/* <div className="main-logo"/> */}
           
             {
-                isAuth === "true" ?  <div>
+                isAuth === true ?  <div>
                                         <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}
                                             onClick={onLogoutHandler}>
                                             로그아웃 
@@ -54,7 +53,7 @@ function HeaderLayout(props) {
                                     </div> : null
             }
             {
-                isAuth === "false" ? <div>
+                isAuth === false || isAuth === null ? <div>
                                         <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}>
                                             <Link to={'/login'}>로그인</Link>
                                         </Button>

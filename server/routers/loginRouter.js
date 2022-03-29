@@ -280,9 +280,9 @@ router.get('/logout', (req, res) => {
   
   try{   
     return res.json({  
-      isAuth : false ,
-      id : ' ',
-      userName : ' ',
+      isAuth : false,
+      id : null,
+      userName : null,
       logoutSuccess : true
     })
   }

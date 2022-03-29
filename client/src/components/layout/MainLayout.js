@@ -24,8 +24,6 @@ function MainLayout(props) {
 
   //사용자 정보 받아오기
   const userState = useSelector(state => state.user.userData);
-  const isAuth = userState === undefined ? null : userState.isAuth;
-  const userName = userState === undefined ? null : userState.userName;
   const admin = userState === undefined ? null : userState.admin;
 
   return (
@@ -33,8 +31,8 @@ function MainLayout(props) {
       <NavLayout props={boardCategory} admin = {admin}/>
       {/* 본문 */}
       <Layout className="site-layout">
-        <HeaderLayout props={[isAuth, userName]} />
-        <Outlet context={[state,setState,boardCategory]}/>
+        <HeaderLayout />
+        <Outlet context={[state, setState, boardCategory]}/>
         <FooterLayout />
       </Layout>
     </Layout>
