@@ -1,6 +1,6 @@
 import React from 'react'
 import Axios from 'axios';
-import { useEffect, useState, useRef} from 'react';
+import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
@@ -27,6 +27,7 @@ function Board_list() {
     keyword: ''
   })
   
+
   // select query문 불러오기.
   useEffect(() => {
     Axios.get('http://localhost:8000/board/api/getBoardList',{
@@ -40,6 +41,7 @@ function Board_list() {
       setViewContent(response.data);
     })
     // 검색 값, 카테고리 변경될때마다 랜더링
+
   },[searchContent,category])
 
   // 페이지 이동
@@ -125,6 +127,7 @@ function Board_list() {
   };
  
 
+
   //render
   return (
 
@@ -155,6 +158,7 @@ function Board_list() {
         </Select>
         <Search placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} />
       </div>
+      
     </Content>
   
   )
