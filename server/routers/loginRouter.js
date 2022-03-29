@@ -180,7 +180,6 @@ router.post('/auth', (req, res, next) => {
   
   const userId = req.body.userId;
   const sqlLogin = 'SELECT * FROM board.users WHERE id = ?'
-  console.log(userId)
 
   db.query(sqlLogin, [userId], (err, result) => {
     // 인증실패

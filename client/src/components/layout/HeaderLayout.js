@@ -32,7 +32,7 @@ function HeaderLayout(props) {
         .then(response => {
             if(response.payload.logoutSuccess === true){
                 alert("로그아웃 완료");
-                navigate("/board_list/notice");
+                navigate("/login");
             }
             else { 
                 alert(response.payload.logoutSuccess);

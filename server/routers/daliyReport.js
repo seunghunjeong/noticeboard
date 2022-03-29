@@ -63,9 +63,16 @@ router.get("/getMyReport", (req, res) => {
 
 });
 
-// 일일보고 리스트 불러오기
+// 일일보고 전체 리스트 불러오기
 router.get("/getReportDetail", (req, res) => {
-    const sqlQuery = `SELECT * FROM board.dailyReport`;
+
+    const sqlQuery = `
+        SELECT 
+            * 
+        FROM 
+            board.dailyReport
+        `;
+
 
     db.query(sqlQuery, (err, result) => {
         res.send(result);
@@ -75,7 +82,7 @@ router.get("/getReportDetail", (req, res) => {
 
 // 일일보고 업데이트
 router.post("/update", (req, res) => {
-
+    
     const sqlQuery = `
         UPDATE board.dailyReport
         SET
@@ -108,7 +115,6 @@ router.post("/delete", (req,res) => {
 // 모바일
 // 일일보고
 router.post("/insertM", (req, res)=>{
-    /* console.log(req.body.id); */
     
     const sqlQuery = "INSERT INTO dailyReport (id, writer, report, plan, regist_date) VALUES(?, ?, ?, ?, ?);";
     db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report, req.body.plan,req.body.regist_date], (err,result) => {
@@ -136,4 +142,5 @@ router.post("/updateM", (req, res) => {
     });
 
 })
+
 module.exports = router;

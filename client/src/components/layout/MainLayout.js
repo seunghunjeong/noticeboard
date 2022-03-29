@@ -34,7 +34,7 @@ function MainLayout(props) {
       {/* 본문 */}
       <Layout className="site-layout">
         <HeaderLayout props={[isAuth, userName]} />
-        <Outlet context={[state,setState]}/>
+        <Outlet context={[state,setState,boardCategory]}/>
         <FooterLayout />
       </Layout>
     </Layout>
