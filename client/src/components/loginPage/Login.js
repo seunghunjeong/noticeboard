@@ -46,7 +46,7 @@ function Login() {
                 // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
 		        //axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                 const userId = response.payload.userId
-                localStorage.setItem("userId", userId);
+                sessionStorage.setItem("userId", userId);
                 navigate("/");
             }
             else { 
@@ -70,9 +70,9 @@ function Login() {
                     <Form.Item name="remember" valuePropName="checked" noStyle>
                         <Checkbox>아이디/비밀번호 저장</Checkbox>
                     </Form.Item>
-                        <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link>
-                    </Form.Item>
-                    <Form.Item>
+                        {/* <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link> */}
+                </Form.Item>
+                <Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight : "10px"}}>
                         로그인
                     </Button>

@@ -15,7 +15,7 @@ export default function(SpecificComponent, option, adminRoute = null) {
 
         const navigate = useNavigate();
         const dispatch = useDispatch();
-        const userId = localStorage.getItem("userId");
+        const userId = sessionStorage.getItem("userId");
 
         let body = {
             userId : userId

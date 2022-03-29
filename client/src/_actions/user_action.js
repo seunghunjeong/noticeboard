@@ -58,7 +58,7 @@ export function logout(){
     }
     else {
         
-         localStorage.removeItem("userId"); 
+        sessionStorage.removeItem("userId"); 
         
         const request = axios.get('http://localhost:8000/api/logout')
         .then(response => response.data)
