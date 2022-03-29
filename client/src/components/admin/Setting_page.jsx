@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { List, Button, Input } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 
 import AddCategoryModal from '../modals/AddCategory';
 import Axios from 'axios';
@@ -10,6 +10,9 @@ import Axios from 'axios';
 
 const Setting_page = () => {
 
+
+    // 로딩처리를 위한 state
+    const [loading, setLoading] = useState(null);
     // Outlet props 사용
     const state = useOutletContext();
     const setState = state[1];
@@ -22,7 +25,10 @@ const Setting_page = () => {
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
     const [addCategory, setAddCategory] = useState({
         category: '',
+        idx:''
     });
+
+    const [mode, setMode] = useState();
 
     // 카테고리 리스트 뿌려주기
     const data = [];
@@ -37,11 +43,14 @@ const Setting_page = () => {
     const getValue = e => {
         const { name, value } = e.target;
         setAddCategory({
+            ...addCategory,
             [name]: value
         })
+        console.log(addCategory.category);
     }
     // 카테고리 추가
     const categoryRegister = () => {
+        setLoading(true);
         const category = addCategory.category;
         Axios.post('http://localhost:8000/admin/addCategory', {
             category: category
@@ -53,6 +62,7 @@ const Setting_page = () => {
                 alert('추가완료');
                 setState(res.data);
                 closeModal();
+                setLoading(false);
             }
         })
     }
@@ -73,6 +83,26 @@ const Setting_page = () => {
 
     }
 
+    // 카테고리 수정 값 셋팅
+    const setCategory = (name, idx) => {
+        setAddCategory({category : name, idx: idx});
+    }
+
+    // 카테고리 수정
+    const categoryUpdate = () => {
+        setLoading(true);
+        Axios.post('http://localhost:8000/admin/udtCategory', {
+            category : addCategory.category,
+            idx : addCategory.idx
+        }).then( res => {
+            alert("수정완료");
+            setState(res.data);
+            closeModal();
+            setLoading(false);
+        })
+
+    }
+
     return (
         <>
             <List
@@ -85,7 +115,10 @@ const Setting_page = () => {
                 }
                 footer={
                     <>
-                        <Button style={{ marginRight: "10px" }} onClick={openModal}>추가</Button>
+                        <Button style={{ marginRight: "10px" }} onClick={() => {
+                            setMode('add');
+                            openModal();
+                        }}>추가</Button>
                     </>
                 }
                 bordered
@@ -93,15 +126,24 @@ const Setting_page = () => {
                 renderItem={item => (
                     <List.Item>
                         {item.category}
-                        <CloseOutlined style={{ marginLeft: "3px", color: 'red' }} onClick={() => {
+                        <EditOutlined style={{ marginLeft: "4px", color: 'darkcyan' }} onClick={() => {
+                            setMode('udt');
+                            setCategory(item.category, item.key);
+                            openModal();
+                        }} />
+                        <CloseOutlined style={{ marginLeft: "4px", color: 'red' }} onClick={() => {
                             categoryDelete(item.category);
                         }} />
                     </List.Item>
                 )}
             />
 
-            <AddCategoryModal display={addCategoryOpen} close={closeModal} insert={categoryRegister} header={'카테고리 추가'}>
-                <Input maxLength={20} onChange={getValue} placeholder='추가할 카테고리명을 입력해주세요.' name='category' style={{ width: '100%', fontSize: '15px' }} />
+            <AddCategoryModal display={addCategoryOpen} update={categoryUpdate} close={closeModal} insert={categoryRegister} header={mode === 'add' ? '카테고리 추가' : '카테고리 수정'} mode={mode} loading={loading}>
+                {
+                    mode === 'add' ?
+                        <Input maxLength={20} onChange={getValue} placeholder='추가할 카테고리명을 입력해주세요.' name='category' style={{ width: '100%', fontSize: '15px' }} />
+                        : <Input maxLength={20} onChange={getValue} name='category' value={addCategory.category} style={{ width: '100%', fontSize: '15px' }} />
+                }
             </AddCategoryModal>
 
         </>

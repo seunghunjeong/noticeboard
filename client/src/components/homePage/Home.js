@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
-import { Calendar, Button, Tag, Badge } from 'antd';
+import { Calendar, Button, Tag } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -15,6 +15,8 @@ import Auth from '../../hoc/auth'
 
 function Home() {
 
+    // 로딩처리를 위한 state
+    const [loading, setLoading] = useState(null);
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState();
     // 일일보고 전체내용을 받기위한 state // 자기 자신것
@@ -161,6 +163,7 @@ function Home() {
 
     // 일일보고 등록
     const submitReport = () => {
+        setLoading(true);
         const id = userId;
         if (report.today === "") {
             alert("내용을 입력해주세요.");
@@ -177,6 +180,7 @@ function Home() {
             closeRegisterModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
+            setLoading(false);
         })
     }
 
@@ -191,6 +195,7 @@ function Home() {
 
     // 보고 수정
     const updateReport = () => {
+        setLoading(true);
         if (report === "") {
             alert("내용을 입력해주세요");
             return;
@@ -205,16 +210,16 @@ function Home() {
             closeUpdateModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
-
+            setLoading(false);
         })
 
     }
     // 보고 삭제
     const deleteReport = () => {
-
         const confirmAction = window.confirm("삭제하시겠습니까?");
-
+        
         if (confirmAction) { //yes 선택
+            setLoading(true);
             Axios.post('http://localhost:8000/report/delete', {
                 idx: dailyReportDetail.idx,
             }).then((res) => {
@@ -222,6 +227,7 @@ function Home() {
                 closeUpdateModal();
                 setReport({ today: '', tomorrow: '' });
                 setState(res);
+                setLoading(false);
             })
         }
     }
@@ -248,7 +254,6 @@ function Home() {
                 <td><pre>{item.report}</pre></td>
                 <td><pre>{item.plan}</pre></td>
             </tr>
-
         ));
 
         return (
@@ -265,12 +270,12 @@ function Home() {
                         {reportList}
                     </tbody>
                 </table>
-                {/* {reportList} */}
             </>
         )
     }
 
     return (
+
         <Fragment>
 
             <Calendar style={{
@@ -284,7 +289,7 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="ICT 사업부 일일 업무 보고" insert={submitReport}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="ICT 사업부 일일 업무 보고" insert={submitReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -302,7 +307,7 @@ function Home() {
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="ICT 사업부 일일 업무 보고" update={updateReport} del={deleteReport}>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="ICT 사업부 일일 업무 보고" update={updateReport} del={deleteReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -315,7 +320,6 @@ function Home() {
                         </tr>
                     </thead>
                 </table>
-                {/* <TextArea style={{ height: '300px' }} onChange={getReport} defaultValue={dailyReportDetail.content}></TextArea> */}
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={dailyReportDetail.content} name="today"></TextArea>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={dailyReportDetail.plan} name="tomorrow"></TextArea>
             </ReportUpdateModal>

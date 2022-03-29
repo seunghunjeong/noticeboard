@@ -21,6 +21,7 @@ router.use(function(req, res, next) {
     next();
 });
 
+// 카테고리 목록 가져오기
 router.post("/getCateGory",(req,res) => {
     
     const sqlQuery = `SELECT * FROM boardCategory`;
