@@ -75,6 +75,10 @@ function Board_register() {
     const writer = userName;
     const category = boardContent.category;
 
+    if (category === ""){
+      alert('카테고리를 선택해주세요.');
+      return;
+    }
     if (title === "") {
       alert('제목을 입력해주세요.');
       return;

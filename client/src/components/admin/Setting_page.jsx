@@ -19,8 +19,8 @@ const Setting_page = () => {
     const categoryList = state[2];
     // 카테고리 등록 모달
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
-    const openModal = () => { setAddCategoryOpen(true); };
-    const closeModal = () => { setAddCategoryOpen(false); };
+    const openModal = () => { setAddCategoryOpen(true);  };
+    const closeModal = () => { setAddCategoryOpen(false); setAddCategory({category: '', idx: ''}); };
 
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
     const [addCategory, setAddCategory] = useState({
@@ -46,12 +46,18 @@ const Setting_page = () => {
             ...addCategory,
             [name]: value
         })
-        console.log(addCategory.category);
     }
     // 카테고리 추가
     const categoryRegister = () => {
         setLoading(true);
         const category = addCategory.category;
+
+        if(category === ""){
+            alert("카테고리 명을 입력해주세요.");
+            setLoading(false);
+            return;
+        }
+
         Axios.post('http://localhost:8000/admin/addCategory', {
             category: category
         }).then((res) => {
