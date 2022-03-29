@@ -29,9 +29,10 @@ function Nav(props) {
   const url = window.location.pathname;
     if(url !== '/') {
       tmpUrl = url.split('/');
-      tmpUrl = tmpUrl[tmpUrl.length-2];
+      tmpUrl = tmpUrl[1];
+      tmpUrl.includes('board') ? tmpUrl = ['board'] : tmpUrl = ['setting']
     } else {
-      tmpUrl = 'board_list';
+      tmpUrl = ['board'];
     }
     return tmpUrl;
   }
@@ -41,11 +42,11 @@ function Nav(props) {
   return (
     <Sider>
       <div className="main-logo" />
-      <Menu theme="dark" defaultOpenKeys={returnSub} defaultSelectedKeys={returnTab} mode="inline">
+      <Menu theme="dark" defaultSelectedKeys={returnTab} defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link to={'/'}>HOME</Link>
         </Menu.Item>
-        <SubMenu key="board_list" icon={<ProfileOutlined />} title="Board">
+        <SubMenu key="board" icon={<ProfileOutlined />} title="Board">
           {
             categoryList.map((e) =>
               <Menu.Item key={e.category}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
