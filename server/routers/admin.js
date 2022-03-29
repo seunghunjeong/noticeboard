@@ -76,4 +76,22 @@ router.post('/delCategory',(req,res)=> {
     });
 })
 
+// 카테고리 수정
+router.post('/udtCategory',(req,res) => {
+
+    console.log(req.body);
+    const sqlQuery = `
+        UPDATE
+            boardCategory
+        SET
+            category = '${req.body.category}'
+        WHERE
+            idx = '${req.body.idx}'
+    `;
+
+    db.query(sqlQuery,(err,result)=>{
+        res.send(result);
+    });
+})
+
 module.exports = router;

@@ -84,7 +84,8 @@ router.get("/getReportDetail", (req, res) => {
 router.post("/update", (req, res) => {
     
     const sqlQuery = `
-        UPDATE board.dailyReport
+        UPDATE
+            board.dailyReport
         SET
             report = '${req.body.content}',
             plan = '${req.body.plan}',

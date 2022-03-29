@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
-import { Calendar, Button, Tag, Badge } from 'antd';
+import { Calendar, Button, Tag } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -13,12 +13,9 @@ import '../../App.css';
 import { useSelector } from 'react-redux';
 import Auth from '../../hoc/auth'
 
-
-
-
-
 function Home() {
 
+    // 로딩처리를 위한 state
     const [loading, setLoading] = useState(null);
     // 캘린더 셀 렌더링을 위한 state
     const [state, setState] = useState();
