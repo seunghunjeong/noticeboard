@@ -13,28 +13,20 @@ const Setting_page = () => {
     // Outlet props 사용
     const state = useOutletContext();
     const setState = state[1];
-
+    const categoryList = state[2];
     // 카테고리 등록 모달
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
     const openModal = () => { setAddCategoryOpen(true); };
     const closeModal = () => { setAddCategoryOpen(false); };
 
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
-    const [boardCategory, setBoardCategory] = useState([]);
     const [addCategory, setAddCategory] = useState({
         category: '',
     });
 
-    useEffect(() => {
-        Axios.post('http://localhost:8000/nav/getCategory')
-            .then((res) => {
-                setBoardCategory(res.data);
-            })
-    }, [state]);
-
     // 카테고리 리스트 뿌려주기
     const data = [];
-    boardCategory.map(e => {
+    categoryList.map(e => {
         data.push({
             category: e.category,
             key: e.idx
