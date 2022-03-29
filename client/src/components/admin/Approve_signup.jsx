@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Layout, Button, Table } from 'antd';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 import Axios from 'axios';
 
 
@@ -12,7 +12,7 @@ const Approve_signup = () => {
     // 가입대기열 불러오기
     const [stanbyList, setStanbyList] = useState([]);
     useEffect(() => {
-        Axios.get('http://localhost:8000/api/getStandby_signup')
+        Axios.get('/api/getStandby_signup')
         .then((response) => {
             setStanbyList(response.data);
         })
@@ -22,8 +22,9 @@ const Approve_signup = () => {
     const approveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
 
-        Axios.post('http://localhost:8000/api/approve-sign-up', {id : userId})
+        Axios.post('/api/approve-sign-up', {id : userId})
         .then((response) => {
             if(response.data.msg === "success"){
                 alert("가입승인완료");
@@ -38,10 +39,11 @@ const Approve_signup = () => {
     const rejectHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("가입을 거절하시겠습니까? 해당 사용자는 가입승인 대기열에서 삭제됩니다.");
         
         if(confirmAction) { //yes 선택
-            Axios.post('http://localhost:8000/api/reject-sign-up', {id : userId})
+            Axios.post('/api/reject-sign-up', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("가입거절 완료");
@@ -60,10 +62,11 @@ const Approve_signup = () => {
      const adminAppointHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("해당 유저를 관리자로 지정하시겠습니까?");
         
         if(confirmAction) { //yes 선택
-            Axios.post('http://localhost:8000/api/admin-appoint', {id : userId})
+            Axios.post('/api/admin-appoint', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("관리자 지정 완료");
@@ -82,10 +85,11 @@ const Approve_signup = () => {
     const adminRemoveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
+        console.log(value);
         const confirmAction = window.confirm("해당 관리자를 해지하시겠습니까?");
         
         if(confirmAction) { //yes 선택
-            Axios.post('http://localhost:8000/api/admin-remove', {id : userId})
+            Axios.post('/api/admin-remove', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("관리자 해지 완료");
@@ -126,8 +130,8 @@ const Approve_signup = () => {
             align : 'center'
         },
         {   title: '가입승인일', 
-            dataIndex: 'tmp', 
-            key: 'tmp',
+            dataIndex: 'approved', 
+            key: 'approved',
             align : 'center'
         },
         {
@@ -178,7 +182,8 @@ const Approve_signup = () => {
           name : element.username,
           auth : element.auth === 1 ? "관리자" : null,
           registered : moment(element.registered).format('YYYY-MM-DD, HH:mm:ss'),
-          status : element.status
+          status : element.status,
+          approved : element.approved !==null ? moment(element.approved).format('YYYY-MM-DD, HH:mm:ss') : null
         });
         return data;
     });

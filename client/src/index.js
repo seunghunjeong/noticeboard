@@ -19,8 +19,7 @@ ReactDOM.render(
     store={createStoreWithMiddlewear(Reducer,
         window.__REDUX_DEVTOOLS_EXTENSION__&& //redux_extension 설치
         window.__REDUX_DEVTOOLS_EXTENSION__()
-      )}>
-   
+    )}>
     <App />
   </Provider>
   , document.getElementById('root')

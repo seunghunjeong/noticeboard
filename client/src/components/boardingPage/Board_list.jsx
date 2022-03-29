@@ -6,7 +6,7 @@ import '../../App.css';
 import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams } from "react-router-dom"
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 function Board_list() {
   
@@ -30,7 +30,7 @@ function Board_list() {
 
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('http://localhost:8000/board/api/getBoardList',{
+    Axios.get('/board/api/getBoardList',{
       params: {
         filter : searchContent.filter === '' ? '' : searchContent.filter,
         // %를 넣어줘야 와일드카드 검색 조건.

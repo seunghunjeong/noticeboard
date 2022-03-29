@@ -16,7 +16,7 @@ function MainLayout(props) {
   const [boardCategory, setBoardCategory] = useState([]);
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/nav/getCategory')
+    Axios.post('/nav/getCategory')
       .then((res) => {
         setBoardCategory(res.data);
       })

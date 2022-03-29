@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true //세션관리를 위한 옵션
 //로그인 action
 export function loginUser(dataToSubmit){
 
-    const request = axios.post('http://localhost:8000/api/login', dataToSubmit)
+    const request = axios.post('/api/login', dataToSubmit)
     .then(response => response.data)
 
     return {
@@ -24,7 +24,7 @@ export function loginUser(dataToSubmit){
 //회원가입 action
 export function registerUser(dataToSubmit){//post는 바디부분이 필요하다
 
-    const request = axios.post('http://localhost:8000/api/standby-signup', dataToSubmit)
+    const request = axios.post('/api/standby-signup', dataToSubmit)
     .then(response => response.data)
 
     return {
@@ -37,7 +37,7 @@ export function registerUser(dataToSubmit){//post는 바디부분이 필요하�
 //사용자별 권한 action
 export function auth(dataToSubmit){
                               
-    const request = axios.post('http://localhost:8000/api/auth', dataToSubmit)
+    const request = axios.post('/api/auth', dataToSubmit)
     .then(response => response.data)
 
     return {
@@ -60,7 +60,7 @@ export function logout(){
         
         sessionStorage.removeItem("userId"); 
         
-        const request = axios.get('http://localhost:8000/api/logout')
+        const request = axios.get('/api/logout')
         .then(response => response.data)
         
         return {

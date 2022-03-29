@@ -11,7 +11,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import '../../App.css';
 import { useSelector } from 'react-redux';
-import Auth from '../../hoc/auth'
+import Auth from '../../_hoc/auth'
 
 function Home() {
 
@@ -61,7 +61,7 @@ function Home() {
     // 자신이 작성한 전체 일일보고 받아오기
     useEffect(() => {
         const id = userId;
-        Axios.get('http://localhost:8000/report/getMyReport', {
+        Axios.get('/report/getMyReport', {
             params: {
                 id: id
             }
@@ -73,7 +73,7 @@ function Home() {
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
-        Axios.get('http://localhost:8000/report/getReportDetail'
+        Axios.get('/report/getReportDetail'
         ).then((res) => {
             setViewDetailReportList(res.data);
         })
@@ -170,7 +170,7 @@ function Home() {
             setLoading(false);
             return;
         }
-        Axios.post('http://localhost:8000/report/insert', {
+        Axios.post('/report/insert', {
             report: report.today,
             plan: report.tomorrow,
             writer: userName,
@@ -201,7 +201,7 @@ function Home() {
             alert("내용을 입력해주세요");
             return;
         }
-        Axios.post('http://localhost:8000/report/update', {
+        Axios.post('/report/update', {
             idx: dailyReportDetail.idx,
             content: report.today,
             plan: report.tomorrow,
@@ -221,7 +221,7 @@ function Home() {
         
         if (confirmAction) { //yes 선택
             setLoading(true);
-            Axios.post('http://localhost:8000/report/delete', {
+            Axios.post('/report/delete', {
                 idx: dailyReportDetail.idx,
             }).then((res) => {
                 alert("삭제완료");
