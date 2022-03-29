@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { List, Button, Input } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
+import Auth from '../../_hoc/auth'
 
 import AddCategoryModal from '../modals/AddCategory';
 import Axios from 'axios';
@@ -157,4 +158,4 @@ const Setting_page = () => {
 
 }
 
-export default Setting_page
+export default Auth(Setting_page, true)
