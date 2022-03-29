@@ -46,7 +46,6 @@ const Setting_page = () => {
             ...addCategory,
             [name]: value
         })
-        console.log(addCategory.category);
     }
     // 카테고리 추가
     const categoryRegister = () => {
