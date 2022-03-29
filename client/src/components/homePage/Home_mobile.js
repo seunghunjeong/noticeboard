@@ -76,8 +76,8 @@ function Home() {
          // 일보 초기화
          setDailyReport({
              ...dailyReport,
-             report: '@ ',
-             plan: '@ '
+             report: '◎',
+             plan: '◎'
          })
 
          setLoading(false);
@@ -198,7 +198,7 @@ function Home() {
     // 일보 저장
     const insertBogo = () => {
         setLoading(true);
-        if (dailyReport.report === "@ ") {
+        if (dailyReport.report === "◎") {
             alert("금일 실적을 입력해주세요");
             setLoading(false);
             return;
@@ -221,7 +221,7 @@ function Home() {
 
     const updateReport = () => {
         setLoading(true);
-        if (dailyReport.report === "@ ") {
+        if (dailyReport.report === "◎") {
             alert("금일 실적을 입력해주세요.");
             setLoading(false);
             return;
@@ -270,13 +270,13 @@ function Home() {
                 plan: resultTxt[0].plan
             })
         }
-        return resultTxt ? resultTxt[0].report : ' @'
+        return resultTxt ? resultTxt[0].report : '◎'
     }
     
     // 익일 계획 읽기
     const readPlan = () => {
         const resultTxt = filterBogo();
-        return resultTxt ? resultTxt[0].plan : ' @'
+        return resultTxt ? resultTxt[0].plan : '◎'
     }
 
     // 전체 보기
