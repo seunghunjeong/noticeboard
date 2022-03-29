@@ -1,18 +1,19 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../hoc/auth'
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import axios from "axios";
 import Logo from '../layout/cmworld-logo.png';
+import { useCookies } from 'react-cookie';
+import crypto from 'crypto-js';
 
 function Login() {
 
-    //antd
+    const [ isRemember, setIsRemember ] = useState(false);
+    const [ cookies, setCookie, removeCookie ] = useCookies(['rememberId','rememberPassword']);
 
     //페이지이동
     const navigate = useNavigate();
@@ -21,6 +22,17 @@ function Login() {
     //inform
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
+
+    useEffect(()=>{
+        if(cookies.rememberId !== undefined && cookies.rememberPassword !== undefined ){
+            let bytes = crypto.AES.decrypt(cookies.rememberPassword, 'cookiePassword');
+            let rememberPassword = bytes.toString(crypto.enc.Utf8);
+            setId(cookies.rememberId);
+            setPassword(rememberPassword)
+            setIsRemember(true);
+        }
+    },[]);
+
 
     const onIdHandler = (event) => {  
         setId(event.currentTarget.value)
@@ -31,6 +43,14 @@ function Login() {
 
     const onSubmitHandler = (value) => {
         //event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
+
+        if(isRemember){
+            setCookie('rememberId', Id , {maxAge:200000});
+            setCookie('rememberPassword', crypto.AES.encrypt(Password, 'cookiePassword').toString() , {maxAge:200000});
+        } else {
+            removeCookie('rememberId');
+            removeCookie('rememberPassword');
+        }
 
         let body = {
             id : Id,
@@ -58,6 +78,10 @@ function Login() {
     
     }
 
+    const handleOnChange = (e) => {
+        setIsRemember(e.target.checked);
+    }
+
     return (
         <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', background: '#001529', color: '#fff'}}>
             <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
@@ -65,15 +89,15 @@ function Login() {
                     <img src={Logo} width="99px" height='26px'/>
                 </div>
                 <div className="login-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>LOGIN</div>
-                <Form.Item name="username" rules={[{ required: true, message: '아이디를 입력하세요.'}]}>
-                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" value={Id} onChange={onIdHandler}/>
+                <Form.Item rules={[{ required: true, message: '아이디를 입력하세요.'}]} initialValue={{id : Id}}> 
+                    <Input name='id' prefix={<UserOutlined className="site-form-item-icon" />} placeholder="ID" value={Id} onChange={onIdHandler}/>
                 </Form.Item>
-                <Form.Item name="password" rules={[{ required: true, message: '비밀번호를 입력하세요.'}]}>
-                    <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" value={Password} onChange={onPasswordHandler}/>
+                <Form.Item rules={[{ required: true, message: '비밀번호를 입력하세요.'}]} initialValue={{remPw : Password}}>
+                    <Input name='remPw' prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" value={Password} onChange={onPasswordHandler}/>
                 </Form.Item>
                 <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox style={{color : 'white'}}>아이디/비밀번호 저장</Checkbox>
+                    <Form.Item name="remember" noStyle>
+                        <Checkbox style={{color : 'white'}} onChange={handleOnChange} checked={isRemember}>아이디/비밀번호 저장</Checkbox>
                     </Form.Item>
                         {/* <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link> */}
                 </Form.Item>
