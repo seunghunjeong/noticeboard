@@ -6,16 +6,14 @@ function Nav(props) {
 
   const categoryList = props.props;
   const admin = props.admin;
-  console.log(categoryList);
-  console.log(admin);
-  
+
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
 
   return (
     <Sider>
-      
+
       <div className="main-logo" />
       <Menu theme="dark" defaultOpenKeys={['sub1']} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
@@ -23,8 +21,8 @@ function Nav(props) {
         </Menu.Item>
         <SubMenu key="sub1" icon={<ProfileOutlined />} title="Board">
           {
-            categoryList.map((e)=>
-              <Menu.Item key={'board_'+e.idx}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
+            categoryList.map((e) =>
+              <Menu.Item key={'board_' + e.idx}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
             )
           }
         </SubMenu>
