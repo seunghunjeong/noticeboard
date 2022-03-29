@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useOutletContext } from 'react-router-dom';
-import { List, Layout, Button, Input, Table, Radio, Divider } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { Layout, Button, Table } from 'antd';
 import Auth from '../../hoc/auth'
 import Axios from 'axios';
 
