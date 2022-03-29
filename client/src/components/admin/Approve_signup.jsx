@@ -8,7 +8,7 @@ import Axios from 'axios';
 
 const Approve_signup = () => {
 
-    // antd 변수
+    // antd
     const { Content } = Layout;
 
     // 가입대기열 불러오기
@@ -16,33 +16,96 @@ const Approve_signup = () => {
     useEffect(() => {
         Axios.get('http://localhost:8000/api/getStandby_signup')
         .then((response) => {
-            console.log(response)
             setStanbyList(response.data);
         })
-    },[])
-        
-    const approveHandler = (event) =>{  
-        console.log()
+    },[stanbyList])
+    
+    //가입수락 클릭
+    const approveHandler = (event, value) => {  
         event.preventDefault();
-        // Axios.post('http://localhost:8000/api/approve-sign-up', {id : key})
-        // .then((response) => {
-        //     console.log(response)
-        // })
+        const userId = value;
+
+        Axios.post('http://localhost:8000/api/approve-sign-up', {id : userId})
+        .then((response) => {
+            if(response.data.msg === "success"){
+                alert("가입승인완료");
+            }
+            else{
+                alert(response.data.msg);
+            }
+        })
     }
 
-    const adminHandler = (event) =>{  
-
+    //가입거절 클릭
+    const rejectHandler = (event, value) => {  
         event.preventDefault();
-        // Axios.post('http://localhost:8000/api/approve-sign-up', {id : key})
-        // .then((response) => {
-        //     console.log(response)
-        // })
+        const userId = value;
+        const confirmAction = window.confirm("가입을 거절하시겠습니까? 해당 사용자는 가입승인 대기열에서 삭제됩니다.");
+        
+        if(confirmAction) { //yes 선택
+            Axios.post('http://localhost:8000/api/reject-sign-up', {id : userId})
+            .then((response) => {
+                if(response.data.msg === "success"){
+                    alert("가입거절 완료");
+                }
+                else{
+                    alert(response.data.msg);
+                }
+            })
+        }
+        else {
+            event.preventDefault();
+        }  
+    }
+
+     //관리자지정 클릭
+     const adminAppointHandler = (event, value) => {  
+        event.preventDefault();
+        const userId = value;
+        const confirmAction = window.confirm("해당 유저를 관리자로 지정하시겠습니까?");
+        
+        if(confirmAction) { //yes 선택
+            Axios.post('http://localhost:8000/api/admin-appoint', {id : userId})
+            .then((response) => {
+                if(response.data.msg === "success"){
+                    alert("관리자 지정 완료");
+                }
+                else{
+                    alert(response.data.msg);
+                }
+            })
+        }
+        else {
+            event.preventDefault();
+        }  
+    }
+
+    //관리자해지 클릭
+    const adminRemoveHandler = (event, value) => {  
+        event.preventDefault();
+        const userId = value;
+        const confirmAction = window.confirm("해당 관리자를 해지하시겠습니까?");
+        
+        if(confirmAction) { //yes 선택
+            Axios.post('http://localhost:8000/api/admin-remove', {id : userId})
+            .then((response) => {
+                if(response.data.msg === "success"){
+                    alert("관리자 해지 완료");
+                }
+                else{
+                    alert(response.data.msg);
+                }
+            })
+        }
+        else {
+            event.preventDefault();
+        }  
     }
 
     // table columns
     const columns = [
         {   
-            title: '신청자',
+            title: '신청인 이름',
             dataIndex: 'name', 
             key: 'name',
             align : 'center'
@@ -64,24 +127,44 @@ const Approve_signup = () => {
             key: 'status',
             align : 'center'
         },
+        {   title: '가입승인일', 
+            dataIndex: 'tmp', 
+            key: 'tmp',
+            align : 'center'
+        },
         {
             title: '가입승인',
-            dataIndex: 'status',
+            dataIndex: 'x',
             key: 'x',
             align : 'center',
             width : 300,
-            render: (row, id) => <div>
-                                    <Button onClick={approveHandler}>가입승인</Button>
-                                    <Button onClick={approveHandler}>가입거절</Button>
-                                 </div>
+            render : (title, row) => 
+            (  
+                <>
+                {row.status === 'N' ? 
+                    <div>
+                        <Button danger onClick={e => approveHandler(e, row.id)}>가입수락</Button>
+                        <Button onClick={e => rejectHandler(e, row.id)}>가입거절</Button>
+                    </div> : <Button disabled>승인완료</Button>
+                } 
+                </>
+            )
         },
         {
             title: '권한부여',
-            dataIndex: 'auth',
+            dataIndex: 'y',
             key: 'y',
             align : 'center',
-            width : 100,
-            render: (row) => <Button onClick={adminHandler}>관리자지정</Button>
+            width : 150,
+            render : (title, row) => 
+            (  
+                <>
+                {row.status === 'N' ? <Button disabled>관리자지정</Button> : 
+                                      (row.auth === "관리자" ? <Button onClick={e => adminRemoveHandler(e, row.id)}>관리자해지</Button> 
+                                      : <Button onClick={e => adminAppointHandler(e, row.id)}>관리자지정</Button>)
+                } 
+                </>
+            )
         },
       ];
       
@@ -95,8 +178,8 @@ const Approve_signup = () => {
           key : element.id,
           id : element.id,
           name : element.username,
-          auth : element.auth,
-          registered : moment(element.regist_date).format('YYYY-MM-DD'),
+          auth : element.auth === 1 ? "관리자" : null,
+          registered : moment(element.registered).format('YYYY-MM-DD, HH:mm:ss'),
           status : element.status
         });
         return data;
