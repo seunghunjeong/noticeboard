@@ -15,15 +15,13 @@ import JoinPage from '../joinPage/Join';
 
 // components layout
 import MainLayout from './MainLayout';
-// divide Browser, Mobile
-import {BrowserView} from "react-device-detect";
+
 
 const BrowserComponent = () => {
 
     return(
-        <BrowserView>
-            <BrowserRouter>   
-                <Routes>
+        <BrowserRouter>   
+            <Routes>
                 <Route element = {<MainLayout/>}>
                     <Route path="/" element = {<HomePage/>}/>
                     <Route path="/board_list/:category" element = {<BoardingListPage/>}/>
@@ -35,9 +33,8 @@ const BrowserComponent = () => {
                 </Route>
                 <Route path="/login" element = {<LoginPage/>}/>
                 <Route path="/sign-up" element = {<JoinPage/>}/>
-                </Routes>
-            </BrowserRouter>
-        </BrowserView>
+            </Routes>
+        </BrowserRouter>
     )
 }
 
