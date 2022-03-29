@@ -10,25 +10,51 @@ function Nav(props) {
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
+  let tmpUrl = '';
+
+  // nav default tab
+  const returnTab = () => {    
+    const url = window.location.pathname;
+      if(url !== '/') {
+        tmpUrl = url.split('/');
+        tmpUrl = tmpUrl[tmpUrl.length-1];
+      } else {
+        tmpUrl = '1';
+      }
+      return tmpUrl;
+    }
+
+  // nav default Sub
+  const returnSub = () => {    
+  const url = window.location.pathname;
+    if(url !== '/') {
+      tmpUrl = url.split('/');
+      tmpUrl = tmpUrl[tmpUrl.length-2];
+    } else {
+      tmpUrl = 'board_list';
+    }
+    return tmpUrl;
+  }
+
+
 
   return (
     <Sider>
-
       <div className="main-logo" />
-      <Menu theme="dark" defaultOpenKeys={['sub1']} mode="inline">
+      <Menu theme="dark" defaultOpenKeys={returnSub} defaultSelectedKeys={returnTab} mode="inline">
         <Menu.Item key="1" icon={<HomeOutlined />}>
           <Link to={'/'}>HOME</Link>
         </Menu.Item>
-        <SubMenu key="sub1" icon={<ProfileOutlined />} title="Board">
+        <SubMenu key="board_list" icon={<ProfileOutlined />} title="Board">
           {
             categoryList.map((e) =>
-              <Menu.Item key={'board_' + e.idx}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
+              <Menu.Item key={e.category}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
             )
           }
         </SubMenu>
         {admin === true ? <SubMenu key="sub2" icon={<SettingOutlined />} title="Setting">
-                            <Menu.Item key="2"><Link to={`/approve_signup`}>가입승인</Link></Menu.Item>   
-                            <Menu.Item key="3"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>   
+                            <Menu.Item key="approve_signup"><Link to={`/approve_signup`}>가입승인</Link></Menu.Item>   
+                            <Menu.Item key="setting_page"><Link to={`/setting_page`}>게시판관리</Link></Menu.Item>   
                           </SubMenu> : null
         }
 
