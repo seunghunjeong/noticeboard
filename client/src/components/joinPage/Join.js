@@ -114,7 +114,7 @@ function Join() {
           
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Link to={'/login'}>뒤로가기</Link>
+          <Button type="dashed" href='/login'> 취소</Button>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">
               회원가입신청
             </Button>

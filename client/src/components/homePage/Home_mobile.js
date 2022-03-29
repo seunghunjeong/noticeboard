@@ -36,6 +36,7 @@ function Home() {
     const [viewMyDailyReport, setViewMyDailyReport] = useState([]);
     const [viewDailyReport, setViewDailyReport] = useState([]);
 
+    // 선택한 일일보고
     const [readBogoArr, setReadBogoArr] = useState();
 
     // 수정 확인
@@ -44,6 +45,50 @@ function Home() {
         planChk: false
     })
 
+    // 로딩 여부
+    const [loading, setLoading] = useState(false);
+
+     // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
+     const [modalOpen, setModalOpen] = useState(false);
+     const openModal = (e) => {
+         // 이벤트 전파 방지
+         e.stopPropagation();
+         // 버튼에 저장한 날짜 가져오기.
+         const date = e.currentTarget.getAttribute('date');
+         // 등록일 저장
+         setDailyReport({
+             ...dailyReport,
+             regist_date: date
+         })
+         setModalOpen(true);
+         // 버튼 상태 가져오기
+         setState(e.currentTarget.getAttribute('state'));
+     };
+     const closeModal = () => {
+         setModalOpen(false);
+         
+         // 업데이트 확인 초기화
+         setUpdateBogoArr({
+             reportChk:false,
+             planChk:false
+         })
+         
+         // 일보 초기화
+         setDailyReport({
+             ...dailyReport,
+             report: '@ ',
+             plan: '@ '
+         })
+
+         setLoading(false);
+     };
+     const [viewModalOpen, setViewModalOpen] = useState(false);
+     // 조회창 열고닫기
+     const openViewModal = () => { setViewModalOpen(true); };
+     const closeViewModal = () => {
+         setViewModalOpen(false);
+     };
+ 
 
     // 로그인한 사용자용 일보 가져오기
     useEffect(() => {
@@ -110,64 +155,6 @@ function Home() {
         );
     }
 
-
-    // 년 단위 캘린더 랜더링 할 내용 
-    function getMonthData(value) {
-        if (value.month() === 5) {
-            return 1394;
-        }
-    }
-
-    // 년 단위 캘린더 랜더링 위한 함수
-    function monthCellRender(value) {
-        const num = getMonthData(value);
-        return num ? (
-            <div className="notes-month">
-                <section>{num}</section>
-                <span>Backlog number</span>
-            </div>
-        ) : null;
-    }
-
-    // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
-    const [modalOpen, setModalOpen] = useState(false);
-    const openModal = (e) => {
-        // 이벤트 전파 방지
-        e.stopPropagation();
-        // 버튼에 저장한 날짜 가져오기.
-        const date = e.currentTarget.getAttribute('date');
-        // 등록일 저장
-        setDailyReport({
-            ...dailyReport,
-            regist_date: date
-        })
-        setModalOpen(true);
-        // 버튼 상태 가져오기
-        setState(e.currentTarget.getAttribute('state'));
-    };
-    const closeModal = () => {
-        setModalOpen(false);
-        
-        // 업데이트 확인 초기화
-        setUpdateBogoArr({
-            reportChk:false,
-            planChk:false
-        })
-        
-        // 일보 초기화
-        setDailyReport({
-            ...dailyReport,
-            report: '@ ',
-            plan: '@ '
-        })
-    };
-    const [viewModalOpen, setViewModalOpen] = useState(false);
-    // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); };
-    const closeViewModal = () => {
-        setViewModalOpen(false);
-    };
-
     // 클릭한 셀이 표시하는 일자를 받아옴
     const onSelect = value => {
         // 등록일 저장
@@ -210,8 +197,10 @@ function Home() {
 
     // 일보 저장
     const insertBogo = () => {
+        setLoading(true);
         if (dailyReport.report === "@ ") {
             alert("금일 실적을 입력해주세요");
+            setLoading(false);
             return;
         }
         
@@ -231,8 +220,10 @@ function Home() {
     }
 
     const updateReport = () => {
+        setLoading(true);
         if (dailyReport.report === "@ ") {
             alert("금일 실적을 입력해주세요.");
+            setLoading(false);
             return;
         }
 
@@ -249,6 +240,7 @@ function Home() {
     }
 
     const deleteReport = () => {
+        setLoading(true);
         Axios.post('http://localhost:8000/report/delete', {
             idx: readBogoArr.idx,
         }).then(() => {
@@ -333,12 +325,10 @@ function Home() {
             }}
                 locale={locale}
                 fullscreen={true}
-                // onPanelChange={onPanelChange}
                 dateCellRender={dateCellRender}
-                // monthCellRender={monthCellRender}
                 onSelect={onSelect}
             />
-            <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport}>
+            <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
                 <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 금일 실적 <FormOutlined /></Divider>

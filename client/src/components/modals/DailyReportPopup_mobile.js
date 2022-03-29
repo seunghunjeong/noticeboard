@@ -1,9 +1,10 @@
 import React from 'react';
 import './DailyReport.css'
+import { Button } from 'antd';
 
 const ReportRegisterModal = (props) => {
     // 부모로부터 값을 받아옴
-    const { state, display, close, header, insert, update, del } = props;
+    const { state, display, close, header, insert, update, del, loading } = props;
 
     return (
         // 클래스명 변경을 통해 활성화 / 비활성화
@@ -19,15 +20,15 @@ const ReportRegisterModal = (props) => {
                     <main>{props.children}</main>
                     <footer>
                         { state === 'insertModal' ?
-                            <button className="insert" onClick={insert}>
+                            <Button className="insert" onClick={insert} loading={loading}>
                                 등록
-                            </button>
+                            </Button>
                             : 
-                            <><button className="update" onClick={update}>
+                            <><Button className="update" onClick={update} loading={loading}>
                                 수정
-                            </button><button className="delete" onClick={del}>
+                            </Button><Button className="delete" onClick={del} loading={loading}>
                                     삭제
-                            </button></>
+                            </Button></>
                         }
                         <button className="close" onClick={close}>
                             취소

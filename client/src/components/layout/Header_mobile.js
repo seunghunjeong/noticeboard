@@ -47,7 +47,7 @@ function header() {
             <div className={MobileStyle.mainLogo} />
             {
                 isAuth === true ? <div className={MobileStyle.logoutM}>
-                                    <span >{userName}님 환영합니다!  </span>
+                                    <span >{userName}님! </span>
                                     
                                     <LoginOutlined key="userKsy" onClick={onLogoutHandler}>
                                         로그아웃 
