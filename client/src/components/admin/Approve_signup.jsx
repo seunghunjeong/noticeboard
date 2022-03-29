@@ -16,7 +16,7 @@ const Approve_signup = () => {
         .then((response) => {
             setStanbyList(response.data);
         })
-    },[stanbyList])
+    },[])
     
     //가입수락 클릭
     const approveHandler = (event, value) => {  
