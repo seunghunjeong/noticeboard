@@ -9,6 +9,9 @@ const Approve_signup = () => {
     // antd
     const { Content } = Layout;
 
+    // 렌더링을 위한 state
+    const [state, setState] = useState();
+
     // 가입대기열 불러오기
     const [stanbyList, setStanbyList] = useState([]);
     useEffect(() => {
@@ -16,9 +19,9 @@ const Approve_signup = () => {
         .then((response) => {
             setStanbyList(response.data);
         })
-    },[])
+    }, [state])
     
-    //가입수락 클릭
+    // 가입수락 클릭
     const approveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
@@ -28,6 +31,7 @@ const Approve_signup = () => {
         .then((response) => {
             if(response.data.msg === "success"){
                 alert("가입승인완료");
+                setState(response);
             }
             else{
                 alert(response.data.msg);
@@ -35,7 +39,7 @@ const Approve_signup = () => {
         })
     }
 
-    //가입거절 클릭
+    // 가입거절 클릭
     const rejectHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
@@ -47,6 +51,7 @@ const Approve_signup = () => {
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("가입거절 완료");
+                    setState(response);
                 }
                 else{
                     alert(response.data.msg);
@@ -58,7 +63,7 @@ const Approve_signup = () => {
         }  
     }
 
-     //관리자지정 클릭
+     // 관리자지정 클릭
      const adminAppointHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
@@ -70,6 +75,7 @@ const Approve_signup = () => {
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("관리자 지정 완료");
+                    setState(response);
                 }
                 else{
                     alert(response.data.msg);
@@ -81,7 +87,7 @@ const Approve_signup = () => {
         }  
     }
 
-    //관리자해지 클릭
+    // 관리자해지 클릭
     const adminRemoveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
@@ -93,6 +99,7 @@ const Approve_signup = () => {
             .then((response) => {
                 if(response.data.msg === "success"){
                     alert("관리자 해지 완료");
+                    setState(response);
                 }
                 else{
                     alert(response.data.msg);
