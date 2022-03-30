@@ -32,7 +32,7 @@ router.post("/getCateGory",(req,res) => {
             count(B.category) as count
         FROM 
             boardCategory A 
-        INNER JOIN 
+        LEFT JOIN 
             noticeboard B
         ON 
             A.category = B.category 
