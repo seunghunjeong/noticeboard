@@ -91,6 +91,7 @@ function Board_list() {
 
   //table rows
   const data = [];
+  
   viewContent.map((element, index) => {
     data.push({
       key : element.idx,
@@ -101,6 +102,9 @@ function Board_list() {
     });
     return data;
   });
+
+  // 총 게시글 수 
+  let dataLength = data.length.toString();
 
   // table method
   function onChange(pagination, filters, sorter, extra) {
@@ -125,8 +129,6 @@ function Board_list() {
       keyword : value
     });
   };
- 
-
 
   //render
   return (
@@ -143,7 +145,8 @@ function Board_list() {
       </div>
       
       <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
-             pagination={{position: ["bottomCenter"]}}
+             pagination={{position: ["bottomCenter"]}} 
+             footer={() => 'total : ' + dataLength }
       /> 
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
