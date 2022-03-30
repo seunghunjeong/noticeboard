@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
-import { List, Button, Input,Table,Layout } from 'antd';
+import { Button, Input, Table, Layout } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import Auth from '../../_hoc/auth'
 
@@ -22,93 +22,74 @@ const Setting_page = () => {
     const categoryList = state[2];
     // 카테고리 등록 모달
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
-    const openModal = () => { setAddCategoryOpen(true);  };
-    const closeModal = () => { setAddCategoryOpen(false); setAddCategory({category: '', idx: ''}); };
+    const openModal = () => { setAddCategoryOpen(true); };
+    const closeModal = () => { setAddCategoryOpen(false); setAddCategory({ category: '', idx: '' }); };
 
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
     const [addCategory, setAddCategory] = useState({
         category: '',
-        idx:'',
-        description :''
+        idx: '',
+        description: ''
     });
-
-    const [count, setCount] = useState([]);
 
     const [mode, setMode] = useState();
 
-    // useEffect(() => {
-    //     Axios.post('/admin/getCount')
-    //       .then((res) => {
-    //         setCount(res.data);
-    //       })
-
-    //       for(let i in categoryList){
-    //           for(let j in count){
-    //               if (categoryList[i].category === count[j].category){
-    //                   //categoryList[i].concat(count[j].count);
-    //               }
-    //           }
-    //       }
-
-    // }, [state]);
-    
-    
     const columns = [
-        {   
+        {
             title: '카테고리',
-            dataIndex: 'category', 
+            dataIndex: 'category',
             key: 'category',
-            align : 'center',
-            width : '15%'
+            align: 'center',
+            width: '15%'
         },
-        {   
+        {
             title: '게시글 수',
-            dataIndex: 'count', 
+            dataIndex: 'count',
             key: 'count',
-            align : 'center',
-            width : '10%'
+            align: 'center',
+            width: '10%'
         },
-        {   
+        {
             title: '설명',
-            dataIndex: 'description', 
+            dataIndex: 'description',
             key: 'description',
-            align : 'center',
-            width : '30%'
+            align: 'center',
+            width: '30%'
         },
-        {   
+        {
             title: '수정',
-            dataIndex: 'registered', 
+            dataIndex: 'registered',
             key: 'registered',
-            align : 'center' ,
+            align: 'center',
             width: '15%',
-            render : (title, row) => (
+            render: (title, row) => (
                 <>
-                <EditOutlined style={{ marginLeft: "4px", color: 'darkcyan' }} onClick={() => {
-                            setMode('udt');
-                            setCategory(row.category, row.key, row.description);
-                            openModal();
-                        }} />
+                    <EditOutlined style={{ marginLeft: "4px", color: 'darkcyan' }} onClick={() => {
+                        setMode('udt');
+                        setCategory(row.category, row.key, row.description);
+                        openModal();
+                    }} />
                 </>
             )
         },
-        {   
-            title: '삭제', 
-            dataIndex: 'auth', 
+        {
+            title: '삭제',
+            dataIndex: 'auth',
             key: 'auth',
-            align : 'center',
+            align: 'center',
             width: '15%',
-            render : (title, row) => (
+            render: (title, row) => (
                 <>
-                <CloseOutlined style={{ marginLeft: "4px", color: 'red' }} onClick={() => {
-                            categoryDelete(row.category);
-                        }} />
+                    <CloseOutlined style={{ marginLeft: "4px", color: 'red' }} onClick={() => {
+                        categoryDelete(row.category);
+                    }} />
                 </>
             )
         },
-        
-        
-        
-      ];
+
+
+
+    ];
 
     // 카테고리 리스트 뿌려주기
     const data = [];
@@ -116,7 +97,8 @@ const Setting_page = () => {
         data.push({
             category: e.category,
             key: e.idx,
-            description: e.description
+            description: e.description,
+            count: e.count
         });
         return data
     })
@@ -134,8 +116,8 @@ const Setting_page = () => {
         setLoading(true);
         const category = addCategory.category;
         const description = addCategory.description;
-        if(category === ""){
-            alert("카테고리 명을 입력해주세요.");
+        if (category === "") {
+            alert("카테고리명을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -174,17 +156,17 @@ const Setting_page = () => {
 
     // 카테고리 수정 값 셋팅
     const setCategory = (name, idx, description) => {
-        setAddCategory({category : name, idx: idx, description: description});
+        setAddCategory({ category: name, idx: idx, description: description });
     }
 
     // 카테고리 수정
     const categoryUpdate = () => {
         setLoading(true);
         Axios.post('/admin/udtCategory', {
-            category : addCategory.category,
-            idx : addCategory.idx,
+            category: addCategory.category,
+            idx: addCategory.idx,
             description: addCategory.description
-        }).then( res => {
+        }).then(res => {
             alert("수정완료");
             setState(res.data);
             closeModal();
@@ -195,32 +177,32 @@ const Setting_page = () => {
 
     return (
         <>
-            
-            <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
-                
-            <span style={{fontSize : "20px", fontWeight : "bold"}}>게시판 카테고리 관리</span>
-            <Button style={{ float: 'right', marginBottom:'15px' }} type="primary" onClick={() => {
-                            setMode('add');
-                            openModal();
-                        }}>추가</Button>
-            <Table
-                columns={columns}
-                dataSource={data}
-            />
+
+            <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
+
+                <span style={{ fontSize: "20px", fontWeight: "bold" }}>게시판 카테고리 관리</span>
+                <Button style={{ float: 'right', marginBottom: '15px' }} type="primary" onClick={() => {
+                    setMode('add');
+                    openModal();
+                }}>추가</Button>
+                <Table
+                    columns={columns}
+                    dataSource={data}
+                />
             </Content>
 
             <AddCategoryModal display={addCategoryOpen} update={categoryUpdate} close={closeModal} insert={categoryRegister} header={mode === 'add' ? '카테고리 추가' : '카테고리 수정'} mode={mode} loading={loading}>
                 {
                     mode === 'add' ?
-                    <>
-                        <Input maxLength={20} onChange={getValue} placeholder='추가할 카테고리명을 입력해주세요.' name='category' style={{ width: '100%', fontSize: '15px' }} />
-                        <Input maxLength={20} onChange={getValue} placeholder='카테고리 설명을 입력해주세요.' name='description' style={{ width: '100%', fontSize: '15px', marginTop:'10px' }} />
-                    </>
-                        : 
-                    <>
-                        <Input maxLength={20} onChange={getValue} name='category' value={addCategory.category} style={{ width: '100%', fontSize: '15px' }} />
-                        <Input maxLength={20} onChange={getValue} placeholder='카테고리 설명을 입력해주세요.' name='description' value={addCategory.description} style={{ width: '100%', fontSize: '15px', marginTop:'10px' }} />
-                    </>
+                        <>
+                            <Input maxLength={20} onChange={getValue} placeholder='추가할 카테고리명을 입력해주세요.' name='category' style={{ width: '100%', fontSize: '15px' }} />
+                            <Input maxLength={20} onChange={getValue} placeholder='카테고리 설명을 입력해주세요.' name='description' style={{ width: '100%', fontSize: '15px', marginTop: '10px' }} />
+                        </>
+                        :
+                        <>
+                            <Input maxLength={20} onChange={getValue} name='category' value={addCategory.category} style={{ width: '100%', fontSize: '15px' }} />
+                            <Input maxLength={20} onChange={getValue} placeholder='카테고리 설명을 입력해주세요.' name='description' value={addCategory.description} style={{ width: '100%', fontSize: '15px', marginTop: '10px' }} />
+                        </>
                 }
             </AddCategoryModal>
 
