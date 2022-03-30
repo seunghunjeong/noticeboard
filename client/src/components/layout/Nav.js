@@ -1,47 +1,63 @@
 import { Layout, Menu } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function Nav(props) {
 
   const categoryList = props.props;
   const admin = props.admin;
+  
 
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
+  const [state, setState] = useState();
+  const ss = useState(props.state);
   let tmpUrl = '';
+  let tmpSub = '';
+
+  useEffect(() => {
+    returnTab();
+  }, [ss])
+
+  const logoHome = () => {
+      setState('home');
+  }
+
+  const handleClick = (e) => {
+    setState(e.key);
+  };
 
   // nav default tab
-  const returnTab = () => {    
+  const returnTab = () => {
     const url = window.location.pathname;
-      if(url !== '/') {
-        tmpUrl = url.split('/');
-        tmpUrl = tmpUrl[tmpUrl.length-1];
-      } else {
-        tmpUrl = 'home';
-      }
-      return tmpUrl;
+    if(url !== '/') {
+      tmpUrl = url.split('/');
+      tmpUrl = tmpUrl[tmpUrl.length-1];
+    } else {
+      tmpUrl = 'home';
+    }
+    setState(tmpUrl);
+    return tmpUrl;
     }
 
   // nav default Sub
   const returnSub = () => {    
   const url = window.location.pathname;
     if(url !== '/') {
-      tmpUrl = url.split('/');
-      tmpUrl = tmpUrl[1];
-      if(tmpUrl.includes('board'))
-       tmpUrl = 'board'
+      tmpSub = url.split('/');
+      tmpSub = tmpSub[1];
+      if(tmpSub.includes('board'))
+      tmpSub = 'board'
     }
-    return [tmpUrl];
+    return [tmpSub];
   }
-
-
 
   return (
     <Sider>
-     <Link to={'/'}> <div className="main-logo" onClick={tmpUrl='home'}/></Link>
-      <Menu theme="dark" defaultSelectedKeys={returnTab} defaultOpenKeys={returnSub} mode="inline">
+     <Link to={'/'}> <div className="main-logo" onClick={logoHome}/></Link>
+      <Menu className='menu_nav' selectedKeys={state} onClick={handleClick} theme='dark' defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link to={'/'}>HOME</Link>
         </Menu.Item>
