@@ -23,7 +23,7 @@ router.post('/standby-signup', (req, res, next) => {
           if (err) {
             //throw err;
             return res.json({
-              msg: "이미 사용하고 있는 아이디입니다.",
+              msg: "해당 아이디를 사용할 수 없습니다.",
             })
           }
           return res.json({
