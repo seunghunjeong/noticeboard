@@ -186,7 +186,7 @@ function Board_update() {
       <Card>
         <Select
           onChange={getCategory}
-          placeholder="category"
+          placeholder="category" size="large"
           style={{ width: '7%' }}
           defaultValue={category}
         >
@@ -196,7 +196,9 @@ function Board_update() {
             )
           }
         </Select>
-        <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getTitleValue} name='title' value={boardContent.title} style={{ width: '93%', fontSize: '14px', marginBottom: '16px' }} />
+        <Input maxLength={20} placeholder='제목을 입력해주세요.'
+               onChange={getTitleValue} name='title' value={boardContent.title} 
+               style={{ width: '93%', fontSize: '19px', marginBottom: '16px', padding : "3px 11px 5px" }}/>
         <CKEditor
           editor={Editor} data={boardContent.content}
           onChange={(event, editor) => {

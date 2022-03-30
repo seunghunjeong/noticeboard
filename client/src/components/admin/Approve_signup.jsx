@@ -114,16 +114,16 @@ const Approve_signup = () => {
     // table columns
     const columns = [
         {   
-            title: '신청인 이름',
-            dataIndex: 'name', 
-            key: 'name',
-            align : 'center'
-        },
-        {   
             title: '가입신청일',
             dataIndex: 'registered', 
             key: 'registered',
             align : 'center' 
+        },
+        {   
+            title: '신청인 이름',
+            dataIndex: 'name', 
+            key: 'name',
+            align : 'center'
         },
         {   
             title: '권한상태', 

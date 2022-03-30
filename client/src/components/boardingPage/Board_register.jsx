@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Axios from 'axios';
-import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs, Divider, Select } from 'antd';
+import { useSelector } from 'react-redux';
+import Auth from '../../_hoc/auth'
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
+import { Card, Layout, Button, Input, Tabs, Divider, Select } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import Auth from '../../_hoc/auth'
+
 
 
 function Board_register() {
@@ -25,14 +25,16 @@ function Board_register() {
   //antd
   const { Content } = Layout;
   const { TabPane } = Tabs;
-  const { category } = useParams();
   const { Option } = Select;
+
+  //카테고리 받아오기
+  const { category } = useParams();
+  console.log(category)
 
   //사용자 정보 받아오기
   const userState = useSelector(state => state.user.userData);
   const userId = userState === undefined ? null : userState.id;
   const userName = userState === undefined ? null : userState.userName;
-  const isAuth = userState === undefined ? null : userState.isAuth;
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
   const selectFile = (event) => {
@@ -71,11 +73,11 @@ function Board_register() {
   const submitBoard = () => {
     let formData = new FormData();
     let content = boardContent.content;
-    const title = boardContent.title;
+    let title = boardContent.title;
+    let category = boardContent.category;
     const writer = userName;
     const id = userId;
-    const category = boardContent.category;
-
+    
     if (category === ""){
       alert('카테고리를 선택해주세요.');
       return;
@@ -146,7 +148,8 @@ function Board_register() {
             {/* select css 수정필요 */}
             <Select
               onChange={getCategory}
-              placeholder="category"
+              placeholder="category" size="large"
+              // defaultValue={category}
               style={{ width: '7%' }}>
               {
                 boardCategory.map(e =>
@@ -154,7 +157,9 @@ function Board_register() {
                 )
               }
             </Select>
-            <Input maxLength={20} placeholder='제목을 입력해주세요.' onChange={getValue} name='title' style={{ width: '93%', fontSize: '14px', marginBottom: '16px' }} />
+            <Input maxLength={50} placeholder='제목을 입력해주세요.' 
+                   onChange={getValue} name='title' 
+                   style={{ width: '93%', fontSize: '19px', marginBottom: '16px', padding : "3px 11px 5px" }}/>
           </div>
           <CKEditor
             editor={Editor}
