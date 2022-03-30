@@ -45,8 +45,8 @@ function Login() {
         //event.preventDefault(); //안하면 페이지가 refresh되므로 막아주려고 사용.
 
         if(isRemember){
-            setCookie('rememberId', Id , {maxAge:200000});
-            setCookie('rememberPassword', crypto.AES.encrypt(Password, 'cookiePassword').toString() , {maxAge:200000});
+            setCookie('rememberId', Id , {maxAge:30000000});
+            setCookie('rememberPassword', crypto.AES.encrypt(Password, 'cookiePassword').toString() , {maxAge:30000000});
         } else {
             removeCookie('rememberId');
             removeCookie('rememberPassword');
