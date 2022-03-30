@@ -66,7 +66,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title', 
-      render: (title, row) => <Link to={`/board_detail/${row.idx}/${category}`}>{title}</Link>,
+      render: (title, row) => <Link to={`/board_detail/${row.key}/${category}`}>{title}</Link>,
       align : 'left'
     },
     {

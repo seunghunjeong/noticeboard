@@ -1,19 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import Axios from 'axios';
-import 'antd/dist/antd.less';
-import '../../App.css';
-import { Card, Layout, Button, Tag, Tabs } from 'antd';
-import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
 
+import '../../App.css';
+import 'antd/dist/antd.less';
+import { Card, Layout, Button, Tag, Tabs } from 'antd';
+import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
+
 // codeblock
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+
 
 function Board_detail() {
   // antd 변수
@@ -26,7 +27,6 @@ function Board_detail() {
   //사용자 정보 받아오기
   const getUserData = useSelector(state => state.user.userData);
   const userId = getUserData === undefined ? null : getUserData.id;
-  //const userName = getUserData === undefined ? null : getUserData.userName;
   const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
   const [BoardDetail, setBoardDetail] = useState([]);
@@ -46,7 +46,7 @@ function Board_detail() {
         }
       })
   }, []);
-
+  
   //작성한 사람만 수정/삭제할 수 있도록
   //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
   let userIdConfrim = userId === BoardDetail.userId ? true : false;
