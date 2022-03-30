@@ -283,7 +283,7 @@ function Home() {
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)'
-            }}
+                }}
                 locale={locale}
                 fullscreen={true}
                 dateCellRender={dateCellRender}
