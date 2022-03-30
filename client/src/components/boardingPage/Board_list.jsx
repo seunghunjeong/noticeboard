@@ -55,7 +55,7 @@ function Board_list() {
   // table columns
   const columns = [
     {
-      title: ' ',
+      title: 'No',
       dataIndex: 'idx',
       key: 'idx',
       align : 'center',
@@ -81,8 +81,8 @@ function Board_list() {
       dataIndex: 'regist_date',
       key: 'regist_date',
       align : 'center',
-      width : 200,
-      sorter: true
+      width : 200
+      // sorter: true
     }
   ];
 
@@ -90,11 +90,11 @@ function Board_list() {
   let moment =  require('moment');
 
   //table rows
-  const data = []
-  viewContent.map(element => {
+  const data = [];
+  viewContent.map((element, index) => {
     data.push({
       key : element.idx,
-      idx : element.idx,
+      idx : index + 1,
       title : element.title,
       writer : element.writer,
       regist_date : moment(element.regist_date).format('YYYY-MM-DD')
