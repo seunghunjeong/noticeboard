@@ -27,9 +27,6 @@ function Board_register() {
   const { TabPane } = Tabs;
   const { Option } = Select;
 
-  //카테고리 받아오기
-  const { category } = useParams();
-  console.log(category)
 
   //사용자 정보 받아오기
   const userState = useSelector(state => state.user.userData);
@@ -41,11 +38,15 @@ function Board_register() {
     setSelectedFiles(event.target.files);
   };
 
+  //카테고리 받아오기
+  const { category } = useParams();
+
   const [boardContent, setBoardContent] = useState({
     title: '',
     content: '',
-    category: '',
+    category: category,
   })
+
 
   // 에디터에서 입력값 받아오는 함수
   const getValue = e => {
@@ -98,9 +99,9 @@ function Board_register() {
 
     formData.append('title', title);
     formData.append('content', content);
+    formData.append('category', category);
     formData.append('writer', writer);
     formData.append('userId', id);
-    formData.append('category', category);
 
     Axios.post('/board/api/insert', formData, {
       headers: {
@@ -145,11 +146,10 @@ function Board_register() {
         </div>
         <Card>
           <div>
-            {/* select css 수정필요 */}
             <Select
               onChange={getCategory}
               placeholder="category" size="large"
-              // defaultValue={category}
+              defaultValue={category}
               style={{ width: '7%' }}>
               {
                 boardCategory.map(e =>
