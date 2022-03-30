@@ -8,11 +8,11 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 import { Card, Layout, Button, Input, Tabs, Divider, Select } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
-
-
+import '../../App.css';
 
 function Board_register() {
 
+  const [loading, setLoading] = useState(false);
   const [boardCategory, setBoardCategory] = useState([]);
 
   useEffect(() => {
@@ -78,9 +78,10 @@ function Board_register() {
     let category = boardContent.category;
     const writer = userName;
     const id = userId;
-    
-    if (category === ""){
+
+    if (category === "") {
       alert('카테고리를 선택해주세요.');
+      
       return;
     }
     if (title === "") {
@@ -90,6 +91,8 @@ function Board_register() {
     else if (content === "") {
       content = "내용없음";
     }
+
+    setLoading(true);
 
     if (selectedFiles) {
       for (const key of Object.keys(selectedFiles)) {
@@ -110,6 +113,7 @@ function Board_register() {
     }).then(() => {
       navigate(`/board_list/${category}`);
       alert('등록완료');
+      setLoading(false);
     })
   };
 
@@ -136,9 +140,10 @@ function Board_register() {
             >
             </TabPane>
           </Tabs>
-          <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
+          <Button style={{ float: 'right' }} type="primary"  loading={loading} danger onClick={onBoardGoHomeHandler}>취소</Button>
           <Button style={{ marginRight: '10px', float: 'right' }} type="primary"
             icon={<EditOutlined />}
+            loading={loading}
             onClick={() => {
               submitBoard()
             }}
@@ -157,9 +162,9 @@ function Board_register() {
                 )
               }
             </Select>
-            <Input maxLength={50} placeholder='제목을 입력해주세요.' 
-                   onChange={getValue} name='title' 
-                   style={{ width: '93%', fontSize: '19px', marginBottom: '16px', padding : "3px 11px 5px" }}/>
+            <Input maxLength={50} placeholder='제목을 입력해주세요.'
+              onChange={getValue} name='title'
+              style={{ width: '93%', fontSize: '19px', marginBottom: '16px', padding: "3px 11px 5px" }} />
           </div>
           <CKEditor
             editor={Editor}

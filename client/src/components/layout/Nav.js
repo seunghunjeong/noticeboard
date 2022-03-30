@@ -18,6 +18,7 @@ function Nav(props) {
   let tmpSub = '';
 
   useEffect(() => {
+    
     returnTab();
   }, [ss])
 

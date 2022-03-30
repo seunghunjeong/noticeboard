@@ -109,10 +109,6 @@
   outline: none;
 }
 
-.ant-picker-calendar-full .ant-picker-panel{
-  text-align: left;
-}
-
 /* login */
 #components-form-demo-normal-login .login-form {
   max-width: 300px;
@@ -134,4 +130,18 @@
 
 .ant-form-item-label > label {
   color: white !important;
+}
+
+/* antd calender Custom */
+.ant-picker-date-panel .ant-picker-content th {
+  text-align: center;
+  font-weight: bold;
+}
+
+.ant-picker-date-panel .ant-picker-content th:nth-child(1), .ant-picker-date-panel .ant-picker-content th:nth-child(7) {
+  color : red
+}
+
+.ant-picker-calendar-full .ant-picker-panel{
+  text-align: left;
 }

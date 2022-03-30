@@ -55,7 +55,7 @@ function Board_list() {
   // table columns
   const columns = [
     {
-      title: ' ',
+      title: 'No',
       dataIndex: 'idx',
       key: 'idx',
       align : 'center',
@@ -66,7 +66,7 @@ function Board_list() {
       title: '제목',
       dataIndex: 'title',
       key: 'title', 
-      render: (title, row) => <Link to={`/board_detail/${row.idx}/${category}`}>{title}</Link>,
+      render: (title, row) => <Link to={`/board_detail/${row.key}/${category}`}>{title}</Link>,
       align : 'left'
     },
     {
@@ -81,8 +81,8 @@ function Board_list() {
       dataIndex: 'regist_date',
       key: 'regist_date',
       align : 'center',
-      width : 200,
-      sorter: true
+      width : 200
+      // sorter: true
     }
   ];
 
@@ -90,17 +90,21 @@ function Board_list() {
   let moment =  require('moment');
 
   //table rows
-  const data = []
-  viewContent.map(element => {
+  const data = [];
+  
+  viewContent.map((element, index) => {
     data.push({
       key : element.idx,
-      idx : element.idx,
+      idx : index + 1,
       title : element.title,
       writer : element.writer,
       regist_date : moment(element.regist_date).format('YYYY-MM-DD')
     });
     return data;
   });
+
+  // 총 게시글 수 
+  let dataLength = data.length.toString();
 
   // table method
   function onChange(pagination, filters, sorter, extra) {
@@ -125,8 +129,6 @@ function Board_list() {
       keyword : value
     });
   };
- 
-
 
   //render
   return (
@@ -143,7 +145,8 @@ function Board_list() {
       </div>
       
       <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
-             pagination={{position: ["bottomCenter"]}}
+             pagination={{position: ["bottomCenter"]}} 
+             footer={() => 'total : ' + dataLength }
       /> 
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
