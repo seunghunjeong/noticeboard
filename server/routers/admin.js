@@ -24,6 +24,8 @@ router.use(function(req, res, next) {
 // 카테고리 추가
 router.post("/addCategory",(req,res) => {
 
+    console.log(req.body);
+
     let check;
 
     const checkQuety = `
@@ -36,13 +38,14 @@ router.post("/addCategory",(req,res) => {
     db.query(checkQuety, (err,result) => {
         check = result[0].COUNT === 1 ? false : true ;
         
-        if(check){
+        if(check){ 
+            console.log('test');
             const sqlQuery = `
                 INSERT INTO
                     boardCategory
                     (
                         category,
-                        description.
+                        description,
                         idx
                     )
                     VALUES
