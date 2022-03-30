@@ -7,7 +7,7 @@ import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from '../../components/modals/DailyReportPopup_mobile';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import ReportViewModal from '../modals/DailyReportView';
+import ReportViewModal from '../modals/DailyReportView_mobile';
 import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기

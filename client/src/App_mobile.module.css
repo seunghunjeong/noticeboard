@@ -38,3 +38,9 @@
 .detailModal {
   height: 40vh !important;
 }
+
+/* 전체 화면 */
+.drv_date {
+  position: absolute;
+  right: 11px;
+}
