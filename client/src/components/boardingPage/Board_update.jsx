@@ -18,7 +18,7 @@ function Board_update() {
 
   // idx 가져오기
   let { idx, category } = useParams();
-
+  const [loading, setLoading] = useState(false);
   const [boardCategory, setBoardCategory] = useState([]);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ function Board_update() {
     else if (content === "") {
       content = "내용없음";
     }
-
+    
     //선택한 파일이 있다면 formdata 에 담음
     if (selectedFiles) {
       for (const key of Object.keys(selectedFiles)) {
@@ -125,6 +125,7 @@ function Board_update() {
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
     if (confirmAction) { //yes 선택
+      setLoading(true);
       Axios.post('/board/api/updateBoard', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -132,6 +133,7 @@ function Board_update() {
       }).then(() => {
         navigate(`/board_list/${category}`);
         alert('수정완료');
+        setLoading(false);
       })
     } else {
       event.preventDefault();
@@ -179,8 +181,8 @@ function Board_update() {
           >
           </TabPane>
         </Tabs>
-        <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardGoHomeHandler}>취소</Button>
-        <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
+        <Button style={{ float: 'right' }} type="primary" danger loading={loading} onClick={onBoardGoHomeHandler}>취소</Button>
+        <Button style={{ marginRight: '10px', float: 'right' }} loading={loading} type="primary" onClick={onBoardUpdateHandler} icon={<EditOutlined />}>수정</Button>
       </div>
 
       <Card>
