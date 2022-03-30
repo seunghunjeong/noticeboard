@@ -42,11 +42,13 @@ router.post("/addCategory",(req,res) => {
                     boardCategory
                     (
                         category,
+                        description.
                         idx
                     )
                     VALUES
                     (
                         '${req.body.category}',
+                        '${req.body.description}',
                         (select idx from (select ifnull(max(idx),0)+1 as idx from boardCategory) tmp)
                     )
                 `;
@@ -84,11 +86,29 @@ router.post('/udtCategory',(req,res) => {
         UPDATE
             boardCategory
         SET
-            category = '${req.body.category}'
+            category = '${req.body.category}',
+            description = '${req.body.description}'
         WHERE
             idx = '${req.body.idx}'
     `;
 
+    db.query(sqlQuery,(err,result)=>{
+        res.send(result);
+    });
+})
+
+// 게시글 수 불러오기 
+router.post('/getCount',(req,res) => {
+
+    const sqlQuery = `
+        SELECT
+            count(*) as count,
+            category
+        FROM
+            noticeboard
+        GROUP BY
+            category
+    `
     db.query(sqlQuery,(err,result)=>{
         res.send(result);
     });

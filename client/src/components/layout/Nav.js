@@ -6,7 +6,7 @@ function Nav(props) {
 
   const categoryList = props.props;
   const admin = props.admin;
-
+  console.log(categoryList);
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
