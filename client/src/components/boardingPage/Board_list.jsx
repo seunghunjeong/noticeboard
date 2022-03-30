@@ -42,7 +42,7 @@ function Board_list() {
     })
     // 검색 값, 카테고리 변경될때마다 랜더링
 
-  },[searchContent,category])
+  }, [searchContent, category])
 
   // 페이지 이동
   const navigate = useNavigate();
@@ -112,7 +112,7 @@ function Board_list() {
   }
 
   // 게시글 검색 조건 설정
-  const onChangeSearchFilter = value => {
+  const onChangeSearchFilter = (value, event) => {
     setSearchContent({
       ...searchContent,
       filter : value
@@ -120,7 +120,7 @@ function Board_list() {
   };
 
   // 게시글 검색
-  const onSearch = value => {
+  const onSearch = (value, event) => {
     if(searchContent.filter === '') {
       alert('검색 조건을 선택해주세요.');
     }
@@ -132,7 +132,6 @@ function Board_list() {
 
   //render
   return (
-
     <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
       <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Breadcrumb style={{ float: 'left' }}>
@@ -143,7 +142,6 @@ function Board_list() {
         </Breadcrumb>
         <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button>
       </div>
-      
       <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
              pagination={{position: ["bottomCenter"]}} 
              footer={() => 'total : ' + dataLength }
@@ -161,9 +159,7 @@ function Board_list() {
         </Select>
         <Search placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} />
       </div>
-      
     </Content>
-  
   )
 }
 
