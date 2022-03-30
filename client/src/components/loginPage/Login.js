@@ -101,11 +101,11 @@ function Login() {
                     </Form.Item>
                         {/* <Link to={'/sign-up'} className="login-form-forgot"> 비밀번호찾기(임시)</Link> */}
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={{textAlign : "center"}}>
                     <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight : "10px"}}>
                         로그인
                     </Button>
-                    <Button type="dashed" href='/sign-up' style={{float:'right'}}> 회원가입</Button>
+                    <Button type="dashed" href='/sign-up'> 회원가입</Button>
                 </Form.Item>
             </Form>
         
