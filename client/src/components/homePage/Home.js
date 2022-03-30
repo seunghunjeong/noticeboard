@@ -252,7 +252,7 @@ function Home() {
 
         const reportList = detailReport.map((item) => (
             <tr key={item.idx}>
-                <td className='writer'>{item.writer}</td>
+                <td className='writer'>{item.writer}님</td>
                 <td><pre>{item.report}</pre></td>
                 <td><pre>{item.plan}</pre></td>
             </tr>
