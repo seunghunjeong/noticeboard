@@ -71,7 +71,7 @@ function Join() {
       <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', background:'#001529'}}>
         <Form
             name="basic"
-            labelCol={{ span: 10 }}
+            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             //initialValues={{ remember: true }}
             onFinish={onSubmitHandler}
@@ -82,21 +82,14 @@ function Join() {
           </div>
           <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>SIGN-UP</div>
           <Form.Item
-            label="ID"
+            label="아이디"
             name="ID"
             rules={[{ required: true, message: '아이디를 입력하세요!' }]}
           >
-            <Input value={Id} placeholder="id를 입력하세요." onChange={onIdHandler} />
+            <Input value={Id} placeholder="아이디를 입력하세요." onChange={onIdHandler} />
           </Form.Item>
           <Form.Item
-            label="username"
-            name="username"
-            rules={[{ required: true, message: '이름을 입력하세요!' }]}
-          >
-            <Input placeholder="이름을 입력하세요." value={Name} onChange={onNameHandler} />
-          </Form.Item>
-          <Form.Item
-            label="Password"
+            label="비밀번호"
             name="password"
             rules={[{ required: true, message: '비밀번호를 입력하세요!' }]}
           >
@@ -104,13 +97,19 @@ function Join() {
           </Form.Item>
 
           <Form.Item
-            label="Confirm Password"
+            label="비밀번호확인"
             name="confirmPassword"
             rules={[{ required: true, message: '비밀번호확인을 입력하세요!' }]}
           >
             <Input.Password value={ConfirmPassword} onChange={onConfirmPasswordHandler}/>
           </Form.Item>
-
+          <Form.Item
+            label="사용자이름"
+            name="username"
+            rules={[{ required: true, message: '사용자이름을 입력하세요!' }]}
+          >
+            <Input placeholder="사용자이름을 입력하세요." value={Name} onChange={onNameHandler} />
+          </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="dashed" href='/login'> 취소</Button>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">

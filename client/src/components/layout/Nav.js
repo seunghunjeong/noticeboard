@@ -60,16 +60,16 @@ function Nav(props) {
      <Link to={'/'}> <div className="main-logo" onClick={logoHome}/></Link>
       <Menu className='menu_nav' selectedKeys={state} onClick={handleClick} theme='dark' defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
-          <Link to={'/'}>HOME</Link>
+          <Link to={'/'}>홈</Link>
         </Menu.Item>
-        <SubMenu key="board" icon={<ProfileOutlined />} title="Board">
+        <SubMenu key="board" icon={<ProfileOutlined />} title="게시판">
           {
             categoryList.map((e) =>
               <Menu.Item key={e.category}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
             )
           }
         </SubMenu>
-        {admin === true ? <SubMenu key="setting" icon={<SettingOutlined />} title="Setting">
+        {admin === true ? <SubMenu key="setting" icon={<SettingOutlined />} title="설정">
                             <Menu.Item key="approve_signup"><Link to={`/setting/approve_signup`}>가입승인</Link></Menu.Item>   
                             <Menu.Item key="setting_page"><Link to={`/setting/setting_page`}>게시판관리</Link></Menu.Item>   
                           </SubMenu> : null
