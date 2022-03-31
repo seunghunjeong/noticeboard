@@ -282,7 +282,8 @@ function Home() {
 
             <Calendar style={{
                 margin: '16px 16px 0 16px',
-                height: 'calc(100% - 134px)'
+                height: 'calc(100% - 134px)',
+                padding : '16px'
                 }}
                 locale={locale}
                 fullscreen={true}

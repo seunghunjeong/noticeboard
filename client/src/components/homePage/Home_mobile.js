@@ -321,7 +321,8 @@ function Home() {
         <Fragment>
             <Calendar style={{
                 margin: '16px 16px 0 16px',
-                height: 'calc(80vh)'
+                height: 'calc(80vh)',
+                padding : '10px'
             }}
                 locale={locale}
                 fullscreen={true}

@@ -141,7 +141,11 @@
 .ant-picker-date-panel .ant-picker-content th:nth-child(1), .ant-picker-date-panel .ant-picker-content th:nth-child(7) {
   color : red
 }
-
+ 
 .ant-picker-calendar-full .ant-picker-panel{
   text-align: left;
+}
+/* antd calender month or year selection button display none */
+.ant-picker-calendar-mode-switch {
+  display : none;
 }
