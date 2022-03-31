@@ -18,7 +18,6 @@ function Nav(props) {
   let tmpSub = '';
 
   useEffect(() => {
-    
     returnTab();
   }, [ss])
 
@@ -39,6 +38,7 @@ function Nav(props) {
     } else {
       tmpUrl = 'home';
     }
+    tmpUrl = decodeURI(tmpUrl);
     setState(tmpUrl);
     return tmpUrl;
     }
