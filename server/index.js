@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 // data base
+require('dotenv').config({path : "./config/config.env"}); 
 const db = require('./config/db');
 
 // set up port

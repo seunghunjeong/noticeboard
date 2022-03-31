@@ -2,10 +2,10 @@ const mysql = require("mysql");
 
 // mysql db 접속
 const db = mysql.createConnection({
-    host: "192.168.0.177",
-    user: "cmworld",
-    password: "Cmworld@1234",
-    database: "board"
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
   
 
