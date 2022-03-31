@@ -135,7 +135,7 @@ function Board_list() {
     <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
       <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Breadcrumb style={{ float: 'left' }}>
-          <Breadcrumb.Item>Board</Breadcrumb.Item>
+          <Breadcrumb.Item>게시판</Breadcrumb.Item>
           <Breadcrumb.Item>
             {category}
           </Breadcrumb.Item>
