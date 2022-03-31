@@ -24,9 +24,12 @@ function Board_list() {
   // 검색 param
   const [searchContent, setSearchContent] = useState({
     filter: '',
-    keyword: ''
+    keyword: '',
+    category : ''
   })
-  
+ 
+  // 검색 value값 저장용
+  const [searchTxt, setSearchTxt] = useState();  
 
   // select query문 불러오기.
   useEffect(() => {
@@ -35,14 +38,26 @@ function Board_list() {
         filter : searchContent.filter === '' ? '' : searchContent.filter,
         // %를 넣어줘야 와일드카드 검색 조건.
         keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
-        category: category
+        category: searchContent.category
      }
     }).then((response) => {
       setViewContent(response.data);
     })
     // 검색 값, 카테고리 변경될때마다 랜더링
 
-  }, [searchContent, category])
+  }, [searchContent])
+
+  // 카테고리 변경 시 검색 조건 초기화
+  useEffect(() => {
+    setSearchContent({
+      filter : '',
+      keyword : '',
+      category : category
+    })
+
+    // 키워드 초기화
+    setSearchTxt('');
+  }, [category])
 
   // 페이지 이동
   const navigate = useNavigate();
@@ -111,6 +126,11 @@ function Board_list() {
     console.log('params', pagination, filters, sorter, extra);
   }
 
+  // Search 값 저장
+  const searchChangeHandler = (e) => {
+    setSearchTxt(e.target.value);
+  }
+
   // 게시글 검색 조건 설정
   const onChangeSearchFilter = (value, event) => {
     setSearchContent({
@@ -157,7 +177,7 @@ function Board_list() {
           <Option value="writer">작성자</Option>
           <Option value="title">제목</Option>
         </Select>
-        <Search placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} />
+        <Search name='txt_search' placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} onChange={searchChangeHandler} value={searchTxt}/>
       </div>
     </Content>
   )
