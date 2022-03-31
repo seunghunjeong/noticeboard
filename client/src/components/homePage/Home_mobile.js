@@ -157,12 +157,26 @@ function Home() {
 
     // 클릭한 셀이 표시하는 일자를 받아옴
     const onSelect = value => {
+        // 선택된 캘린더의 날짜 연월
+        let valueY = value.format('YYYY');
+        let valueM = value.format('MM');
+
+        // 저장된 날짜 연월
+        let dateArr = dailyReport.regist_date.split('-');
+
+        let dateY = dateArr[0];
+        let dateM = dateArr[1];
+         
         // 등록일 저장
         setDailyReport({
             ...dailyReport,
             regist_date: value.format('YYYY-MM-DD')
         })
-        openViewModal();
+        
+        // select 박스 이벤트 전파를 막기위한 조건문
+        if(valueY === dateY && valueM === dateM){
+                openViewModal();
+        }
     };
 
     // 일보 내용 저장
