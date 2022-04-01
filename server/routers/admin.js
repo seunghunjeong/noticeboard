@@ -1,13 +1,12 @@
 const router = require('express').Router();
 const db = require('../config/db');
 
+// logger
+const logger = require('../logger');
+
 // 카테고리 추가
-router.post("/addCategory",(req,res) => {
-
-    console.log(req.body);
-
+router.post("/addCategory", (req, res) => {
     let check;
-
     const checkQuety = `
         SELECT COUNT(*) as COUNT 
         FROM
@@ -15,9 +14,13 @@ router.post("/addCategory",(req,res) => {
         WHERE
             category = '${req.body.category}'
     ` 
-    db.query(checkQuety, (err,result) => {
+    db.query(checkQuety, (err, result) => {
         check = result[0].COUNT === 1 ? false : true ;
-        
+
+        if (err) {
+            logger.error(err);
+        }
+
         if(check){ 
             console.log('test');
             const sqlQuery = `
@@ -36,19 +39,20 @@ router.post("/addCategory",(req,res) => {
                     )
                 `;
         
-            db.query(sqlQuery, (err,result) => {
+            db.query(sqlQuery, (err, result) => {
+                if (err) {
+                    logger.error(err);
+                }
                 res.send(result);
             });
         } else {
             res.send('중복');
         }
-        
     })
-
 })
 
 // 카테고리 삭제
-router.post('/delCategory',(req,res)=> {
+router.post('/delCategory', (req, res) => {
     const sqlQuery = `
         DELETE FROM
             boardCategory
@@ -57,12 +61,15 @@ router.post('/delCategory',(req,res)=> {
     `
 
     db.query(sqlQuery, (err,result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 })
 
 // 카테고리 수정
-router.post('/udtCategory',(req,res) => {
+router.post('/udtCategory', (req, res) => {
 
     console.log(req.body);
     const sqlQuery = `
@@ -75,13 +82,16 @@ router.post('/udtCategory',(req,res) => {
             idx = '${req.body.idx}'
     `;
 
-    db.query(sqlQuery,(err,result)=>{
+    db.query(sqlQuery,(err,result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 })
 
 // 게시글 수 불러오기 
-router.post('/getCount',(req,res) => {
+router.post('/getCount', (req, res) => {
 
     const sqlQuery = `
         SELECT
@@ -92,7 +102,10 @@ router.post('/getCount',(req,res) => {
         GROUP BY
             category
     `
-    db.query(sqlQuery,(err,result)=>{
+    db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 })

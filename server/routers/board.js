@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const db = require('../config/db');
 
+// logger
+const logger = require('../logger');
+
 // file upload
 const multer = require('multer');
 const path = require('path');
@@ -52,7 +55,10 @@ router.post("/api/insert", upload.any(), (req, res)=>{
     
     const sqlQuery = "INSERT INTO noticeboard (title,content,writer,file_path,category,userId) VALUES (?,?,?,?,?,?)";
     db.query(sqlQuery, [title,content,writer,filePath,category,userId], (err,result) => {
-        if(err) return res.status(400).send(err);
+        if(err) {
+            logger.error(err);
+            return res.status(400).send(err);
+        }
 
         return res.status(200).send(result);
     })
@@ -87,6 +93,9 @@ router.get("/api/getBoardList", (req, res) => {
 
     // ?에 키워드 넣기.
     db.query(sqlQuery, [category, keyword] , (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     })
 })
@@ -96,8 +105,10 @@ router.post("/api/getBoardDetail", (req, res) => {
     const idx = req.body.idx;
     const sqlQuery = "SELECT * FROM board.noticeboard WHERE idx = ?";
     db.query(sqlQuery, [idx], (err, result) => {
-        if(err) return res.status(400).send(err);
-        
+        if(err) {
+            logger.error(err);    
+            return res.status(400).send(err);
+        } 
         return res.status(200).send(result);
     })
 })
@@ -136,6 +147,7 @@ router.post("/api/updateBoard", upload.any(), (req, res) => {
 
     db.query(sqlQuery, [title,category, content, filePath, idx], (err, result) => {
         if(err){
+            logger.error(err); 
             res.send("error : " + err );
         } else {
             res.send("success");
@@ -156,7 +168,10 @@ router.post("/api/deleteBoard", (req, res) => {
     const sqlQuery = "DELETE FROM board.noticeboard WHERE idx = ?";
 
     db.query(sqlQuery, [idx], (err, result) => {
-        if(err) return res.status(400).send(err);
+        if(err) {
+            logger.error(err); 
+            return res.status(400).send(err);
+        }
         
         return res.status(200).send("success");
     })
@@ -182,7 +197,8 @@ router.post("/api/fileDownload", (req, res)=> {
             return;
         }
  
-    } catch (e) {
+    } catch (err) {
+        logger.error(err); 
         res.send('파일을 다운로드하는 중 에러가 발생하였습니다.');
         return;
     }

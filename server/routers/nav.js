@@ -1,8 +1,11 @@
 const router = require('express').Router();
 const db = require('../config/db');
 
+// logger
+const logger = require('../logger');
+
 // 카테고리 목록 가져오기
-router.post("/getCateGory",(req,res) => {
+router.post("/getCateGory", (req, res) => {
     
     const sqlQuery = `
         SELECT
@@ -20,7 +23,10 @@ router.post("/getCateGory",(req,res) => {
             A.category 
     `;
 
-    db.query(sqlQuery, (err,result) => {
+    db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 

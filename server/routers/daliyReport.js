@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const db = require('../config/db');
 
+// logger
+const logger = require('../logger');
+
 // 일일보고 등록
 router.post('/insert', (req, res) => {
     const sqlQuery = `
@@ -22,6 +25,9 @@ router.post('/insert', (req, res) => {
                 '${req.body.date}'
             )`;
     db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 });
@@ -37,6 +43,9 @@ router.get("/getMyReport", (req, res) => {
         id = '${req.query.id}'`;
 
     db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     })
 
@@ -54,6 +63,9 @@ router.get("/getReportDetail", (req, res) => {
 
 
     db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     })
 
@@ -74,6 +86,9 @@ router.post("/update", (req, res) => {
     `;
 
     db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 
@@ -88,6 +103,9 @@ router.post("/delete", (req,res) => {
             idx = '${req.body.idx}'
     `;
     db.query(sqlQuery,(err,result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 })
@@ -98,7 +116,10 @@ router.post("/insertM", (req, res)=>{
     
     const sqlQuery = "INSERT INTO dailyReport (id, writer, report, plan, regist_date) VALUES(?, ?, ?, ?, ?);";
     db.query(sqlQuery, [req.body.id,req.body.writer,req.body.report, req.body.plan,req.body.regist_date], (err,result) => {
-        if(err) return res.status(400).send(err);
+        if(err) {
+            logger.error(err);
+            return res.status(400).send(err);
+        }
 
         return res.status(200).send(result);
     }) 
@@ -118,6 +139,9 @@ router.post("/updateM", (req, res) => {
     `;
 
     db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
         res.send(result);
     });
 

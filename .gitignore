@@ -27,6 +27,7 @@ yarn-error.log*
 client/node_modules
 server/node_modules
 server/config/config.env
+server/logs
 
 # debugger
 .vscode

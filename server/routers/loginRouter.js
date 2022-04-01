@@ -1,6 +1,8 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
 const db = require('../config/db');
+
+// logger
+const logger = require('../logger');
 
 // 비밀번호 암호화
 const bcrypt = require('bcrypt');
@@ -21,6 +23,7 @@ router.post('/standby-signup', (req, res, next) => {
     bcrypt.hash(password, salt, (err, hash) => {
       db.query(sqlQuery, [id, username, hash], (err, result) => {
         if (err) {
+          logger.error(err);
           //throw err;
           return res.json({
             msg: "해당 아이디를 사용할 수 없습니다.",
@@ -41,6 +44,9 @@ router.get("/getStandby_signup", (req, res) => {
   const sqlQuery = `SELECT * FROM board.users ORDER BY registered DESC, status ASC`;
 
   db.query(sqlQuery, (err, result) => {
+      if (err) {
+        logger.error(err);
+      }
       res.send(result);
   });
 
@@ -55,6 +61,7 @@ router.post('/approve-sign-up', (req, res, next) => {
   db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         //throw err;
+        logger.error(err);
         return res.json({
           msg: "가입승인오류. 관리자에게 문의해주세요.",
         })
@@ -75,6 +82,7 @@ router.post('/reject-sign-up', (req, res, next) => {
   db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         //throw err;
+        logger.error(err);
         return res.json({
           msg: "가입거절오류. 관리자에게 문의해주세요.",
         })
@@ -95,6 +103,7 @@ router.post('/admin-appoint', (req, res, next) => {
   db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         //throw err;
+        logger.error(err);
         return res.json({
           msg: "관리자 지정 오류. 관리자에게 문의해주세요.",
         })
@@ -115,6 +124,7 @@ router.post('/admin-remove', (req, res, next) => {
   db.query(sqlQuery, [id], (err, result) => {
       if (err) {
         //throw err;
+        logger.error(err);
         return res.json({
           msg: "관리자 해지 오류. 관리자에게 문의해주세요.",
         })
@@ -137,6 +147,7 @@ router.post('/login', (req, res, next) => {
   db.query(sqlLogin, [id], (err, result) => {
       // 유저 확인 x
       if (err) {
+        logger.error(err);
         return res.json({
           msg: err,
           loginSuccess : false
@@ -163,6 +174,7 @@ router.post('/login', (req, res, next) => {
           bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
             // wrong password
             if (bErr) {
+              logger.error(bErr);
               return res.json({
                 msg: "패스워드가 틀렸습니다.",
                 loginSuccess : false
@@ -197,6 +209,7 @@ router.post('/login', (req, res, next) => {
                 loginSuccess : true
               });
             }
+            logger.error(err);
             return res.json({
               msg: '아이디나 패스워드가 틀렸습니다.',
               loginSuccess : false
@@ -218,6 +231,7 @@ router.post('/auth', (req, res, next) => {
   db.query(sqlLogin, [userId], (err, result) => {
     // 인증실패
     if (err) {
+      logger.error(err);
       return res.json({
         userName : null,
         id : null,
@@ -259,6 +273,7 @@ router.get('/logout', (req, res) => {
     })
   }
   catch(err) {
+    logger.error(err);
     res.json({ logoutSuccess : err})
   }
 })
