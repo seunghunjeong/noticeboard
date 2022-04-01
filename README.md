@@ -140,3 +140,7 @@ Project Link: [https://github.com/seunghunjeong/noticeboard](https://github.com/
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/seunghunjeong/noticeboard.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/seunghunjeong/noticeboard.svg?style=for-the-badge
