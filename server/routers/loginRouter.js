@@ -20,17 +20,16 @@ router.post('/standby-signup', (req, res, next) => {
   bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(password, salt, (err, hash) => {
       db.query(sqlQuery, [id, username, hash], (err, result) => {
-          if (err) {
-            //throw err;
-            return res.json({
-              msg: "해당 아이디를 사용할 수 없습니다.",
-            })
-          }
+        if (err) {
+          //throw err;
           return res.json({
-            msg : "success"
-          });
+            msg: "해당 아이디를 사용할 수 없습니다.",
+          })
         }
-      );
+        return res.json({
+          msg : "success"
+        });
+      });
     });      
   });
 });
