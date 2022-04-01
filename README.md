@@ -29,11 +29,8 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -43,10 +40,8 @@
 
 1. 캘린더에 일일보고서 입력/수정/삭제/조회
 2. 게시판 입력/수정/삭제/조회
-3. 파일첨부 기능 기능 추가
-4. 게시판 카테고리 추가/수정/삭제
-5. 로그인/회원가입
-6. 회원가입 신청 후 승인 관리자 페이지 설명하기
+3. 파일 업로드/다운로드
+4. 로그인/회원가입
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -105,17 +100,6 @@ client 와 sever 각각에서 모듈을 다운받아주세요.
    npm run dev
    ```
    nodemon으로 서버를 구동시키고 있으며 concurrently 라이브러리를 이용해서 sever와 client 동시에 구동시키고 있습니다.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
