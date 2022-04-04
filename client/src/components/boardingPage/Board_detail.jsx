@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 import '../../App.css';
 import 'antd/dist/antd.less';
 import { Card, Layout, Button, Tag, Tabs } from 'antd';
-import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 
 // codeblock
 import hljs from 'highlight.js';
@@ -31,6 +31,7 @@ function Board_detail() {
   const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
   const [BoardDetail, setBoardDetail] = useState([]);
+  const [fileReady, setFileReady] = useState(false);
 
   // 게시판 idx 가져오기
   let { idx, category } = useParams();
@@ -97,6 +98,7 @@ function Board_detail() {
   let moment = require('moment');
  
   const fileDownloadHandler = () => {
+    setFileReady(true);
     const filePath = BoardDetail.file_path;
     let fileName;
     let fileNameArr = [];
@@ -118,6 +120,7 @@ function Board_detail() {
         const oriFileName = BoardDetail.file_path.split("\\");
         const blob = new Blob([response.data]);
         saveAs(blob, oriFileName[2]);
+        setFileReady(false);
         // const link = document.createElement('a');
         // link.href = window.URL.createObjectURL(blob);
         // link.download = oriFileName[2];
@@ -136,7 +139,11 @@ function Board_detail() {
       fileName = fileNameArr[2];
     }
 
-    return <button style={{border:'none', background:'none', cursor:'pointer'}} onClick={fileDownloadHandler}>{fileName}</button>
+    return(
+      fileReady ?  
+      <><LoadingOutlined /> 다운로드 준비중 입니다...</>
+      : <button style={{border:'none', background:'none', cursor:'pointer'}} onClick={fileDownloadHandler}>{fileName}</button>
+    ) 
 
   }
 
