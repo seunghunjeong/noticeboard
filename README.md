@@ -49,10 +49,11 @@
 
 ### Built With
 
-* [React.js](https://reactjs.org/)
-* [Node.js](https://nodejs.org/en/)
+* [React.js](https://reactjs.org/) - front
+* [Node.js](https://nodejs.org/en/) - back(v16.14.2)
 * [Ant Design](https://ant.design/)
 * [MySql](https://www.mysql.com/)
+* IDE : visualcode
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -76,16 +77,17 @@
 
 client 와 sever 각각에서 모듈을 다운받아주세요.
 
-1.  cd client로 이동 후 Install NPM packages
-    ```sh
-    npm i
-    ```
-    
-2. cd server로 이동 후 Install NPM packages
+1. cd server로 이동 후 Install NPM packages
    ```sh
+   npm init
    npm i
    ```
 
+2.  cd client로 이동 후 Install NPM packages
+    ```sh
+    npm i
+    ```   
+    
 3. `config.env`에 DB정보입력 sever > config > `config.env`
    <br>
    ![image](https://user-images.githubusercontent.com/59137000/161227997-0a137a99-e606-4149-a31d-35a0f521bbaf.png)
