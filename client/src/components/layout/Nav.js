@@ -57,10 +57,10 @@ function Nav(props) {
 
   return (
     <Sider>
-     <Link to={'/'}> <div className="main-logo" onClick={logoHome}/></Link>
+     <Link to={'/home'}> <div className="main-logo" onClick={logoHome}/></Link>
       <Menu className='menu_nav' selectedKeys={state} onClick={handleClick} theme='dark' defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
-          <Link to={'/'}>홈</Link>
+          <Link to={'/home'}>홈</Link>
         </Menu.Item>
         <SubMenu key="board" icon={<ProfileOutlined />} title="게시판">
           {
