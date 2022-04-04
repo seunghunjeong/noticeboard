@@ -27,7 +27,7 @@ function Home() {
         {
             report: '',
             plan: '',
-            regist_date: ''
+            regist_date: moment(Date.now()).format("YYYY-MM-DD")
         }
     );
     const [state, setState] = useState();
@@ -175,7 +175,7 @@ function Home() {
         
         // select 박스 이벤트 전파를 막기위한 조건문
         if(valueY === dateY && valueM === dateM){
-                openViewModal();
+            openViewModal();
         }
     };
 
