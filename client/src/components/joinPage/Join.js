@@ -54,7 +54,7 @@ function Join() {
         .then(response => {
             if(response.payload.msg === "success"){
                 alert("회원가입 신청완료");
-                navigate("/login");
+                navigate("/");
             }
             else { 
                 alert(response.payload.msg);

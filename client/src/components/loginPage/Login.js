@@ -69,7 +69,7 @@ function Login() {
 		        //axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                 const userId = response.payload.userId
                 sessionStorage.setItem("userId", userId);
-                navigate("/");
+                navigate("/home");
             }
             else { 
                 alert(response.payload.msg);

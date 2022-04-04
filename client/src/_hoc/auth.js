@@ -30,7 +30,7 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     //로그인한 유저만 출입이 가능한 페이지
                     if(option){
                         alert("로그인을 해야합니다.");
-                        navigate("/board_list/공지사항");
+                        navigate("/");
                     }
                     //아무나출입
                     else{
@@ -42,13 +42,13 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     //로그인한 유저는 출입 불가능한 페이지
                     if(!option && option !== null){
                         alert("이미 로그인한 상태입니다.");
-                        navigate("/")
+                        navigate("/home")
                     }
                     //로그인한 유저만 
                     else{
                         //관리자페이지
                         if(adminRoute && !response.payload.isAdmin){
-                            navigate("/")
+                            navigate("/home")
                         } 
                      }
                 }

@@ -23,7 +23,7 @@ const BrowserComponent = () => {
         <BrowserRouter>   
             <Routes>
                 <Route element = {<MainLayout/>}>
-                    <Route path="/" element = {<HomePage/>}/>
+                    <Route path="/home" element = {<HomePage/>}/>
                     <Route path="/board_list/:category" element = {<BoardingListPage/>}/>
                     <Route path="/board_register/:category" element = {<BoardingRegisterPage/>}/>
                     <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
@@ -31,7 +31,7 @@ const BrowserComponent = () => {
                     <Route path="/setting/setting_page" element={<AdminSetting/>}/>
                     <Route path="/setting/approve_signup" element={<ApproveSignup/>}/>
                 </Route>
-                <Route path="/login" element = {<LoginPage/>}/>
+                <Route path="/" element = {<LoginPage/>}/>
                 <Route path="/sign-up" element = {<JoinPage/>}/>
             </Routes>
         </BrowserRouter>
