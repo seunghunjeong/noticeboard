@@ -30,7 +30,7 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     //로그인한 유저만 출입이 가능한 페이지
                     if(option){
                         alert("로그인을 해야합니다.");
-                        navigate("/login");
+                        navigate("/board_list/공지사항");
                     }
                     //아무나출입
                     else{

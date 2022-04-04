@@ -80,7 +80,7 @@ function Join() {
           <div className='login-logo'>
             <img src={Logo} width="99px" height='26px'/>
           </div>
-          <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>SIGN-UP</div>
+          <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "50px", color : 'white'}}>회원가입</div>
           <Form.Item
             label="아이디"
             name="ID"
@@ -113,7 +113,7 @@ function Join() {
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="dashed" href='/login'> 취소</Button>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">
-              회원가입신청
+              가입신청
             </Button>
           </Form.Item>
         </Form>
