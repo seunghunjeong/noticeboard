@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
-import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
@@ -110,7 +109,9 @@ function Board_detail() {
       filePath: filePath,
       fileName: fileName
     },
-    )
+    {
+      responseType: 'blob'
+    })
       .then (response => {
 
         if(response.data === false){
@@ -119,12 +120,11 @@ function Board_detail() {
         }
         const oriFileName = BoardDetail.file_path.split("\\");
         const blob = new Blob([response.data]);
-        saveAs(blob, oriFileName[2]);
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = oriFileName[2];
+        link.click();
         setFileReady(false);
-        // const link = document.createElement('a');
-        // link.href = window.URL.createObjectURL(blob);
-        // link.download = oriFileName[2];
-        // link.click();
       })
   }
   
