@@ -80,9 +80,12 @@ const Setting_page = () => {
             width: '15%',
             render: (title, row) => (
                 <>
+                {
+                   row.category === '공지사항' ? <div><CloseOutlined/></div> :
                     <CloseOutlined style={{ marginLeft: "4px", color: 'red' }} onClick={() => {
                         categoryDelete(row.category);
-                    }} />
+                    }} /> 
+                }
                 </>
             )
         },
