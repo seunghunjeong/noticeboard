@@ -57,7 +57,7 @@ function Nav(props) {
 
   return (
     <Sider>
-     <Link to={'/home'}> <div className="main-logo" onClick={logoHome}/></Link>
+     <Link to={'/home'}> <div className="main-logo" onClick={logoHome} style={{color:'white'}}>로고자리</div></Link>
       <Menu className='menu_nav' selectedKeys={state} onClick={handleClick} theme='dark' defaultOpenKeys={returnSub} mode="inline">
         <Menu.Item key="home" icon={<HomeOutlined />}>
           <Link to={'/home'}>홈</Link>

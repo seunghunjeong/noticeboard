@@ -10,7 +10,7 @@ const Maps = () => {
         lng : 126.8973216,
         zoom : 16
     })
-
+    
     const position = [state.lat, state.lng];
     return (
         <>
@@ -18,6 +18,8 @@ const Maps = () => {
                 <TileLayer
                     // url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                     url='http://xdworld.vworld.kr:8080/2d/Base/201710/{z}/{x}/{y}.png'
+                    maxZoom={17}
+                    minZoom={8}
                 />
                 {/* <Marker position={position}>
                     <Popup>
