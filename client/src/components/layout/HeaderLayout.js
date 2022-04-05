@@ -55,7 +55,7 @@ function HeaderLayout() {
             {
                 isAuth === false || isAuth === null ? <div>
                                         <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}>
-                                            <Link to={'/login'}>로그인</Link>
+                                            <Link to={'/'}>로그인</Link>
                                         </Button>
                                         <span  style={{color : "white", float : "right"}}>로그인을 해주세요.</span>
                                     </div> : null 

@@ -12,12 +12,12 @@ const Maps = () => {
     })
 
     const position = [state.lat, state.lng];
-
     return (
         <>
             <MapContainer style={{ height: "85vh" }} center={position} zoom={state.zoom}>
                 <TileLayer
-                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    // url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    url='http://xdworld.vworld.kr:8080/2d/Base/201710/{z}/{x}/{y}.png'
                 />
                 {/* <Marker position={position}>
                     <Popup>
