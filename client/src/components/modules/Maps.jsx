@@ -19,11 +19,11 @@ const Maps = () => {
                 <TileLayer
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 />
-                <Marker position={position}>
+                {/* <Marker position={position}>
                     <Popup>
                         <span>입력</span>
                     </Popup>
-                </Marker>
+                </Marker> */}
             </MapContainer>
         </>
 
