@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import ReactHtmlParser from 'react-html-parser';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
+import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
@@ -118,12 +119,13 @@ function Board_detail() {
           alert("파일이 존재하지 않습니다.");
           return;
         }
-        const oriFileName = BoardDetail.file_path.split("\\");
-        const blob = new Blob([response.data]);
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = oriFileName[2];
-        link.click();
+        const oriFileName = BoardDetail.file_path.split("-real-");
+        // const blob = new Blob([response.data]);
+        // const link = document.createElement('a');
+        // link.href = window.URL.createObjectURL(blob);
+        // link.download = oriFileName[2];
+        // link.click();
+        saveAs(response.data,oriFileName[1]);
         setFileReady(false);
       })
   }
@@ -135,8 +137,8 @@ function Board_detail() {
     if (fileName == null) {
       fileName = "첨부된 파일이 없습니다.";
     } else {
-      fileNameArr = fileName.split("\\");
-      fileName = fileNameArr[2];
+      fileNameArr = fileName.split("-real-");
+      fileName = fileNameArr[1];
     }
 
     return(
