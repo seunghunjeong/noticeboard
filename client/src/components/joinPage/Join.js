@@ -4,7 +4,6 @@ import { registerUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../_hoc/auth'
 import { Form, Input, Button } from 'antd';
-import Logo from '../layout/cmworld-logo.png';
 
 function Join() {
 
@@ -78,7 +77,7 @@ function Join() {
             onFinishFailed={onFinishFailed}
             autoComplete="off">
           <div className='login-logo'>
-            <img src={Logo} width="99px" height='26px'/>
+              <p style={{color:'white'}}>로고자리</p>
           </div>
           <div className="signup-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "50px", color : 'white'}}>회원가입</div>
           <Form.Item
@@ -111,7 +110,7 @@ function Join() {
             <Input placeholder="사용자이름을 입력하세요." value={Name} onChange={onNameHandler} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="dashed" href='/login'> 취소</Button>
+            <Button type="dashed" href='/'> 취소</Button>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">
               가입신청
             </Button>
