@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import BoardingListPage from '../boardingPage/Board_list';
+import BoardingListPage from '../boardingPage/Board_list_mobile';
 import BoardingDetailPage from '../boardingPage/Board_detail';
 
 // components views
@@ -17,6 +17,8 @@ const MobileViewComponent = ({children}) =>{
             <Routes>
             <Route element = {<MainLayoutMobile/>}>
             <Route path="/home" element = {<HomePageMobile/>}/>
+            <Route path="/board_list/:category" element = {<BoardingListPage/>}/>
+            <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
             </Route>
             <Route path="/" element = {<LoginPage/>}/>
             <Route path="/sign-up" element = {<JoinPage/>}/>

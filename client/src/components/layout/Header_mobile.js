@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
-import { Layout } from 'antd';
-import {/* BarsOutlined, */ LoginOutlined  } from '@ant-design/icons';
+import { Layout, Avatar, Image } from 'antd';
+import {BarsOutlined, LoginOutlined  } from '@ant-design/icons';
 
 import { Link } from 'react-router-dom';
 import { logout} from '../../_actions/user_action';
@@ -47,14 +47,18 @@ function header() {
             <div className={MobileStyle.mainLogo} />
             {
                 isAuth === true ? <div className={MobileStyle.logoutM}>
-                                    <span >{userName}님! </span>
+                                    {/* <span >{userName}님! </span> */}
+                                    <Avatar className={MobileStyle.avtHeader}
+                                    style={{backgroundColor : '#EE6F57'}}
+                                    >{userName.substr(0,1)}</Avatar>
                                     
-                                    <LoginOutlined key="userKsy" onClick={onLogoutHandler}>
+                                    <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
                                         로그아웃 
                                     </LoginOutlined>
+
+                                    <BarsOutlined /> 
                                     </div> : ''
             }
-            {/* <BarsOutlined className={MobileStyle.btnHeader} /> */}
         </Header>
     )
 }
