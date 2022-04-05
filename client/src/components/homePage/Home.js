@@ -12,7 +12,7 @@ import moment from 'moment';
 import '../../App.css';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
-
+import Maps from '../modules/Maps';
 function Home() {
 
     // 로딩처리를 위한 state

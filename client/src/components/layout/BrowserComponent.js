@@ -12,6 +12,7 @@ import ApproveSignup from '../admin/Approve_signup';
 import HomePage from '../homePage/Home';
 import LoginPage from '../loginPage/Login';
 import JoinPage from '../joinPage/Join';
+import Map from '../modules/Maps';
 
 // components layout
 import MainLayout from './MainLayout';
@@ -24,6 +25,7 @@ const BrowserComponent = () => {
             <Routes>
                 <Route element = {<MainLayout/>}>
                     <Route path="/home" element = {<HomePage/>}/>
+                    <Route path="/map" element = {<Map/>}/>
                     <Route path="/board_list/:category" element = {<BoardingListPage/>}/>
                     <Route path="/board_register/:category" element = {<BoardingRegisterPage/>}/>
                     <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
