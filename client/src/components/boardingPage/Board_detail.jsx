@@ -188,7 +188,7 @@ function Board_detail() {
           </Tag>
         </div>
       </Card>
-      <Card style={{ width: '100%', height : '65%'}}>
+      <Card style={{ width: '100%'}}>
         <div className='content'>
             {ReactHtmlParser(BoardDetail.content)}
         </div>
