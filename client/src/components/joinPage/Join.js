@@ -111,7 +111,7 @@ function Join() {
             <Input placeholder="사용자이름을 입력하세요." value={Name} onChange={onNameHandler} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="dashed" href='/login'> 취소</Button>
+            <Button type="dashed" href='/'> 취소</Button>
             <Button style={{marginLeft : "10px"}} type="primary" htmlType="submit">
               가입신청
             </Button>
