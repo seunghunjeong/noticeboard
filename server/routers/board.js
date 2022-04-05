@@ -33,7 +33,7 @@ const getFile = (file) => {
     let ext = path.extname(oriFile);
     let name = path.basename(oriFile, ext);
     let rnd = Math.floor(Math.random() * 90) + 10; // 10 ~ 99
-    return Date.now() + '-' + rnd + '-' + name + ext;
+    return Date.now() + '-' + rnd + '-real-' + name + ext;
 }
 
 let upload = multer({
