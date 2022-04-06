@@ -121,6 +121,7 @@ function Board_update() {
     formData.append('idx', idx);
     formData.append('deleteChk', fileDeleteChk);
     formData.append('category', category);
+    formData.append('udt', 'udt');
 
     const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
 
@@ -131,9 +132,9 @@ function Board_update() {
           "Content-Type": "multipart/form-data",
         }
       }).then(() => {
-        navigate(`/board_list/${category}`);
         alert('수정완료');
         setLoading(false);
+        navigate(`/board_list/${category}`);
       })
     } else {
       event.preventDefault();
@@ -149,13 +150,13 @@ function Board_update() {
 
   const AttaFile = () => {
     let fileName = boardContent.file_path;
-    let fileNameArr = fileName.split('\\');
+    let fileNameArr = fileName.split('-real-');
     return (
       <>
         <div className={fileDeleteChk ? "deleteY" : "deleteN"} >
           <Tag style={{ marginLeft: '10px', marginBottom: '5px' }}>
             <button style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-              {fileNameArr[2]}
+              {fileNameArr[1]}
             </button>
           </Tag>
           <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDeleteClick}>삭제</button>
