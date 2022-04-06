@@ -25,8 +25,8 @@ function Home() {
     // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
         {
-            report: '',
-            plan: '',
+            report: '◎',
+            plan: '◎',
             regist_date: moment(Date.now()).format("YYYY-MM-DD")
         }
     );
