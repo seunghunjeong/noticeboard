@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, /* Button, */ Input, Select, Breadcrumb } from 'antd';
+import { Table, Layout, /* Button, */ Input, Select, Breadcrumb, Card, Space, Pagination } from 'antd';
 /* import { EditOutlined } from '@ant-design/icons'; */
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
@@ -31,6 +31,9 @@ function Board_list() {
   // 검색 value값 저장용
   const [searchTxt, setSearchTxt] = useState();  
 
+  // 카드 로딩
+  const [loading, setLoading] = useState(true);
+
   // select query문 불러오기.
   useEffect(() => {
     Axios.get('/board/api/getBoardList',{
@@ -41,6 +44,7 @@ function Board_list() {
         category: searchContent.category
      }
     }).then((response) => {
+      setLoading(false);
       setViewContent(response.data);
     })
     // 검색 값, 카테고리 변경될때마다 랜더링
@@ -67,64 +71,8 @@ function Board_list() {
     navigate(`/board_register/${category}`);//board_register router로 이동
   }
 
-  // table columns
-  const columns = [
-    {
-      title: 'No',
-      dataIndex: 'idx',
-      key: 'idx',
-      align : 'center',
-      width : 100,
-      sorter: (a, b) => a.idx - b.idx,
-    },
-    {
-      title: '제목',
-      dataIndex: 'title',
-      key: 'title', 
-      render: (title, row) => <Link to={`/board_detail/${row.key}/${category}`}>{title}</Link>,
-      align : 'left'
-    },
-    {
-      title: '작성자',
-      dataIndex: 'writer',
-      key: 'writer',
-      align : 'center',
-      width : 200
-    },
-    {
-      title: '작성일',
-      dataIndex: 'regist_date',
-      key: 'regist_date',
-      align : 'center',
-      width : 200
-      // sorter: true
-    }
-  ];
-
   //date format 수정
   let moment =  require('moment');
-
-  //table rows
-  const data = [];
-  
-  viewContent.map((element, index) => {
-    data.push({
-      key : element.idx,
-      idx : index + 1,
-      title : element.title,
-      writer : element.writer,
-      regist_date : moment(element.regist_date).format('YYYY-MM-DD')
-    });
-    return data;
-  });
-
-  // 총 게시글 수 
-  let dataLength = data.length.toString();
-
-  // table method
-  function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
-  }
 
   // Search 값 저장
   const searchChangeHandler = (e) => {
@@ -153,19 +101,46 @@ function Board_list() {
   //render
   return (
     <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
-      <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
+
+     <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Breadcrumb style={{ float: 'left' }}>
           <Breadcrumb.Item>게시판</Breadcrumb.Item>
           <Breadcrumb.Item>
             {category}
           </Breadcrumb.Item>
-        </Breadcrumb>
-        {/* <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button> */}
+        </Breadcrumb>        
       </div>
-      <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
-             pagination={{position: ["bottomCenter"]}} 
-             footer={() => 'total : ' + dataLength }
-      /> 
+      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+       {/*  <Card title={<a href="#">title Card</a>} size="small">
+          <p>Card content</p>
+        </Card>
+        <Card title={<a href="#">title Card</a>} size="small">
+          <p>Card content</p>
+        </Card>
+        <Card title={<a href="#">title Card</a>} size="small">
+          <p>Card content</p>
+        </Card>         */}
+        {
+          viewContent.map((e) =>
+          <Card 
+            size="small"
+            loading={loading} 
+          >
+            <Card 
+              size="small"
+              title={<Link to={`/board_detail/${e.idx}/${category}`}>{e.title}</Link>} 
+              headStyle={{fontSize:'24px'}}
+              bordered={false}
+            >
+              {e.writer} | {moment(e.regist_date).format('YYYY-MM-DD')}
+            </Card>
+          </Card>
+          )
+        }
+      </Space>
+      <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
+        <Pagination size="small" defaultCurrent={1} total={200}  showTotal={total => `total : ${total}`}/>
+      </div>
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
           placeholder="검색 조건"
