@@ -132,9 +132,9 @@ function Board_update() {
           "Content-Type": "multipart/form-data",
         }
       }).then(() => {
-        navigate(`/board_list/${category}`);
         alert('수정완료');
         setLoading(false);
+        navigate(`/board_list/${category}`);
       })
     } else {
       event.preventDefault();
