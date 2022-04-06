@@ -21,7 +21,7 @@ const { isGeneratorFunction } = require('util/types');
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const current = moment().format('Y-M-D')
-        let uploadPath = `C:/uploadtest/${current}`;
+        let uploadPath = `C:/upload/${current}`;
         
         if(req.body.udt === 'udt'){
             uploadPath = req.body.filePath;
