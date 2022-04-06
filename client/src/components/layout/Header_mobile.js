@@ -71,7 +71,7 @@ function header(props) {
         return(
         <>
             <BarsOutlined onClick={showDrawer} /> 
-            <Drawer placement="right" onClose={navClose} visible={visible} closable={false} width={'70%'} bodyStyle={{padding:0, backgroundColor: 'rgb(0, 21, 41)'}}>
+            <Drawer placement="right" onClose={navClose} visible={visible} closable={false} width={'70vw'} bodyStyle={{padding:0, backgroundColor: 'rgb(0, 21, 41)'}}>
                 <NavLayout props={boardCategory} admin={admin} state={ss}> </NavLayout>
             </Drawer>
         </>
@@ -81,7 +81,7 @@ function header(props) {
 
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
-            <div className={MobileStyle.mainLogo} />
+             <Link to={'/home'}><div className={MobileStyle.mainLogo} /></Link>
             {
                 isAuth === true ? <div className={MobileStyle.logoutM}>
                                     {/* <span >{userName}님! </span> */}
