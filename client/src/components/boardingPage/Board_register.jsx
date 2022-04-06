@@ -111,9 +111,9 @@ function Board_register() {
         "Content-Type": "multipart/form-data",
       }
     }).then(() => {
-      navigate(`/board_list/${category}`);
       alert('등록완료');
       setLoading(false);
+      navigate(`/board_list/${category}`);
     })
   };
 
