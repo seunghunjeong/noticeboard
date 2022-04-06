@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../config/db');
 const moment = require('moment')
-const current = moment().utc().format('Y-M-D')
+
 // logger
 const logger = require('../logger');
 
@@ -21,7 +21,7 @@ const { isGeneratorFunction } = require('util/types');
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        
+        const current = moment().format('Y-M-D')
         let uploadPath = `C:/uploadtest/${current}`;
         
         if(req.body.udt === 'udt'){
