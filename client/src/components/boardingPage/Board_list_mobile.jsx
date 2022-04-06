@@ -3,8 +3,8 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Table, Layout, /* Button, */ Input, Select, Breadcrumb } from 'antd';
+/* import { EditOutlined } from '@ant-design/icons'; */
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
@@ -47,10 +47,10 @@ function Board_list() {
 
   }, [searchContent])
 
-  // 카테고리 변경 시 검색 조건 초기화
+  // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
     setSearchContent({
-      filter : '',
+      ...searchContent,
       keyword : '',
       category : category
     })
@@ -177,7 +177,7 @@ function Board_list() {
           <Option value="writer">작성자</Option>
           <Option value="title">제목</Option>
         </Select>
-        <Search name='txt_search' placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: 400 }} onChange={searchChangeHandler} value={searchTxt}/>
+        <Search name='txt_search' placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: '60vw' }} onChange={searchChangeHandler} value={searchTxt}/>
       </div>
     </Content>
   )

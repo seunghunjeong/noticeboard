@@ -47,10 +47,10 @@ function Board_list() {
 
   }, [searchContent])
 
-  // 카테고리 변경 시 검색 조건 초기화
+  // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
     setSearchContent({
-      filter : '',
+      ...searchContent,
       keyword : '',
       category : category
     })
