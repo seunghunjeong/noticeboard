@@ -18,7 +18,7 @@ const Maps = () => {
         <>
             <MapContainer style={{ height: "85vh" }} center={position} zoom={state.zoom}>
                 <TileLayer
-                    url='http://xdworld.vworld.kr:8080/2d/Base/201710/{z}/{x}/{y}.png'
+                    url='http://xdworld.vworld.kr:8080/2d/Base/202111/{z}/{x}/{y}.png'
                     maxZoom={18}
                     minZoom={8}
                 />
