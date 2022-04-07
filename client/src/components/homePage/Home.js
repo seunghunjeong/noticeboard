@@ -241,15 +241,8 @@ function Home() {
         const day = moment(selectDay.selectedValue).format('YYYY-MM-DD');
         const detailReportList = viewDetailReportList;
 
-        for (let i in detailReportList) {
-            let regist_date = moment(detailReportList[i].regist_date).format('YYYY-MM-DD');
-
-            if (day === regist_date) {
-                detailReport.push(detailReportList[i]);
-            }
-
-        }
-
+        detailReport = detailReportList.filter(item => moment(item.regist_date).format('YYYY-MM-DD') === day)
+        
         const reportList = detailReport.map((item) => (
             <tr key={item.idx}>
                 <td className='writer'>{item.writer}님</td>
