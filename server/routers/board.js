@@ -12,25 +12,28 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
+const schedule = require('node-schedule');
+
+
+
 // 파일저장경로, 폴더가없다면 생성함
-// const uploadPath = `C:/uploadtest/${Date.now}`;
-// const directory = fs.existsSync(uploadPath);
-// if (!directory) fs.mkdirSync(uploadPath);
+let current = moment().format('Y-M-D');
+let uploadPath = `C:/upload/${current}`;
+const directory = fs.existsSync(uploadPath);
+if (!directory) fs.mkdirSync(uploadPath);
+
+const job = schedule.scheduleJob('0 0 0 * * *', () => {
+    current = moment().format('Y-M-D');
+    uploadPath = `C:/upload/${current}`;
+    console.log(current);
+    console.log(uploadPath);
+})
 
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const current = moment().format('Y-M-D')
-        let uploadPath = `C:/upload/${current}`;
-        
-        if(req.body.udt === 'udt'){
-            uploadPath = req.body.filePath;
-        }
-        
-        const directory = fs.existsSync(uploadPath);
-        if (!directory) fs.mkdirSync(uploadPath);
-
         cb(null, uploadPath);
+        
     },
     filename: function (req, file, cb) {
         cb(null, getFile(file));
