@@ -34,7 +34,7 @@ function Board_list() {
   // paging param
   const [pagingVal, setPagingVal] = useState({
     page : 1,
-    pageSize : 5
+    pageSize : 4
   });
 
   // list total
@@ -42,19 +42,13 @@ function Board_list() {
  
   // 검색 value값 저장용
   const [searchTxt, setSearchTxt] = useState();  
-  // select query문 불러오기.
-  useEffect(() => {
-    Axios.all([selectBoardList, selectBoardListCnt]).then(
-      axios.spread((...responses) => {
-        setViewContent(responses[0].data);
-        setListCnt(responses[1].data);
-      })
-    )
-    // 검색 값, 카테고리 변경될때마다 랜더링
-  }, [searchContent, pagingVal])
+
+  //
+  const [pageLoading, SetPageLoading] = useState(true);  
 
   // 리스트 가져오기
-  const selectBoardList = Axios.get('/board/api/getBoardListM',{
+  const selectBoardList = () => {
+    return Axios.get('/board/api/getBoardListM',{
       params: {
         filter : filter === '' ? '' : filter,
         // %를 넣어줘야 와일드카드 검색 조건.
@@ -63,16 +57,36 @@ function Board_list() {
         page : (pagingVal.page - 1) * pagingVal.pageSize,
         pageSize : pagingVal.pageSize
      }
-  })
+   })
+  }
 
-  const selectBoardListCnt =  Axios.get('/board/api/getBoardListCntM',{
+  const selectBoardListCnt = () =>{
+    return Axios.get('/board/api/getBoardListCntM',{
       params: {
         filter : filter === '' ? '' : filter,
         // %를 넣어줘야 와일드카드 검색 조건.
         keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
         category: searchContent.category
      }
-  })
+    })
+  }
+
+   // select query문 불러오기.
+  useEffect(() => {
+    Axios.all([selectBoardList(), selectBoardListCnt()]).then(
+      axios.spread((...responses) => {
+        setViewContent(responses[0].data);
+        setListCnt(responses[1].data);
+        if(responses[1].data[0].cnt === 0) {
+          SetPageLoading(false);
+        }
+      })
+    )
+    return () => {
+      SetPageLoading(true);
+    }
+    // 검색 값, 페이징 할 때마다 랜더링
+  }, [searchContent, pagingVal])
 
   // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
@@ -81,22 +95,21 @@ function Board_list() {
       keyword : '',
       category : category
     })
-
     // 키워드 초기화
     setSearchTxt('');
 
     setPagingVal({
     page : 1,
-    pageSize : 5
+    pageSize : 4
     });
   }, [category])
 
   // 페이지 이동
-  const navigate = useNavigate();
-  const onBoardRegisterHandler = (event) => {
+  /* const navigate = useNavigate();
+   const onBoardRegisterHandler = (event) => {
     event.preventDefault();
     navigate(`/board_register/${category}`);//board_register router로 이동
-  }
+  } */
 
   //date format 수정
   let moment =  require('moment');
@@ -107,7 +120,7 @@ function Board_list() {
   }
 
   // 게시글 검색 조건 설정
-  const onChangeSearchFilter = (value, event) => {
+  const onChangeSearchFilter = (value) => {
     setFilter(value);
   };
 
@@ -124,7 +137,7 @@ function Board_list() {
 
     setPagingVal({
       page : 1,
-      pageSize : 5
+      pageSize : 4
     });
   };
 
@@ -164,19 +177,20 @@ function Board_list() {
               {e.writer} | {moment(e.regist_date).format('YYYY-MM-DD')}
             </Card> 
           </Card>
-          ) :
+          ) : 
           <Card 
-            size="small"
-          ><Empty description={false} /></Card>
+          size="small"
+          loading={pageLoading}
+          ><Empty description={false}/></Card>
         }
       </Space>
       {
         viewContent.length !== 0 ?
         <>
         <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
-        <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={5}/>
-      </div>
-      </>:
+         <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={4}/>
+        </div>
+        </>:
         null
       }
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >

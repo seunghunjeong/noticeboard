@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import BoardingListPage from '../boardingPage/Board_list_mobile';
-import BoardingDetailPage from '../boardingPage/Board_detail';
+import BoardingDetailPage from '../boardingPage/Board_detail_mobile';
 
 // components views
 import LoginPage from '../loginPage/Login';
