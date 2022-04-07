@@ -3,10 +3,11 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, /* Button, */ Input, Select, Breadcrumb } from 'antd';
+import { Table, Layout, /* Button, */ Input, Select, Breadcrumb, Card, Space, Pagination, Empty } from 'antd';
 /* import { EditOutlined } from '@ant-design/icons'; */
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
+import axios from 'axios';
 
 function Board_list() {
   
@@ -23,29 +24,55 @@ function Board_list() {
 
   // 검색 param
   const [searchContent, setSearchContent] = useState({
-    filter: '',
     keyword: '',
     category : ''
   })
+
+  // 검색 조건
+  const [filter, setFilter] = useState('');
+
+  // paging param
+  const [pagingVal, setPagingVal] = useState({
+    page : 1,
+    pageSize : 5
+  });
+
+  // list total
+  const [listCnt, setListCnt] = useState();
  
   // 검색 value값 저장용
   const [searchTxt, setSearchTxt] = useState();  
-
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('/board/api/getBoardList',{
+    Axios.all([selectBoardList, selectBoardListCnt]).then(
+      axios.spread((...responses) => {
+        setViewContent(responses[0].data);
+        setListCnt(responses[1].data);
+      })
+    )
+    // 검색 값, 카테고리 변경될때마다 랜더링
+  }, [searchContent, pagingVal])
+
+  // 리스트 가져오기
+  const selectBoardList = Axios.get('/board/api/getBoardListM',{
       params: {
-        filter : searchContent.filter === '' ? '' : searchContent.filter,
+        filter : filter === '' ? '' : filter,
+        // %를 넣어줘야 와일드카드 검색 조건.
+        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
+        category: searchContent.category,
+        page : (pagingVal.page - 1) * pagingVal.pageSize,
+        pageSize : pagingVal.pageSize
+     }
+  })
+
+  const selectBoardListCnt =  Axios.get('/board/api/getBoardListCntM',{
+      params: {
+        filter : filter === '' ? '' : filter,
         // %를 넣어줘야 와일드카드 검색 조건.
         keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
         category: searchContent.category
      }
-    }).then((response) => {
-      setViewContent(response.data);
-    })
-    // 검색 값, 카테고리 변경될때마다 랜더링
-
-  }, [searchContent])
+  })
 
   // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
@@ -57,74 +84,22 @@ function Board_list() {
 
     // 키워드 초기화
     setSearchTxt('');
+
+    setPagingVal({
+    page : 1,
+    pageSize : 5
+    });
   }, [category])
 
   // 페이지 이동
   const navigate = useNavigate();
   const onBoardRegisterHandler = (event) => {
     event.preventDefault();
-
     navigate(`/board_register/${category}`);//board_register router로 이동
   }
 
-  // table columns
-  const columns = [
-    {
-      title: 'No',
-      dataIndex: 'idx',
-      key: 'idx',
-      align : 'center',
-      width : 100,
-      sorter: (a, b) => a.idx - b.idx,
-    },
-    {
-      title: '제목',
-      dataIndex: 'title',
-      key: 'title', 
-      render: (title, row) => <Link to={`/board_detail/${row.key}/${category}`}>{title}</Link>,
-      align : 'left'
-    },
-    {
-      title: '작성자',
-      dataIndex: 'writer',
-      key: 'writer',
-      align : 'center',
-      width : 200
-    },
-    {
-      title: '작성일',
-      dataIndex: 'regist_date',
-      key: 'regist_date',
-      align : 'center',
-      width : 200
-      // sorter: true
-    }
-  ];
-
   //date format 수정
   let moment =  require('moment');
-
-  //table rows
-  const data = [];
-  
-  viewContent.map((element, index) => {
-    data.push({
-      key : element.idx,
-      idx : index + 1,
-      title : element.title,
-      writer : element.writer,
-      regist_date : moment(element.regist_date).format('YYYY-MM-DD')
-    });
-    return data;
-  });
-
-  // 총 게시글 수 
-  let dataLength = data.length.toString();
-
-  // table method
-  function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
-  }
 
   // Search 값 저장
   const searchChangeHandler = (e) => {
@@ -133,39 +108,77 @@ function Board_list() {
 
   // 게시글 검색 조건 설정
   const onChangeSearchFilter = (value, event) => {
-    setSearchContent({
-      ...searchContent,
-      filter : value
-    })
+    setFilter(value);
   };
 
   // 게시글 검색
   const onSearch = (value, event) => {
-    if(searchContent.filter === '') {
+    if(filter === '') {
       alert('검색 조건을 선택해주세요.');
+      return;
     }
     setSearchContent({
       ...searchContent,
       keyword : value
     });
+
+    setPagingVal({
+      page : 1,
+      pageSize : 5
+    });
   };
+
+  // 페이징
+  const pagingHandler = (page, pageSize) => {
+    setPagingVal({
+      page : page,
+      pageSize : pageSize
+    })
+  }
 
   //render
   return (
     <Content style={{ margin : '16px 16px 0 16px', height : 'calc(100% - 134px)' }}>
-      <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
+
+     <div style={{marginBottom : '16px', position : 'relative', height : '32px' }}>
         <Breadcrumb style={{ float: 'left' }}>
           <Breadcrumb.Item>게시판</Breadcrumb.Item>
           <Breadcrumb.Item>
             {category}
           </Breadcrumb.Item>
-        </Breadcrumb>
-        {/* <Button style={{ float: 'right' }} type="primary" icon={<EditOutlined />} onClick={onBoardRegisterHandler}>글작성</Button> */}
+        </Breadcrumb>        
       </div>
-      <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
-             pagination={{position: ["bottomCenter"]}} 
-             footer={() => 'total : ' + dataLength }
-      /> 
+      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
+        {
+          viewContent.length !== 0 ?
+          viewContent.map((e) =>
+          <Card 
+            size="small"
+          >
+            <Card 
+              size="small"
+              title={<Link to={`/board_detail/${e.idx}/${category}`}>{e.title}</Link>} 
+              headStyle={{fontSize:'24px'}}
+              bordered={false}
+            >
+              {e.writer} | {moment(e.regist_date).format('YYYY-MM-DD')}
+            </Card> 
+          </Card>
+          ) :
+          <Card 
+            size="small"
+          ><Empty description={false} /></Card>
+        }
+      </Space>
+      {
+        viewContent.length !== 0 ?
+        <>
+        <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
+        <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={5}/>
+      </div>
+      </>:
+        null
+      }
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
           placeholder="검색 조건"
@@ -178,7 +191,7 @@ function Board_list() {
           <Option value="title">제목</Option>
         </Select>
         <Search name='txt_search' placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: '60vw' }} onChange={searchChangeHandler} value={searchTxt}/>
-      </div>
+      </div> 
     </Content>
   )
 }
