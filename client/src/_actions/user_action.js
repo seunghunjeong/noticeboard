@@ -6,6 +6,8 @@ import {
     LOGOUT
 } from "./types";
 
+import { message } from 'antd';
+
 axios.defaults.withCredentials = true //세션관리를 위한 옵션
 
 //로그인 action
@@ -53,7 +55,7 @@ export function logout(){
    
 
     if (sessionStorage.getItem("userId") === null){
-        alert("로그아웃 실패")
+        message.error("로그아웃 실패")
         return false;
     }
     else {

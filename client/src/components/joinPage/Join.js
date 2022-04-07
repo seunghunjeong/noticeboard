@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { registerUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../_hoc/auth'
-import { Form, Input, Button } from 'antd';
+
+import { Form, Input, Button, message } from 'antd';
 import Logo from '../layout/cmworld-logo.png';
 
 function Join() {
@@ -36,7 +37,7 @@ function Join() {
 
         //password와 confirm password가 일치할때만 가입승인
         if(Password !== ConfirmPassword){
-            return alert("비밀번호와 비밀번호 확인은 같아야 합니다.")
+            return message.warning("비밀번호와 비밀번호 확인은 같아야 합니다.")
         }
 
         let body = {
@@ -53,11 +54,11 @@ function Join() {
         dispatch(registerUser(body))
         .then(response => {
             if(response.payload.msg === "success"){
-                alert("회원가입 신청완료");
+                message.success("회원가입 신청완료");
                 navigate("/");
             }
             else { 
-                alert(response.payload.msg);
+                message.error(response.payload.msg);
             }
         });
 

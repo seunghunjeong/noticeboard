@@ -3,8 +3,7 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, /* Button, */ Input, Select, Breadcrumb, Card, Space, Pagination, Empty } from 'antd';
-/* import { EditOutlined } from '@ant-design/icons'; */
+import { Layout, Input, Select, Breadcrumb, Card, Space, Pagination, Empty, message } from 'antd';
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 import axios from 'axios';
@@ -114,7 +113,7 @@ function Board_list() {
   // 게시글 검색
   const onSearch = (value, event) => {
     if(filter === '') {
-      alert('검색 조건을 선택해주세요.');
+      message.warning('검색 조건을 선택해주세요.');
       return;
     }
     setSearchContent({

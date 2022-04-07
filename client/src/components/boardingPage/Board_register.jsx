@@ -6,7 +6,7 @@ import Auth from '../../_hoc/auth'
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
-import { Card, Layout, Button, Input, Tabs, Divider, Select } from 'antd';
+import { Card, Layout, Button, Input, Tabs, Divider, Select, message } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import '../../App.css';
 
@@ -80,12 +80,12 @@ function Board_register() {
     const id = userId;
 
     if (category === "") {
-      alert('카테고리를 선택해주세요.');
+      message.warning('카테고리를 선택해주세요.');
       
       return;
     }
     if (title === "") {
-      alert('제목을 입력해주세요.');
+      message.warning('제목을 입력해주세요.');
       return;
     }
     else if (content === "") {
@@ -111,7 +111,7 @@ function Board_register() {
         "Content-Type": "multipart/form-data",
       }
     }).then(() => {
-      alert('등록완료');
+      message.success('등록완료');
       setLoading(false);
       navigate(`/board_list/${category}`);
     })

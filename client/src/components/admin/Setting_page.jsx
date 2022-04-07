@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
-import { Button, Input, Table, Layout } from 'antd';
+import { Button, Input, Table, Layout, message } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import Auth from '../../_hoc/auth'
 
@@ -120,7 +120,7 @@ const Setting_page = () => {
         const category = addCategory.category;
         const description = addCategory.description;
         if (category === "") {
-            alert("카테고리명을 입력해주세요.");
+            message.warning("카테고리명을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -131,9 +131,9 @@ const Setting_page = () => {
         }).then((res) => {
             console.log(res);
             if (res.data === "중복") {
-                alert('이미 존재하는 카테고리명입니다.');
+                message.warning('이미 존재하는 카테고리명입니다.');
             } else {
-                alert('추가완료');
+                message.success('추가완료');
                 setState(res.data);
                 closeModal();
                 setLoading(false);
@@ -150,7 +150,7 @@ const Setting_page = () => {
             Axios.post('/admin/delCategory', {
                 category: name
             }).then(res => {
-                alert("삭제완료");
+                message.success("삭제완료");
                 setState(res.data);
             })
         }
@@ -170,7 +170,7 @@ const Setting_page = () => {
             idx: addCategory.idx,
             description: addCategory.description
         }).then(res => {
-            alert("수정완료");
+            message.success("수정완료");
             setState(res.data);
             closeModal();
             setLoading(false);

@@ -1,6 +1,4 @@
 import React from 'react';
-import { Layout, Button } from 'antd';
-import '../../App.css';
 import { Link } from 'react-router-dom';
 import { logout} from '../../_actions/user_action';
 import { useDispatch } from "react-redux";
@@ -8,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
 
+import '../../App.css';
+import { Layout, Button, message } from 'antd';
 
 function HeaderLayout() {
     
@@ -30,11 +30,11 @@ function HeaderLayout() {
         dispatch(logout())
         .then(response => {
             if(response.payload.logoutSuccess === true){
-                alert("로그아웃 완료");
+                message.success("로그아웃 완료");
                 navigate("/");
             }
             else { 
-                alert(response.payload.logoutSuccess);
+                message.error(response.payload.logoutSuccess);
             }
         });
     }
