@@ -57,8 +57,8 @@ function Home() {
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
 
-    // 자신이 작성한 전체 일일보고 받아오기
     useEffect(() => {
+        // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
         Axios.get('/report/getMyReport', {
             params: {
@@ -68,15 +68,20 @@ function Home() {
         ).then((response) => {
             setViewMyDailyReport(response.data);
         })
-    }, [state, userId])
 
-    // 전체 일일보고 데이터 불러오기
-    useEffect(() => {
+        // 전체 일일보고 데이터 불러오기
         Axios.get('/report/getReportDetail'
         ).then((res) => {
             setViewDetailReportList(res.data);
         })
-    }, [state])
+
+        return () => {
+            setRegisterModalOpen(false);
+            setUpdateModalOpen(false);
+            setViewModalOpen(false);
+        }
+
+    }, [state, userId])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -234,21 +239,10 @@ function Home() {
     }
 
     // 일일보고 상세보기
-    let detailReport = [];
     const GetDetailReport = () => {
 
         const day = moment(selectDay.selectedValue).format('YYYY-MM-DD');
         const detailReportList = viewDetailReportList;
-
-        detailReport = detailReportList.filter(item => moment(item.regist_date).format('YYYY-MM-DD') === day)
-        
-        const reportList = detailReport.map((item) => (
-            <tr key={item.idx}>
-                <td className='writer'>{item.writer}님</td>
-                <td><pre>{item.report}</pre></td>
-                <td><pre>{item.plan}</pre></td>
-            </tr>
-        ));
 
         return (
             <>
@@ -261,7 +255,17 @@ function Home() {
                         </tr>
                     </thead>
                     <tbody>
-                        {reportList}
+                        {
+                            detailReportList
+                                .filter(item => moment(item.regist_date).format('YYYY-MM-DD') === day)
+                                .map((item) => (
+                                    <tr key={item.idx}>
+                                        <td className='writer'>{item.writer}님</td>
+                                        <td><pre>{item.report}</pre></td>
+                                        <td><pre>{item.plan}</pre></td>
+                                    </tr>
+                                ))
+                        }
                     </tbody>
                 </table>
             </>
@@ -275,8 +279,8 @@ function Home() {
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)',
-                padding : '16px'
-                }}
+                padding: '16px'
+            }}
                 locale={locale}
                 fullscreen={true}
                 dateCellRender={dateCellRender}
