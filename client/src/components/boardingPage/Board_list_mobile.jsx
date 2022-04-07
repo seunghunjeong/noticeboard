@@ -3,10 +3,11 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, /* Button, */ Input, Select, Breadcrumb, Card, Space, Pagination } from 'antd';
+import { Table, Layout, /* Button, */ Input, Select, Breadcrumb, Card, Space, Pagination, Empty } from 'antd';
 /* import { EditOutlined } from '@ant-design/icons'; */
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
+import axios from 'axios';
 
 function Board_list() {
   
@@ -23,33 +24,55 @@ function Board_list() {
 
   // 검색 param
   const [searchContent, setSearchContent] = useState({
-    filter: '',
     keyword: '',
     category : ''
   })
+
+  // 검색 조건
+  const [filter, setFilter] = useState('');
+
+  // paging param
+  const [pagingVal, setPagingVal] = useState({
+    page : 1,
+    pageSize : 5
+  });
+
+  // list total
+  const [listCnt, setListCnt] = useState();
  
   // 검색 value값 저장용
   const [searchTxt, setSearchTxt] = useState();  
-
-  // 카드 로딩
-  const [loading, setLoading] = useState(true);
-
   // select query문 불러오기.
   useEffect(() => {
-    Axios.get('/board/api/getBoardList',{
+    Axios.all([selectBoardList, selectBoardListCnt]).then(
+      axios.spread((...responses) => {
+        setViewContent(responses[0].data);
+        setListCnt(responses[1].data);
+      })
+    )
+    // 검색 값, 카테고리 변경될때마다 랜더링
+  }, [searchContent, pagingVal])
+
+  // 리스트 가져오기
+  const selectBoardList = Axios.get('/board/api/getBoardListM',{
       params: {
-        filter : searchContent.filter === '' ? '' : searchContent.filter,
+        filter : filter === '' ? '' : filter,
+        // %를 넣어줘야 와일드카드 검색 조건.
+        keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
+        category: searchContent.category,
+        page : (pagingVal.page - 1) * pagingVal.pageSize,
+        pageSize : pagingVal.pageSize
+     }
+  })
+
+  const selectBoardListCnt =  Axios.get('/board/api/getBoardListCntM',{
+      params: {
+        filter : filter === '' ? '' : filter,
         // %를 넣어줘야 와일드카드 검색 조건.
         keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
         category: searchContent.category
      }
-    }).then((response) => {
-      setLoading(false);
-      setViewContent(response.data);
-    })
-    // 검색 값, 카테고리 변경될때마다 랜더링
-
-  }, [searchContent])
+  })
 
   // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
@@ -61,13 +84,17 @@ function Board_list() {
 
     // 키워드 초기화
     setSearchTxt('');
+
+    setPagingVal({
+    page : 1,
+    pageSize : 5
+    });
   }, [category])
 
   // 페이지 이동
   const navigate = useNavigate();
   const onBoardRegisterHandler = (event) => {
     event.preventDefault();
-
     navigate(`/board_register/${category}`);//board_register router로 이동
   }
 
@@ -81,22 +108,33 @@ function Board_list() {
 
   // 게시글 검색 조건 설정
   const onChangeSearchFilter = (value, event) => {
-    setSearchContent({
-      ...searchContent,
-      filter : value
-    })
+    setFilter(value);
   };
 
   // 게시글 검색
   const onSearch = (value, event) => {
-    if(searchContent.filter === '') {
+    if(filter === '') {
       alert('검색 조건을 선택해주세요.');
+      return;
     }
     setSearchContent({
       ...searchContent,
       keyword : value
     });
+
+    setPagingVal({
+      page : 1,
+      pageSize : 5
+    });
   };
+
+  // 페이징
+  const pagingHandler = (page, pageSize) => {
+    setPagingVal({
+      page : page,
+      pageSize : pageSize
+    })
+  }
 
   //render
   return (
@@ -111,20 +149,11 @@ function Board_list() {
         </Breadcrumb>        
       </div>
       <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-       {/*  <Card title={<a href="#">title Card</a>} size="small">
-          <p>Card content</p>
-        </Card>
-        <Card title={<a href="#">title Card</a>} size="small">
-          <p>Card content</p>
-        </Card>
-        <Card title={<a href="#">title Card</a>} size="small">
-          <p>Card content</p>
-        </Card>         */}
         {
+          viewContent.length !== 0 ?
           viewContent.map((e) =>
           <Card 
             size="small"
-            loading={loading} 
           >
             <Card 
               size="small"
@@ -133,14 +162,23 @@ function Board_list() {
               bordered={false}
             >
               {e.writer} | {moment(e.regist_date).format('YYYY-MM-DD')}
-            </Card>
+            </Card> 
           </Card>
-          )
+          ) :
+          <Card 
+            size="small"
+          ><Empty description={false} /></Card>
         }
       </Space>
-      <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
-        <Pagination size="small" defaultCurrent={1} total={200}  showTotal={total => `total : ${total}`}/>
+      {
+        viewContent.length !== 0 ?
+        <>
+        <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
+        <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={5}/>
       </div>
+      </>:
+        null
+      }
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select
           placeholder="검색 조건"
@@ -153,7 +191,7 @@ function Board_list() {
           <Option value="title">제목</Option>
         </Select>
         <Search name='txt_search' placeholder="검색어를 입력하세요" allowClear onSearch={onSearch} style={{ width: '60vw' }} onChange={searchChangeHandler} value={searchTxt}/>
-      </div>
+      </div> 
     </Content>
   )
 }
