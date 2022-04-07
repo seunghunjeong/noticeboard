@@ -27,6 +27,9 @@ function Board_list() {
     keyword: '',
     category : ''
   })
+
+  // 검색 조건
+  const [filter, setFilter] = useState('');
  
   // 검색 value값 저장용
   const [searchTxt, setSearchTxt] = useState();  
@@ -35,7 +38,7 @@ function Board_list() {
   useEffect(() => {
     Axios.get('/board/api/getBoardList',{
       params: {
-        filter : searchContent.filter === '' ? '' : searchContent.filter,
+        filter : filter === '' ? '' : filter,
         // %를 넣어줘야 와일드카드 검색 조건.
         keyword : searchContent.keyword === '' ? '%' : '%'+searchContent.keyword+'%',
         category: searchContent.category
@@ -106,11 +109,11 @@ function Board_list() {
 
   //table rows
   const data = [];
-  
-  viewContent.map((element, index) => {
+  let index = viewContent.length;
+  viewContent.map((element) => {
     data.push({
       key : element.idx,
-      idx : index + 1,
+      idx : index--,
       title : element.title,
       writer : element.writer,
       regist_date : moment(element.regist_date).format('YYYY-MM-DD')
@@ -133,15 +136,12 @@ function Board_list() {
 
   // 게시글 검색 조건 설정
   const onChangeSearchFilter = (value, event) => {
-    setSearchContent({
-      ...searchContent,
-      filter : value
-    })
+    setFilter(value);
   };
 
   // 게시글 검색
   const onSearch = (value, event) => {
-    if(searchContent.filter === '') {
+    if(filter === '') {
       alert('검색 조건을 선택해주세요.');
     }
     setSearchContent({

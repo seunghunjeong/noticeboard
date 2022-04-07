@@ -12,25 +12,30 @@ const mime = require('mime');
 const iconvLite = require('iconv-lite');
 const { isGeneratorFunction } = require('util/types');
 
+const schedule = require('node-schedule');
+
+
+
 // 파일저장경로, 폴더가없다면 생성함
-// const uploadPath = `C:/uploadtest/${Date.now}`;
-// const directory = fs.existsSync(uploadPath);
-// if (!directory) fs.mkdirSync(uploadPath);
+let current = moment().format('Y-M-D');
+let uploadPath = `C:/upload/${current}`;
+const directory = fs.existsSync(uploadPath);
+if (!directory) fs.mkdirSync(uploadPath, { recursive: true } );
+
+const job = schedule.scheduleJob('0 0 0 * * *', () => {
+    current = moment().format('Y-M-D');
+    uploadPath = `C:/upload/${current}`;
+    console.log(current);
+    console.log(uploadPath);
+})
 
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const current = moment().format('Y-M-D')
-        let uploadPath = `C:/upload/${current}`;
-        
-        if(req.body.udt === 'udt'){
-            uploadPath = req.body.filePath;
-        }
-        
-        const directory = fs.existsSync(uploadPath);
-        if (!directory) fs.mkdirSync(uploadPath);
+        if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true } );
 
         cb(null, uploadPath);
+        
     },
     filename: function (req, file, cb) {
         cb(null, getFile(file));
@@ -101,6 +106,72 @@ router.get("/api/getBoardList", (req, res) => {
 
     // 날짜순으로 정렬
     sqlQuery += " order by regist_date desc";
+
+    // ?에 키워드 넣기.
+    db.query(sqlQuery, [category, keyword], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
+// board list mobile
+router.get("/api/getBoardListM", (req, res) => {
+    // params 받기
+    const filter = req.query.filter;
+    const keyword = req.query.keyword;
+    const category = req.query.category;
+
+    // select 시작
+    let sqlQuery = `SELECT * FROM board.noticeboard WHERE category = ?`;
+
+    // filter에 따른 조건 추가
+    switch (filter) {
+        case '':
+            break;
+        case 'writer':
+            sqlQuery += " and writer like ?";
+            break;
+        case 'title':
+            sqlQuery += " and title like ?";
+            break;
+    }
+    // 날짜순으로 정렬
+    sqlQuery += " order by regist_date desc";
+    // 페이징
+    sqlQuery += ` limit ${req.query.page}, ${req.query.pageSize}`
+
+    // ?에 키워드 넣기.
+    db.query(sqlQuery, [category, keyword], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
+// board list mobile count
+router.get("/api/getBoardListCntM", (req, res) => {
+    // params 받기
+    const filter = req.query.filter;
+    const keyword = req.query.keyword;
+    const category = req.query.category;
+
+    // select 시작
+    let sqlQuery = `SELECT COUNT(*) as cnt FROM board.noticeboard WHERE category = ?`;
+
+    // filter에 따른 조건 추가
+    switch (filter) {
+        case '':
+            break;
+        case 'writer':
+            sqlQuery += " and writer like ?";
+            break;
+        case 'title':
+            sqlQuery += " and title like ?";
+            break;
+    }
 
     // ?에 키워드 넣기.
     db.query(sqlQuery, [category, keyword], (err, result) => {
