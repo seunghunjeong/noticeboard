@@ -32,6 +32,8 @@ const job = schedule.scheduleJob('0 0 0 * * *', () => {
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true } );
+
         cb(null, uploadPath);
         
     },

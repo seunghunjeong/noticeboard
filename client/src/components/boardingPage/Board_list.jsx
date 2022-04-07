@@ -109,11 +109,11 @@ function Board_list() {
 
   //table rows
   const data = [];
-  
-  viewContent.map((element, index) => {
+  let index = viewContent.length;
+  viewContent.map((element) => {
     data.push({
       key : element.idx,
-      idx : index + 1,
+      idx : index--,
       title : element.title,
       writer : element.writer,
       regist_date : moment(element.regist_date).format('YYYY-MM-DD')
