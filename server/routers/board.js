@@ -20,7 +20,7 @@ const schedule = require('node-schedule');
 let current = moment().format('Y-M-D');
 let uploadPath = `C:/upload/${current}`;
 const directory = fs.existsSync(uploadPath);
-if (!directory) fs.mkdirSync(uploadPath);
+if (!directory) fs.mkdirSync(uploadPath, { recursive: true } );
 
 const job = schedule.scheduleJob('0 0 0 * * *', () => {
     current = moment().format('Y-M-D');
