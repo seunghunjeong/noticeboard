@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Button, Table } from 'antd';
+import { Layout, Button, Table, message } from 'antd';
 import Auth from '../../_hoc/auth'
 import Axios from 'axios';
 
@@ -30,11 +30,11 @@ const Approve_signup = () => {
         Axios.post('/api/approve-sign-up', {id : userId})
         .then((response) => {
             if(response.data.msg === "success"){
-                alert("가입승인완료");
+                message.success("가입승인완료");
                 setState(response);
             }
             else{
-                alert(response.data.msg);
+                message.error(response.data.msg);
             }
         })
     }
@@ -50,11 +50,11 @@ const Approve_signup = () => {
             Axios.post('/api/reject-sign-up', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
-                    alert("가입거절 완료");
+                    message.success("가입거절 완료");
                     setState(response);
                 }
                 else{
-                    alert(response.data.msg);
+                    message.error(response.data.msg);
                 }
             })
         }
@@ -74,11 +74,11 @@ const Approve_signup = () => {
             Axios.post('/api/admin-appoint', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
-                    alert("관리자 지정 완료");
+                    message.success("관리자 지정 완료");
                     setState(response);
                 }
                 else{
-                    alert(response.data.msg);
+                    message.error(response.data.msg);
                 }
             })
         }
@@ -98,11 +98,11 @@ const Approve_signup = () => {
             Axios.post('/api/admin-remove', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
-                    alert("관리자 해지 완료");
+                    message.success("관리자 해지 완료");
                     setState(response);
                 }
                 else{
-                    alert(response.data.msg);
+                    message.error(response.data.msg);
                 }
             })
         }

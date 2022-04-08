@@ -13,7 +13,6 @@ import HomePage from '../homePage/Home';
 import LoginPage from '../loginPage/Login';
 import JoinPage from '../joinPage/Join';
 import Map from '../modules/Maps';
-
 // components layout
 import MainLayout from './MainLayout';
 

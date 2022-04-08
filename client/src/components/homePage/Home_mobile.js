@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
+
 import 'antd/dist/antd.less';
-import { Calendar, Badge, Tag, Divider } from 'antd';
+import { Calendar, Badge, Tag, Divider, message } from 'antd';
 import { PlusOutlined, EditOutlined,FormOutlined } from '@ant-design/icons';
 import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from '../../components/modals/DailyReportPopup_mobile';
@@ -213,7 +214,7 @@ function Home() {
     const insertBogo = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            alert("금일 실적을 입력해주세요");
+            message.warning("금일 실적을 입력해주세요");
             setLoading(false);
             return;
         }
@@ -227,7 +228,7 @@ function Home() {
             id: userId
         }
         ).then(() => {
-            alert('일일보고가 작성되었습니다.');
+            message.success('일일보고가 작성되었습니다.');
             closeModal();
             setState('insert');
         })
@@ -236,7 +237,7 @@ function Home() {
     const updateReport = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            alert("금일 실적을 입력해주세요.");
+            message.warning("금일 실적을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -247,7 +248,7 @@ function Home() {
             plan : updateBogoArr ? dailyReport.plan : readBogoArr.plan,
             date: dailyReport.regist_date
         }).then(() => {
-            alert("수정완료");
+            message.success("수정완료");
             closeModal();
             setState("update");
         })
@@ -258,7 +259,7 @@ function Home() {
         Axios.post('/report/delete', {
             idx: readBogoArr.idx,
         }).then(() => {
-            alert("삭제완료");
+            message.success("삭제완료");
             closeModal();
             setState("delete");
         })

@@ -139,42 +139,40 @@ function Board_detail() {
       fileNameArr = fileName.split("-real-");
       fileName = fileNameArr[1];
     }
-
     return(
       fileReady ?  
       <><LoadingOutlined /> 다운로드 준비중 입니다...</>
       : <button style={{border:'none', background:'none', cursor:'pointer'}} onClick={fileDownloadHandler}>{fileName}</button>
     ) 
-
   }
-
-
+  
   //render
   return (
-    <Content style={{ margin : '16px', height : '100%' }}>
+    <Content className='contnetDetail' style={{ margin : '16px', height : '100%' }}>
       
       <PageHeader
+      key='keyPage'
       ghost={false}
-      onBack={() => window.history.back()}
+      onBack={onBoardGoHomeHandler}
       title={BoardDetail.title}
       style={{padding:'1em'}}
       extra={[
-        <DeleteOutlined style={{ float: 'right', fontSize: '1.7em' }} onClick={onBoardDeleteHandler}/>
+        <DeleteOutlined key='keyDel' style={{ float: 'right', fontSize: '1.7em' }} onClick={onBoardDeleteHandler}/>
       ]}      
       >
         <p className='writer'>작성자 |
           <span style={{ fontWeight: 'bold' }}> {BoardDetail.writer} </span>
           {moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')} 
         </p>
-        <Card>
+        <Card key='keyFile'>
             {/* <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider> */}
             첨부파일 :
-            <Tag style={{ marginLeft: '10px' }}>
+            <Tag key='keyTag' style={{ marginLeft: '10px' }}>
               <FilePath/>
             </Tag>
         </Card>
-        <Card bodyStyle={{padding:'0.8em'}}>
-          <div className='content'>
+        <Card key='keyBody' bodyStyle={{padding:'0.8em'}}>
+          <div key='keyContent' className='content'>
               {ReactHtmlParser(BoardDetail.content)}
           </div>
         </Card>

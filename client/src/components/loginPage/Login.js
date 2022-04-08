@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { loginUser } from '../../_actions/user_action';
 import { useNavigate } from "react-router-dom";
 import Auth from '../../_hoc/auth'
-import { Form, Input, Button, Checkbox } from 'antd';
+
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useCookies } from 'react-cookie';
 import crypto from 'crypto-js';
@@ -71,7 +72,7 @@ function Login() {
                 navigate("/home");
             }
             else { 
-                alert(response.payload.msg);
+                message.error(response.payload.msg);
             }
         });
     

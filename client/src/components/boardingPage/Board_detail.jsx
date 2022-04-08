@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
-import { Card, Layout, Button, Tag, Tabs } from 'antd';
+import { Card, Layout, Button, Tag, Tabs, message } from 'antd';
 import { UnorderedListOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 
 // codeblock
@@ -44,7 +44,7 @@ function Board_detail() {
           // codeblock 적용
           hljs.highlightAll();
         } else {
-          alert("상세페이지 불러오기 실패");
+          message.error("상세페이지 불러오기 실패");
         }
       })
   }, []);

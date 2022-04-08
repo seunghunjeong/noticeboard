@@ -1,5 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
+import Auth from '../../_hoc/auth'
+
+import '../../App.css';
 import { Calendar, Button, Tag } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
@@ -9,9 +13,8 @@ import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import '../../App.css';
-import { useSelector } from 'react-redux';
-import Auth from '../../_hoc/auth'
+
+
 function Home() {
 
     // 로딩처리를 위한 state
