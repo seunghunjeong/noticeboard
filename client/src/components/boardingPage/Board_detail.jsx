@@ -132,6 +132,7 @@ function Board_detail() {
     // 첨부파일 원본이름 표시
     if (fileName == null) {
       fileName = "첨부된 파일이 없습니다.";
+      setFileReady(false);
     } else {
       fileNameArr = fileName.split("-real-");
       fileName = fileNameArr[1];
