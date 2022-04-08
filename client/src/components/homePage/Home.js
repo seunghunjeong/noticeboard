@@ -125,13 +125,15 @@ function Home() {
                     }
                     <Button className="bogo_view" onClick={openViewModal}><BarsOutlined /></Button>
                 </li>
-                {listData.map(item => (
-                    <li key={"report" + item.idx}>
-                        <pre style={{ fontFamily: 'inherit' }}>
-                            {item.content}
-                        </pre>
-                    </li>
-                ))}
+                {
+                    listData.map(item => (
+                        <li key={"report" + item.idx}>
+                            <pre style={{ fontFamily: 'inherit' }}>
+                                {item.content}
+                            </pre>
+                        </li>
+                    ))
+                }
             </ul>
         );
     }
