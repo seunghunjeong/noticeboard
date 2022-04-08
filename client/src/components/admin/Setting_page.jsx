@@ -7,7 +7,8 @@ import Auth from '../../_hoc/auth'
 import AddCategoryModal from '../modals/AddCategory';
 import Axios from 'axios';
 
-
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 const Setting_page = () => {
 
@@ -24,6 +25,13 @@ const Setting_page = () => {
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
     const openModal = () => { setAddCategoryOpen(true); };
     const closeModal = () => { setAddCategoryOpen(false); setAddCategory({ category: '', idx: '' }); };
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : '',
+        content : ''
+    }
 
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
     const [addCategory, setAddCategory] = useState({
@@ -144,9 +152,7 @@ const Setting_page = () => {
     // 카테고리 삭제
     const categoryDelete = (name) => {
 
-        const confirmAction = window.confirm("삭제시 해당카테고리의 모든 글이 삭제됩니다. \n삭제하시겠습니까?");
-
-        if (confirmAction) { //yes 선택
+        const actionDelCategory = () => {
             Axios.post('/admin/delCategory', {
                 category: name
             }).then(res => {
@@ -155,6 +161,10 @@ const Setting_page = () => {
             })
         }
 
+        confirmParam.txt = '삭제';
+        confirmParam.action = actionDelCategory;
+        confirmParam.content = '주의) 해당카테고리의 모든 글이 삭제됩니다.';
+        confirmModal(confirmParam);
     }
 
     // 카테고리 수정 값 셋팅
