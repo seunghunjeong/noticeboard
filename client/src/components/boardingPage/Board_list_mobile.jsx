@@ -90,7 +90,6 @@ function Board_list() {
   // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
     setSearchContent({
-      ...searchContent,
       keyword : '',
       category : category
     })

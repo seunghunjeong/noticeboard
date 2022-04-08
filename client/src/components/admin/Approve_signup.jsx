@@ -3,6 +3,8 @@ import { Layout, Button, Table, message } from 'antd';
 import Auth from '../../_hoc/auth'
 import Axios from 'axios';
 
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 const Approve_signup = () => {
 
@@ -11,6 +13,13 @@ const Approve_signup = () => {
 
     // 렌더링을 위한 state
     const [state, setState] = useState();
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : '',
+        content : ''
+    }
 
     // 가입대기열 불러오기
     const [stanbyList, setStanbyList] = useState([]);
@@ -40,13 +49,11 @@ const Approve_signup = () => {
     }
 
     // 가입거절 클릭
-    const rejectHandler = (event, value) => {  
-        event.preventDefault();
+    const rejectHandler = (event, value) => {
         const userId = value;
         console.log(value);
-        const confirmAction = window.confirm("가입을 거절하시겠습니까? 해당 사용자는 가입승인 대기열에서 삭제됩니다.");
-        
-        if(confirmAction) { //yes 선택
+
+        const actionDel = () => {
             Axios.post('/api/reject-sign-up', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
@@ -58,9 +65,11 @@ const Approve_signup = () => {
                 }
             })
         }
-        else {
-            event.preventDefault();
-        }  
+
+        confirmParam.txt = '거절';
+        confirmParam.action = actionDel;
+        confirmParam.content = "해당 사용자는 가입승인 대기열에서 삭제됩니다.";
+        confirmModal(confirmParam);
     }
 
      // 관리자지정 클릭
@@ -68,9 +77,7 @@ const Approve_signup = () => {
         event.preventDefault();
         const userId = value;
         console.log(value);
-        const confirmAction = window.confirm("해당 유저를 관리자로 지정하시겠습니까?");
-        
-        if(confirmAction) { //yes 선택
+        const actionAuth = () => {
             Axios.post('/api/admin-appoint', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
@@ -82,9 +89,11 @@ const Approve_signup = () => {
                 }
             })
         }
-        else {
-            event.preventDefault();
-        }  
+
+        confirmParam.txt = '지정';
+        confirmParam.action = actionAuth;
+        confirmParam.content = "해당 유저를 관리자로 지정하시겠습니까?";
+        confirmModal(confirmParam);
     }
 
     // 관리자해지 클릭
@@ -92,9 +101,8 @@ const Approve_signup = () => {
         event.preventDefault();
         const userId = value;
         console.log(value);
-        const confirmAction = window.confirm("해당 관리자를 해지하시겠습니까?");
         
-        if(confirmAction) { //yes 선택
+        const actionAuthFire = () => {
             Axios.post('/api/admin-remove', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
@@ -106,9 +114,11 @@ const Approve_signup = () => {
                 }
             })
         }
-        else {
-            event.preventDefault();
-        }  
+
+        confirmParam.txt = '해지';
+        confirmParam.action = actionAuthFire;
+        confirmParam.content = "해당 관리자를 해지하시겠습니까?";
+        confirmModal(confirmParam);
     }
 
     // table columns
