@@ -129,10 +129,11 @@ function Board_detail() {
   const FilePath = () => {
     let fileName = BoardDetail.file_path;
     let fileNameArr = [];
+    let fileExist = true;
     // 첨부파일 원본이름 표시
     if (fileName == null) {
       fileName = "첨부된 파일이 없습니다.";
-      setFileReady(false);
+      fileExist = false;
     } else {
       fileNameArr = fileName.split("-real-");
       fileName = fileNameArr[1];
@@ -141,7 +142,9 @@ function Board_detail() {
     return (
       fileReady ?
         <><LoadingOutlined /> 다운로드 준비중 입니다...</>
-        : <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDownloadHandler}>{fileName}</button>
+        : fileExist ?
+          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDownloadHandler}>{fileName}</button>
+          : fileName
     )
 
   }
