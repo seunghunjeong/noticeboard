@@ -16,6 +16,8 @@ import { UnorderedListOutlined, EditOutlined, LoadingOutlined } from '@ant-desig
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 function Board_detail() {
   // antd 변수
@@ -57,12 +59,11 @@ function Board_detail() {
   }
 
   // 수정
-  const onGoUpdateHandler = (event) => {
-     event.preventDefault();
+  const onGoUpdateHandler = () => {
      navigate(`/board_update/${BoardDetail.idx}/${category}`);
    }
 
-  // 삭제
+/*   // 삭제
   const onBoardDeleteHandler = (event) => {
     event.preventDefault();
 
@@ -85,7 +86,7 @@ function Board_detail() {
     else {
       event.preventDefault();
     }
-  }
+  } */
 
   // 목록으로 이동
   const onBoardGoHomeHandler = (event) => {
@@ -116,7 +117,7 @@ function Board_detail() {
       .then (response => {
 
         if(response.data === false){
-          alert("파일이 존재하지 않습니다.");
+          message.warning("파일이 존재하지 않습니다.");
           return;
         }
         const oriFileName = BoardDetail.file_path.split("-real-");
@@ -149,7 +150,40 @@ function Board_detail() {
 
   }
 
+    // confirm param object
+    let confirmParam = {
+      txt : '',
+      action : ''
+    }
 
+    // action delete
+    const delAction = () => {
+      Axios.post('/board/api/deleteBoard', { 
+        idx: idx ,
+        filePath: BoardDetail.file_path
+      }).then(response => {
+          if (response.data === "success") {
+            message.success("삭제 완료");
+            navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
+          } else {
+            message.error("삭제 실패");
+          }
+        })
+    }
+    
+    // func confirm
+    const onConfirmdel = () => {
+      confirmParam.txt = '삭제';
+      confirmParam.action = delAction;
+      confirmModal(confirmParam);
+    }
+
+    const onConfirmup = () => {
+      confirmParam.txt = '수정';
+      confirmParam.action = onGoUpdateHandler;
+      confirmModal(confirmParam);
+    }
+  
   //render
   return (
     <Content style={{ margin : '16px', height : '100%' }}>
@@ -167,8 +201,8 @@ function Board_detail() {
           </TabPane>
         </Tabs>
         {userIdConfrim ?  <div>
-                              <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardDeleteHandler}>삭제</Button>
-                              <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onGoUpdateHandler} icon={<EditOutlined />}>수정</Button>
+                              <Button style={{ float: 'right' }} type="primary" danger onClick={onConfirmdel}>삭제</Button>
+                              <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onConfirmup} icon={<EditOutlined />}>수정</Button>
                           </div>: null
         }
        

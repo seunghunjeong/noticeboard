@@ -9,6 +9,9 @@ import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
 
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
+
 function Board_update() {
   // antd 변수
   const { Content } = Layout;
@@ -123,9 +126,7 @@ function Board_update() {
     formData.append('category', category);
     formData.append('udt', 'udt');
 
-    const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
-
-    if (confirmAction) { //yes 선택
+    const upAction = () => {
       setLoading(true);
       Axios.post('/board/api/updateBoard', formData, {
         headers: {
@@ -136,9 +137,15 @@ function Board_update() {
         setLoading(false);
         navigate(`/board_list/${category}`);
       })
-    } else {
-      event.preventDefault();
     }
+
+    // confirm param object
+    let confirmParam = {
+      txt : '수정',
+      action : upAction
+    }
+
+    confirmModal(confirmParam);
   };
 
   // 목록으로 이동
@@ -164,7 +171,6 @@ function Board_update() {
       </>
     )
   }
-
 
   //render
   return (
