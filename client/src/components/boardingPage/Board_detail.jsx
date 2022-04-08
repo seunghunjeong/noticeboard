@@ -100,15 +100,11 @@ function Board_detail() {
   const fileDownloadHandler = () => {
     setFileReady(true);
     const filePath = BoardDetail.file_path;
-    let fileName;
-    let fileNameArr = [];
-
-    fileNameArr = filePath.split("\\");
-    fileName = fileNameArr[2];
+    const fileName = BoardDetail.file_path.split("-real-");
 
     Axios.post('/board/api/fileDownload', {
       filePath: filePath,
-      fileName: fileName
+      fileName: fileName[1]
     },
       {
         responseType: 'blob'
