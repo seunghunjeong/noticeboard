@@ -13,7 +13,10 @@ import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
-import Auth from '../../_hoc/auth'
+import Auth from '../../_hoc/auth';
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 function Home() {
 
@@ -254,15 +257,24 @@ function Home() {
         })
     }
 
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : ''
+    }
+
     const deleteReport = () => {
-        setLoading(true);
-        Axios.post('/report/delete', {
+        const delAction = () => Axios.post('/report/delete', {
             idx: readBogoArr.idx,
         }).then(() => {
             message.success("삭제완료");
             closeModal();
             setState("delete");
         })
+        
+        confirmParam.txt = '삭제';
+        confirmParam.action = delAction;
+        confirmModal(confirmParam);
     }
 
     // 일일보고 필터링

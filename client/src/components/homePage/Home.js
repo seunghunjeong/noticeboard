@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
 
 import '../../App.css';
-import { Calendar, Button, Tag } from 'antd';
+import { Calendar, Button, Tag, message } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -13,6 +13,9 @@ import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 
 function Home() {
@@ -174,7 +177,7 @@ function Home() {
         setLoading(true);
         const id = userId;
         if (report.today === "") {
-            alert("내용을 입력해주세요.");
+            message.warning("내용을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -185,7 +188,7 @@ function Home() {
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
         }).then((res) => {
-            alert("등록완료");
+            message.success("등록완료");
             closeRegisterModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
@@ -206,7 +209,7 @@ function Home() {
     const updateReport = () => {
         setLoading(true);
         if (report === "") {
-            alert("내용을 입력해주세요");
+            message.warning("내용을 입력해주세요");
             return;
         }
         Axios.post('/report/update', {
@@ -215,7 +218,7 @@ function Home() {
             plan: report.tomorrow,
             date: dailyReportDetail.date
         }).then((res) => {
-            alert("수정완료");
+            message.success("수정완료");
             closeUpdateModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
@@ -223,22 +226,31 @@ function Home() {
         })
 
     }
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : ''
+      }
+
     // 보고 삭제
     const deleteReport = () => {
-        const confirmAction = window.confirm("삭제하시겠습니까?");
-
-        if (confirmAction) { //yes 선택
+        const delAction = () => {
             setLoading(true);
             Axios.post('/report/delete', {
                 idx: dailyReportDetail.idx,
             }).then((res) => {
-                alert("삭제완료");
+                message.success("삭제완료");
                 closeUpdateModal();
                 setReport({ today: '', tomorrow: '' });
                 setState(res);
                 setLoading(false);
             })
         }
+
+        confirmParam.txt = '삭제';
+        confirmParam.action = delAction;
+        confirmModal(confirmParam);
     }
 
     // 일일보고 상세보기

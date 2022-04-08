@@ -9,12 +9,15 @@ import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
-import { Card, Layout, Tag, PageHeader } from 'antd';
+import { Card, Layout, Tag, PageHeader, message } from 'antd';
 import { LoadingOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // codeblock
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 
 function Board_detail() {
@@ -32,6 +35,9 @@ function Board_detail() {
   const [BoardDetail, setBoardDetail] = useState([]);
   const [fileReady, setFileReady] = useState(false);
 
+  // confirm Modal
+  const [confirm, setConfirm] = useState(false);
+
   // 게시판 idx 가져오기
   let { idx, category } = useParams();
   useEffect(() => {
@@ -43,7 +49,7 @@ function Board_detail() {
         // codeblock 적용
         hljs.highlightAll();
         } else {
-          alert("상세페이지 불러오기 실패");
+          message.error("상세페이지 불러오기 실패");
         }
       })
   }, []);
@@ -55,36 +61,11 @@ function Board_detail() {
     userIdConfrim = true;
   }
 
-  // 수정
+/*   // 수정
   const onGoUpdateHandler = (event) => {
      event.preventDefault();
      navigate(`/board_update/${BoardDetail.idx}/${category}`);
-   }
-
-  // 삭제
-  const onBoardDeleteHandler = (event) => {
-    event.preventDefault();
-
-    const confirmAction = window.confirm("삭제하시겠습니까?");
-
-    if (confirmAction) { //yes 선택
-      Axios.post('/board/api/deleteBoard', { 
-        idx: idx ,
-        filePath: BoardDetail.file_path
-      }).then(response => {
-          if (response.data === "success") {
-            alert("삭제 완료");
-            navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
-          } else {
-            alert("삭제 실패");
-          }
-
-        })
-    }
-    else {
-      event.preventDefault();
-    }
-  }
+   } */
 
   // 목록으로 이동
   const onBoardGoHomeHandler = (event) => {
@@ -111,7 +92,7 @@ function Board_detail() {
       .then (response => {
 
         if(response.data === false){
-          alert("파일이 존재하지 않습니다.");
+          message.warning("파일이 존재하지 않습니다.");
           return;
         }
         const oriFileName = BoardDetail.file_path.split("-real-");
@@ -141,6 +122,34 @@ function Board_detail() {
       : <button style={{border:'none', background:'none', cursor:'pointer'}} onClick={fileDownloadHandler}>{fileName}</button>
     ) 
   }
+
+  // confirm param object
+  let confirmParam = {
+    txt : '',
+    action : ''
+  }
+  
+  // action delete
+  const delAction = () => {
+    Axios.post('/board/api/deleteBoard', { 
+      idx: idx ,
+      filePath: BoardDetail.file_path
+    }).then(response => {
+        if (response.data === "success") {
+          message.success("삭제 완료");
+          navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
+        } else {
+          message.error("삭제 실패");
+        }
+      })
+  }
+  
+  // func confirm
+  const onConfirmdel = () => {
+    confirmParam.txt = '삭제';
+    confirmParam.action = delAction;
+    confirmModal(confirmParam);
+  }
   
   //render
   return (
@@ -153,7 +162,8 @@ function Board_detail() {
       title={BoardDetail.title}
       style={{padding:'1em'}}
       extra={[
-        <DeleteOutlined key='keyDel' style={{ float: 'right', fontSize: '1.7em' }} onClick={onBoardDeleteHandler}/>
+        userIdConfrim ?
+        <DeleteOutlined key='keyDel' style={{ float: 'right', fontSize: '1.7em' }} onClick={onConfirmdel}/> : null
       ]}      
       >
         <p className='writer'>작성자 |
