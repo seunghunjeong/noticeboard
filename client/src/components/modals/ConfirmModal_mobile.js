@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal} from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import './ConfirmModal.css'
 
 const confirmModal = (params) => {
     // action에는 axios 함수, txt는 뭐할건지
