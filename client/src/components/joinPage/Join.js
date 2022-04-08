@@ -8,6 +8,8 @@ import { Form, Input, Button, message } from 'antd';
 
 import './Join.css'
 
+import './Join.css'
+
 function Join() {
 
   //페이지이동
