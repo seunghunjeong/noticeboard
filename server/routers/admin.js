@@ -13,15 +13,15 @@ router.post("/addCategory", (req, res) => {
             boardCategory
         WHERE
             category = '${req.body.category}'
-    ` 
+    `
     db.query(checkQuety, (err, result) => {
-        check = result[0].COUNT === 1 ? false : true ;
+        check = result[0].COUNT === 1 ? false : true;
 
         if (err) {
             logger.error(err);
         }
 
-        if(check){ 
+        if (check) {
             console.log('test');
             const sqlQuery = `
                 INSERT INTO
@@ -38,7 +38,7 @@ router.post("/addCategory", (req, res) => {
                         (select idx from (select ifnull(max(idx),0)+1 as idx from boardCategory) tmp)
                     )
                 `;
-        
+
             db.query(sqlQuery, (err, result) => {
                 if (err) {
                     logger.error(err);
@@ -60,7 +60,7 @@ router.post('/delCategory', (req, res) => {
             category = '${req.body.category}'
     `
 
-    db.query(sqlQuery, (err,result) => {
+    db.query(sqlQuery, (err, result) => {
         if (err) {
             logger.error(err);
         }
@@ -82,7 +82,7 @@ router.post('/udtCategory', (req, res) => {
             idx = '${req.body.idx}'
     `;
 
-    db.query(sqlQuery,(err,result) => {
+    db.query(sqlQuery, (err, result) => {
         if (err) {
             logger.error(err);
         }
@@ -108,6 +108,64 @@ router.post('/getCount', (req, res) => {
         }
         res.send(result);
     });
+})
+
+router.get("/getUserList", (req, res) => {
+
+    const sqlQuery = `
+        SELECT 
+            id,
+            username,
+            registered,
+            status,
+            approved,
+            auth,
+            department,
+            position
+        FROM
+            board.users
+        ORDER BY 
+            position ASC
+    `;
+
+    db.query(sqlQuery, (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    });
+
+})
+
+// 부서, 직급 등록 수정
+router.post('/insert_management', (req, res) => {
+
+    const sqlQuery = `
+        UPDATE
+            users
+        SET
+            department = '${req.body.department}',
+            position = '${req.body.position}'
+        WHERE
+            id = '${req.body.id}'
+    `;
+
+    db.query(sqlQuery, (err, result) => {
+        res.send(result);
+    })
+})
+
+router.post('/delete_user', (req, res) => {
+    const sqlQuery = `
+        DELETE FROM
+            users
+        WHERE
+            id = '${req.body.id}'
+    `;
+
+    db.query(sqlQuery, (err, result) => {
+        res.send(result);
+    })
 })
 
 module.exports = router;
