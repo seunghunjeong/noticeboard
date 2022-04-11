@@ -62,13 +62,18 @@ function Home() {
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
+    const department = getUserData === undefined ? null : getUserData.department;
 
+    const [selectDept, setSelectDept] = useState();
+
+    console.log(getUserData);
     useEffect(() => {
         // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
         Axios.get('/report/getMyReport', {
             params: {
-                id: id
+                id: id,
+                department: department
             }
         }
         ).then((response) => {
@@ -76,7 +81,11 @@ function Home() {
         })
 
         // 전체 일일보고 데이터 불러오기
-        Axios.get('/report/getReportDetail'
+        Axios.get('/report/getReportDetail', {
+            params: {
+                department: department
+            }
+        }
         ).then((res) => {
             setViewDetailReportList(res.data);
         })
@@ -231,9 +240,9 @@ function Home() {
 
     // confirm param object
     let confirmParam = {
-        txt : '',
-        action : ''
-      }
+        txt: '',
+        action: ''
+    }
 
     // 보고 삭제
     const deleteReport = () => {
@@ -275,13 +284,16 @@ function Home() {
                         {
                             detailReportList
                                 .filter(item => moment(item.regist_date).format('YYYY-MM-DD') === day)
-                                .map((item) => (
-                                    <tr key={item.idx}>
-                                        <td className='writer'>{item.writer}님</td>
-                                        <td><pre>{item.report}</pre></td>
-                                        <td><pre>{item.plan}</pre></td>
-                                    </tr>
-                                ))
+                                .map((item) => {
+                                    let str = item.position;
+                                    return (
+                                        <tr key={item.idx}>
+                                            <td className='writer'>{item.writer} {str = str !== null ? str.substring(2) : null}</td>
+                                            <td><pre>{item.report}</pre></td>
+                                            <td><pre>{item.plan}</pre></td>
+                                        </tr>
+                                    )
+                                })
                         }
                     </tbody>
                 </table>
