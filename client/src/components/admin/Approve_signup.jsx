@@ -72,55 +72,6 @@ const Approve_signup = () => {
         confirmModal(confirmParam);
     }
 
-     // 관리자지정 클릭
-     const adminAppointHandler = (event, value) => {  
-        event.preventDefault();
-        const userId = value;
-        console.log(value);
-        const actionAuth = () => {
-            Axios.post('/api/admin-appoint', {id : userId})
-            .then((response) => {
-                if(response.data.msg === "success"){
-                    message.success("관리자 지정 완료");
-                    setState(response);
-                }
-                else{
-                    message.error(response.data.msg);
-                }
-            })
-        }
-
-        confirmParam.txt = '지정';
-        confirmParam.action = actionAuth;
-        confirmParam.content = "해당 유저를 관리자로 지정하시겠습니까?";
-        confirmModal(confirmParam);
-    }
-
-    // 관리자해지 클릭
-    const adminRemoveHandler = (event, value) => {  
-        event.preventDefault();
-        const userId = value;
-        console.log(value);
-        
-        const actionAuthFire = () => {
-            Axios.post('/api/admin-remove', {id : userId})
-            .then((response) => {
-                if(response.data.msg === "success"){
-                    message.success("관리자 해지 완료");
-                    setState(response);
-                }
-                else{
-                    message.error(response.data.msg);
-                }
-            })
-        }
-
-        confirmParam.txt = '해지';
-        confirmParam.action = actionAuthFire;
-        confirmParam.content = "해당 관리자를 해지하시겠습니까?";
-        confirmModal(confirmParam);
-    }
-
     // table columns
     const columns = [
         {   
@@ -165,22 +116,6 @@ const Approve_signup = () => {
                         <Button danger onClick={e => approveHandler(e, row.id)}>가입수락</Button>
                         <Button onClick={e => rejectHandler(e, row.id)}>가입거절</Button>
                     </div> : <Button disabled>승인완료</Button>
-                } 
-                </>
-            )
-        },
-        {
-            title: '권한부여',
-            dataIndex: 'y',
-            key: 'y',
-            align : 'center',
-            width : 150,
-            render : (title, row) => 
-            (  
-                <>
-                {row.status === 'N' ? <Button disabled>관리자지정</Button> : 
-                                      (row.auth === "관리자" ? <Button onClick={e => adminRemoveHandler(e, row.id)}>관리자해지</Button> 
-                                      : <Button onClick={e => adminAppointHandler(e, row.id)}>관리자지정</Button>)
                 } 
                 </>
             )
