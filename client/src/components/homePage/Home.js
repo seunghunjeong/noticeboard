@@ -18,8 +18,8 @@ import moment from 'moment';
 import confirmModal from '../modals/ConfirmModal_mobile';
 
 
-function Home() {
 
+function Home() {
     // 로딩처리를 위한 state
     const [loading, setLoading] = useState(null);
     // 캘린더 셀 렌더링을 위한 state
@@ -63,10 +63,9 @@ function Home() {
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
     const department = getUserData === undefined ? null : getUserData.department;
+    
+    const [selectDept, setSelectDept] = useState('ICT 사업부');
 
-    const [selectDept, setSelectDept] = useState();
-
-    console.log(getUserData);
     useEffect(() => {
         // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
@@ -83,7 +82,7 @@ function Home() {
         // 전체 일일보고 데이터 불러오기
         Axios.get('/report/getReportDetail', {
             params: {
-                department: department
+                department: department ?? selectDept
             }
         }
         ).then((res) => {
@@ -96,7 +95,7 @@ function Home() {
             setViewModalOpen(false);
         }
 
-    }, [state, userId])
+    }, [state, userId, selectDept])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -304,7 +303,6 @@ function Home() {
     return (
 
         <Fragment>
-
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)',
@@ -317,7 +315,7 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="ICT 사업부 일일 업무 보고" insert={submitReport} loading={loading}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={`${department} 일일 업무 보고`} insert={submitReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -335,7 +333,7 @@ function Home() {
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="ICT 사업부 일일 업무 보고" update={updateReport} del={deleteReport} loading={loading}>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={`${department} 일일 업무 보고`} update={updateReport} del={deleteReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -353,7 +351,7 @@ function Home() {
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={selectDay.selectedValue.format('YYYY-MM-DD')}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={`${department} 일일 업무 보고`} day={selectDay.selectedValue.format('YYYY-MM-DD')}>
                 <GetDetailReport />
             </ReportViewModal>
 

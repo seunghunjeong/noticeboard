@@ -18,11 +18,9 @@ export default function(SpecificComponent, option, adminRoute = null) {
         const navigate = useNavigate();
         const dispatch = useDispatch();
         const userId = sessionStorage.getItem("userId");
-
         let body = {
             userId : userId
         }
-        
         useEffect(() => {
 
             dispatch(auth(body))
@@ -49,7 +47,9 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     //로그인한 유저만 
                     else{
                         //관리자페이지
-                        if(adminRoute && !response.payload.isAdmin){
+                        console.log(response.payload.admin)
+                        if(adminRoute && !response.payload.admin){
+                            message.warning("관리자 전용 페이지입니다.");
                             navigate("/home")
                         } 
                      }

@@ -305,4 +305,4 @@ const User_management = () => {
     )
 }
 
-export default Auth(User_management, true)
+export default Auth(User_management, true, true)

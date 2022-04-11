@@ -224,4 +224,4 @@ const Setting_page = () => {
 
 }
 
-export default Auth(Setting_page, true)
+export default Auth(Setting_page, true, true)

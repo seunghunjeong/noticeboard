@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Layout, Button, Table, message } from 'antd';
 import Auth from '../../_hoc/auth'
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
 
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
-const Approve_signup = () => {
 
+const Approve_signup = () => {
+    
     // antd
     const { Content } = Layout;
 
@@ -152,4 +154,4 @@ const Approve_signup = () => {
     )
 }
 
-export default Auth(Approve_signup, true)
+export default Auth(Approve_signup, true, true )

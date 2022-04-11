@@ -36,7 +36,7 @@ router.post('/insert', (req, res) => {
 router.get("/getMyReport", (req, res) => {
 
     const sqlQuery = `
-    SELECT 
+        SELECT 
             a.idx,
             a.id,
             a.writer,
@@ -44,7 +44,7 @@ router.get("/getMyReport", (req, res) => {
             a.plan,
             a.regist_date,
             b.department,
-            b.position 	
+            b.position 	        
         FROM 
             board.dailyReport a
         LEFT JOIN
@@ -52,10 +52,8 @@ router.get("/getMyReport", (req, res) => {
         ON
             a.id = b.id
         WHERE
-            b.department = '${req.query.department}'
-        AND
             a.id = '${req.query.id}'
-    `;
+        `;
 
         
     db.query(sqlQuery, (err, result) => {
@@ -91,7 +89,8 @@ router.get("/getReportDetail", (req, res) => {
         ORDER BY
             b.position ASC
         `;
-
+    
+    
 
     db.query(sqlQuery, (err, result) => {
         if (err) {

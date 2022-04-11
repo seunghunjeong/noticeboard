@@ -18,6 +18,7 @@ function HeaderLayout() {
     const getUserData = useSelector(state => state.user.userData);
     const userName = getUserData === undefined ? null : getUserData.userName;
     const isAuth = getUserData === undefined ? null : getUserData.isAuth;
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
     //페이지이동
     const navigate = useNavigate();
