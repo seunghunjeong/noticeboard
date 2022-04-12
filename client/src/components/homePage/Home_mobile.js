@@ -297,32 +297,42 @@ function Home() {
     }
 
     // 일일보고 필터링
-    const filterBogo = () => {
-        if (state === 'updateModal') {
-            return viewMyDailyReport.filter(
-                (node) => moment(node.regist_date).format("YYYY-MM-DD") === dailyReport.regist_date
-            )
-        }
+    const filterBogo = (date) => {
+        return viewMyDailyReport.filter(
+            (node) => moment(node.regist_date).format("YYYY-MM-DD") === date
+        )
     }
 
     // 일보 읽기
     const readBogo = () => {
-        const resultTxt = filterBogo();
+        let resultTxt = [];
         if (state === 'updateModal') {
+            resultTxt = filterBogo(dailyReport.regist_date);
             setReadBogoArr(resultTxt[0]);
             setDailyReport({
                 ...dailyReport,
                 report: resultTxt[0].report,
                 plan: resultTxt[0].plan
             })
+        } else if (state === 'insertModal') {
+            const yesterday = moment(dailyReport.regist_date).subtract(1, 'days').format("YYYY-MM-DD");
+            resultTxt = filterBogo(yesterday);
+            setDailyReport({
+                ...dailyReport,
+                report: resultTxt.length > 0 ? resultTxt[0].plan : '◎'
+            })
+            return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
         }
-        return resultTxt ? resultTxt[0].report : '◎'
+        return resultTxt.length > 0 ? resultTxt[0].report : '◎';
     }
     
     // 익일 계획 읽기
     const readPlan = () => {
-        const resultTxt = filterBogo();
-        return resultTxt ? resultTxt[0].plan : '◎'
+        let resultTxt = [];
+        if (state === 'updateModal') {
+            resultTxt = filterBogo(dailyReport.regist_date);
+        }
+        return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
 
     // 전체 보기
