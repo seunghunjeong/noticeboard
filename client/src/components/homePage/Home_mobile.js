@@ -25,6 +25,7 @@ function Home() {
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName; 
     const isAuth = getUserData === undefined ? null : getUserData.isAuth;
+    const department = getUserData === undefined ? null : getUserData.department;
 
     // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
@@ -98,7 +99,8 @@ function Home() {
     useEffect(() => {
         Axios.get('/report/getMyReport', {
             params: {
-                id: userId
+                id: userId,
+                department : department
             }
         }
         ).then((response) => {
@@ -108,11 +110,15 @@ function Home() {
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
-        Axios.get('/report/getReportDetail'
+        Axios.get('/report/getReportDetail', {
+            params: {
+                department: department
+            }
+        }
         ).then((res) => {
             setViewDailyReport(res.data);
         })
-    }, [state])
+    }, [state, userId])
 
 
     // 월 단위 캘린더 랜더링할 내용
