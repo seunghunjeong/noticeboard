@@ -49,13 +49,29 @@ function Home() {
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 등록창 열고닫기
-    const openRegisterModal = () => { setRegisterModalOpen(true); };
+    const openRegisterModal = () => {
+        
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+        setRegisterModalOpen(true);
+        };
     const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
     const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); GetDetailReport(); };
+    const openViewModal = () => {
+        
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+
+        setViewModalOpen(true); 
+        GetDetailReport(); 
+    };
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
 
     //사용자 정보 받아오기
@@ -63,7 +79,8 @@ function Home() {
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
     const department = getUserData === undefined ? null : getUserData.department;
-    
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
+
     const [selectDept, setSelectDept] = useState('ICT 사업부');
 
     useEffect(() => {
@@ -300,9 +317,23 @@ function Home() {
         )
     }
 
+    // 익일 보고를 금일 보고에 넣기
+     const readBogo = () => {
+        const yesterday = moment(selectDay.selectedValue).subtract(1, 'days').format("YYYY-MM-DD");
+        const resultTxt = viewMyDailyReport.filter(
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
+        )
+        setReport({
+            ...report,
+            today : resultTxt.length > 0 ? resultTxt[0].plan : ''
+        });
+        return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
+    }
+
     return (
 
         <Fragment>
+            
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)',
@@ -328,7 +359,7 @@ function Home() {
                         </tr>
                     </thead>
                 </table>
-                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
