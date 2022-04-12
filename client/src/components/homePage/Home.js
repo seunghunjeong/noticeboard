@@ -300,6 +300,19 @@ function Home() {
         )
     }
 
+    // 익일 보고를 금일 보고에 넣기
+     const readBogo = () => {
+        const yesterday = moment(selectDay.selectedValue).subtract(1, 'days').format("YYYY-MM-DD");
+        const resultTxt = viewMyDailyReport.filter(
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
+        )
+        setReport({
+            ...report,
+            today : resultTxt.length > 0 ? resultTxt[0].plan : ''
+        });
+        return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
+    }
+
     return (
 
         <Fragment>
@@ -328,7 +341,7 @@ function Home() {
                         </tr>
                     </thead>
                 </table>
-                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
