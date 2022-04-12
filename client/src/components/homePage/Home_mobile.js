@@ -24,8 +24,8 @@ function Home() {
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName; 
-    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
     const department = getUserData === undefined ? null : getUserData.department;
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
     // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
@@ -56,6 +56,12 @@ function Home() {
      // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
      const [modalOpen, setModalOpen] = useState(false);
      const openModal = (e) => {
+
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+
          // 이벤트 전파 방지
          e.stopPropagation();
          // 버튼에 저장한 날짜 가져오기.
@@ -89,7 +95,14 @@ function Home() {
      };
      const [viewModalOpen, setViewModalOpen] = useState(false);
      // 조회창 열고닫기
-     const openViewModal = () => { setViewModalOpen(true); };
+     const openViewModal = () => { 
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+        setViewModalOpen(true);
+    
+    };
      const closeViewModal = () => {
          setViewModalOpen(false);
      };
