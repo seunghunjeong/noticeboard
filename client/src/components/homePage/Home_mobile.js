@@ -58,7 +58,6 @@ function Home() {
      const openModal = (e) => {
 
         if(department === null && !isAdmin) {
-            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
 
