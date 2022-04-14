@@ -156,7 +156,7 @@ function Home() {
                 {
                     listData.map(item => (
                         <li key={"report" + item.idx}>
-                            <pre style={{ fontFamily: 'inherit' }}>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace:'pre-wrap' }}>
                                 {item.content}
                             </pre>
                         </li>
@@ -305,8 +305,8 @@ function Home() {
                                     return (
                                         <tr key={item.idx}>
                                             <td className='writer'>{item.writer} {str = str !== null ? str.substring(2) : null}</td>
-                                            <td><pre>{item.report}</pre></td>
-                                            <td><pre>{item.plan}</pre></td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
                                         </tr>
                                     )
                                 })
