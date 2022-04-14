@@ -347,8 +347,8 @@ function Home() {
         const reportList = detailReportList.map((item) => (
             <tr key={item.idx}>
                 <td className='writer'>{item.writer}</td>
-                <td><pre>{item.report}</pre></td>
-                <td><pre>{item.plan}</pre></td>
+                <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
+                <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
             </tr>
             
         ));
