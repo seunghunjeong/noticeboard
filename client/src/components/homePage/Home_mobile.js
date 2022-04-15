@@ -314,7 +314,20 @@ function Home() {
                 plan: resultTxt[0].plan
             })
         } else if (state === 'insertModal') {
-            const yesterday = moment(dailyReport.regist_date).subtract(1, 'days').format("YYYY-MM-DD");
+            const dayCnt = moment(dailyReport.regist_date).weekday();
+            let subNumb = 1;
+            switch(dayCnt) {
+                case 1 : 
+                    subNumb = 3;
+                    break;
+                case 6 :
+                case 7 :
+                        return '◎';
+                default :
+                    subNumb = 1;
+                    break;
+            }
+            const yesterday = moment(dailyReport.regist_date).subtract(subNumb, 'days').format("YYYY-MM-DD");
             resultTxt = filterBogo(yesterday);
             setDailyReport({
                 ...dailyReport,
