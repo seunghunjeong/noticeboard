@@ -186,7 +186,7 @@ function Board_detail() {
   
   //render
   return (
-    <Content style={{ margin: '16px', height: '100%' }}>
+    <Content className='mainDetailContent'>
       <div style={{ marginBottom: '16px', position: 'relative', height: '32px' }}>
         <Tabs style={{ float: 'left' }} defaultActiveKey="2">
           <TabPane

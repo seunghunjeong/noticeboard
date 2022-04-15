@@ -304,9 +304,10 @@ function Home() {
 
     // 일보 읽기
     const readBogo = () => {
+        const dateToday = dailyReport.regist_date;
         let resultTxt = [];
         if (state === 'updateModal') {
-            resultTxt = filterBogo(dailyReport.regist_date);
+            resultTxt = filterBogo(dateToday);
             setReadBogoArr(resultTxt[0]);
             setDailyReport({
                 ...dailyReport,
@@ -314,7 +315,7 @@ function Home() {
                 plan: resultTxt[0].plan
             })
         } else if (state === 'insertModal') {
-            const dayCnt = moment(dailyReport.regist_date).weekday();
+            const dayCnt = moment(dateToday).weekday();
             let subNumb = 1;
             switch(dayCnt) {
                 case 1 : 
@@ -327,7 +328,7 @@ function Home() {
                     subNumb = 1;
                     break;
             }
-            const yesterday = moment(dailyReport.regist_date).subtract(subNumb, 'days').format("YYYY-MM-DD");
+            const yesterday = moment(dateToday).subtract(subNumb, 'days').format("YYYY-MM-DD");
             resultTxt = filterBogo(yesterday);
             setDailyReport({
                 ...dailyReport,
