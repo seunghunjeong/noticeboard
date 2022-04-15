@@ -59,9 +59,13 @@ function Join() {
           message.success("회원가입 신청완료");
           navigate("/");
         }
-        else {
-          message.error(response.payload.msg);
-        }
+
+        // let body = {
+        //     id : Id,
+        //     username : Name,
+        //     password : Password,
+        //     confirmPassword : ConfirmPassword
+        // }
       });
 
   }

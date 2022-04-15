@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
-import { Card, Layout, Button, Tag, Tabs, message } from 'antd';
+import { Card, Layout, Button, Tag, Tabs, message, } from 'antd';
 import { UnorderedListOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 
 // codeblock
@@ -74,12 +74,12 @@ function Board_detail() {
         idx: idx,
         filePath: BoardDetail.file_path
       }).then(response => {
-        if (response.data === "success") {
-          alert("삭제 완료");
-          navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
-        } else {
-          alert("삭제 실패");
-        }
+          if (response.data === "success") {
+            message.success("삭제 완료");
+            navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
+          } else {
+            message.error("삭제 실패");
+          }
 
       })
     }
@@ -113,7 +113,7 @@ function Board_detail() {
       .then(response => {
 
         if(response.data === false){
-          message.warning("파일이 존재하지 않습니다.");
+          message.error("파일이 존재하지 않습니다.");
           return;
         }
         const oriFileName = BoardDetail.file_path.split("-real-");
