@@ -112,7 +112,7 @@ function Home() {
             setViewModalOpen(false);
         }
 
-    }, [state, userId, selectDept])
+    }, [state, userId, selectDept, department])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
