@@ -118,7 +118,7 @@ function Home() {
         ).then((response) => {
             setViewMyDailyReport(response.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
@@ -130,7 +130,7 @@ function Home() {
         ).then((res) => {
             setViewDailyReport(res.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
 
     // 월 단위 캘린더 랜더링할 내용
