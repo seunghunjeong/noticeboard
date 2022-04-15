@@ -148,3 +148,19 @@
 .ant-picker-calendar-mode-switch {
   display : none;
 }
+
+/* 메인 콘텐트 */
+.mainDetailContent {
+  margin: '16px';
+  height: '100%';
+}
+
+.mainDetailContent td, .mainDetailContent th, .mainDetailContent table {
+  border: solid black;
+  width: auto;
+  overflow: auto;
+}
+
+.mainDetailContent th {
+  background-color: lightgray;
+}

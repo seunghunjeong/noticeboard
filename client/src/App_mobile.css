@@ -11,4 +11,13 @@
   .contnetDetail .ant-page-header-heading-title {
     width: 55vw
   }
+
+  .mainDetailContent table {
+    width: 85vw;
+    table-layout: fixed;
+  }
+
+  .mainDetailContent img {
+    max-width: 85vw;
+  }
 }
