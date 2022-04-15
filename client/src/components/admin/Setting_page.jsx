@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
-import { Button, Input, Table, Layout } from 'antd';
+import { Button, Input, Table, Layout, message } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import Auth from '../../_hoc/auth'
 
 import AddCategoryModal from '../modals/AddCategory';
 import Axios from 'axios';
 
-
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 const Setting_page = () => {
 
@@ -24,6 +25,13 @@ const Setting_page = () => {
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
     const openModal = () => { setAddCategoryOpen(true); };
     const closeModal = () => { setAddCategoryOpen(false); setAddCategory({ category: '', idx: '' }); };
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : '',
+        content : ''
+    }
 
     // 카테고리 목록, 등록할 카테고리 정보보관 state 
     const [addCategory, setAddCategory] = useState({
@@ -120,7 +128,7 @@ const Setting_page = () => {
         const category = addCategory.category;
         const description = addCategory.description;
         if (category === "") {
-            alert("카테고리명을 입력해주세요.");
+            message.warning("카테고리명을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -131,9 +139,9 @@ const Setting_page = () => {
         }).then((res) => {
             console.log(res);
             if (res.data === "중복") {
-                alert('이미 존재하는 카테고리명입니다.');
+                message.warning('이미 존재하는 카테고리명입니다.');
             } else {
-                alert('추가완료');
+                message.success('추가완료');
                 setState(res.data);
                 closeModal();
                 setLoading(false);
@@ -144,17 +152,19 @@ const Setting_page = () => {
     // 카테고리 삭제
     const categoryDelete = (name) => {
 
-        const confirmAction = window.confirm("삭제시 해당카테고리의 모든 글이 삭제됩니다. \n삭제하시겠습니까?");
-
-        if (confirmAction) { //yes 선택
+        const actionDelCategory = () => {
             Axios.post('/admin/delCategory', {
                 category: name
             }).then(res => {
-                alert("삭제완료");
+                message.success("삭제완료");
                 setState(res.data);
             })
         }
 
+        confirmParam.txt = '삭제';
+        confirmParam.action = actionDelCategory;
+        confirmParam.content = '주의) 해당카테고리의 모든 글이 삭제됩니다.';
+        confirmModal(confirmParam);
     }
 
     // 카테고리 수정 값 셋팅
@@ -170,7 +180,7 @@ const Setting_page = () => {
             idx: addCategory.idx,
             description: addCategory.description
         }).then(res => {
-            alert("수정완료");
+            message.success("수정완료");
             setState(res.data);
             closeModal();
             setLoading(false);
@@ -214,4 +224,4 @@ const Setting_page = () => {
 
 }
 
-export default Auth(Setting_page, true)
+export default Auth(Setting_page, true, true)

@@ -9,13 +9,15 @@ import { saveAs } from 'file-saver';
 
 import '../../App.css';
 import 'antd/dist/antd.less';
-import { Card, Layout, Button, Tag, Tabs } from 'antd';
+import { Card, Layout, Button, Tag, Tabs, message } from 'antd';
 import { UnorderedListOutlined, EditOutlined, LoadingOutlined } from '@ant-design/icons';
 
 // codeblock
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 function Board_detail() {
   // antd 변수
@@ -44,7 +46,7 @@ function Board_detail() {
           // codeblock 적용
           hljs.highlightAll();
         } else {
-          alert("상세페이지 불러오기 실패");
+          message.error("상세페이지 불러오기 실패");
         }
       })
   }, []);
@@ -57,12 +59,11 @@ function Board_detail() {
   }
 
   // 수정
-  const onGoUpdateHandler = (event) => {
-    event.preventDefault();
-    navigate(`/board_update/${BoardDetail.idx}/${category}`);
-  }
+  const onGoUpdateHandler = () => {
+     navigate(`/board_update/${BoardDetail.idx}/${category}`);
+   }
 
-  // 삭제
+/*   // 삭제
   const onBoardDeleteHandler = (event) => {
     event.preventDefault();
 
@@ -85,7 +86,7 @@ function Board_detail() {
     else {
       event.preventDefault();
     }
-  }
+  } */
 
   // 목록으로 이동
   const onBoardGoHomeHandler = (event) => {
@@ -100,23 +101,19 @@ function Board_detail() {
   const fileDownloadHandler = () => {
     setFileReady(true);
     const filePath = BoardDetail.file_path;
-    let fileName;
-    let fileNameArr = [];
-
-    fileNameArr = filePath.split("\\");
-    fileName = fileNameArr[2];
+    const fileName = BoardDetail.file_path.split("-real-");
 
     Axios.post('/board/api/fileDownload', {
       filePath: filePath,
-      fileName: fileName
+      fileName: fileName[1]
     },
       {
         responseType: 'blob'
       })
       .then(response => {
 
-        if (response.data === false) {
-          alert("파일이 존재하지 않습니다.");
+        if(response.data === false){
+          message.warning("파일이 존재하지 않습니다.");
           return;
         }
         const oriFileName = BoardDetail.file_path.split("-real-");
@@ -133,9 +130,11 @@ function Board_detail() {
   const FilePath = () => {
     let fileName = BoardDetail.file_path;
     let fileNameArr = [];
+    let fileExist = true;
     // 첨부파일 원본이름 표시
     if (fileName == null) {
       fileName = "첨부된 파일이 없습니다.";
+      fileExist = false;
     } else {
       fileNameArr = fileName.split("-real-");
       fileName = fileNameArr[1];
@@ -144,12 +143,47 @@ function Board_detail() {
     return (
       fileReady ?
         <><LoadingOutlined /> 다운로드 준비중 입니다...</>
-        : <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDownloadHandler}>{fileName}</button>
+        : fileExist ?
+          <button style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={fileDownloadHandler}>{fileName}</button>
+          : fileName
     )
 
   }
 
+    // confirm param object
+    let confirmParam = {
+      txt : '',
+      action : ''
+    }
 
+    // action delete
+    const delAction = () => {
+      Axios.post('/board/api/deleteBoard', { 
+        idx: idx ,
+        filePath: BoardDetail.file_path
+      }).then(response => {
+          if (response.data === "success") {
+            message.success("삭제 완료");
+            navigate(`/board_list/${category}`); //삭제 후 목록으로 이동
+          } else {
+            message.error("삭제 실패");
+          }
+        })
+    }
+    
+    // func confirm
+    const onConfirmdel = () => {
+      confirmParam.txt = '삭제';
+      confirmParam.action = delAction;
+      confirmModal(confirmParam);
+    }
+
+    const onConfirmup = () => {
+      confirmParam.txt = '수정';
+      confirmParam.action = onGoUpdateHandler;
+      confirmModal(confirmParam);
+    }
+  
   //render
   return (
     <Content style={{ margin: '16px', height: '100%' }}>
@@ -166,10 +200,10 @@ function Board_detail() {
           >
           </TabPane>
         </Tabs>
-        {userIdConfrim ? <div>
-          <Button style={{ float: 'right' }} type="primary" danger onClick={onBoardDeleteHandler}>삭제</Button>
-          <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onGoUpdateHandler} icon={<EditOutlined />}>수정</Button>
-        </div> : null
+        {userIdConfrim ?  <div>
+                              <Button style={{ float: 'right' }} type="primary" danger onClick={onConfirmdel}>삭제</Button>
+                              <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onConfirmup} icon={<EditOutlined />}>수정</Button>
+                          </div>: null
         }
 
       </div>

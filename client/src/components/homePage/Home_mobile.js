@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
+
 import 'antd/dist/antd.less';
-import { Calendar, Badge, Tag, Divider } from 'antd';
+import { Calendar, Badge, Tag, Divider, message } from 'antd';
 import { PlusOutlined, EditOutlined,FormOutlined } from '@ant-design/icons';
 import locale from "antd/es/calendar/locale/ko_KR";
 import Modal from '../../components/modals/DailyReportPopup_mobile';
@@ -12,7 +13,10 @@ import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
-import Auth from '../../_hoc/auth'
+import Auth from '../../_hoc/auth';
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 function Home() {
 
@@ -20,7 +24,8 @@ function Home() {
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName; 
-    const isAuth = getUserData === undefined ? null : getUserData.isAuth;
+    const department = getUserData === undefined ? null : getUserData.department;
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
     // dailyReport 정보 여기다가 사용자 정보 해주면 null이 들어간다.
     const [dailyReport, setDailyReport] = useState(
@@ -51,6 +56,11 @@ function Home() {
      // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
      const [modalOpen, setModalOpen] = useState(false);
      const openModal = (e) => {
+
+        if(department === null && !isAdmin) {
+            return;
+        }
+
          // 이벤트 전파 방지
          e.stopPropagation();
          // 버튼에 저장한 날짜 가져오기.
@@ -84,7 +94,14 @@ function Home() {
      };
      const [viewModalOpen, setViewModalOpen] = useState(false);
      // 조회창 열고닫기
-     const openViewModal = () => { setViewModalOpen(true); };
+     const openViewModal = () => { 
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+        setViewModalOpen(true);
+    
+    };
      const closeViewModal = () => {
          setViewModalOpen(false);
      };
@@ -94,7 +111,8 @@ function Home() {
     useEffect(() => {
         Axios.get('/report/getMyReport', {
             params: {
-                id: userId
+                id: userId,
+                department : department
             }
         }
         ).then((response) => {
@@ -104,11 +122,15 @@ function Home() {
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
-        Axios.get('/report/getReportDetail'
+        Axios.get('/report/getReportDetail', {
+            params: {
+                department: department
+            }
+        }
         ).then((res) => {
             setViewDailyReport(res.data);
         })
-    }, [state])
+    }, [state, userId])
 
 
     // 월 단위 캘린더 랜더링할 내용
@@ -213,7 +235,7 @@ function Home() {
     const insertBogo = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            alert("금일 실적을 입력해주세요");
+            message.warning("금일 실적을 입력해주세요");
             setLoading(false);
             return;
         }
@@ -227,7 +249,7 @@ function Home() {
             id: userId
         }
         ).then(() => {
-            alert('일일보고가 작성되었습니다.');
+            message.success('일일보고가 작성되었습니다.');
             closeModal();
             setState('insert');
         })
@@ -236,7 +258,7 @@ function Home() {
     const updateReport = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            alert("금일 실적을 입력해주세요.");
+            message.warning("금일 실적을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -247,50 +269,69 @@ function Home() {
             plan : updateBogoArr ? dailyReport.plan : readBogoArr.plan,
             date: dailyReport.regist_date
         }).then(() => {
-            alert("수정완료");
+            message.success("수정완료");
             closeModal();
             setState("update");
         })
     }
 
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : ''
+    }
+
     const deleteReport = () => {
-        setLoading(true);
-        Axios.post('/report/delete', {
+        const delAction = () => Axios.post('/report/delete', {
             idx: readBogoArr.idx,
         }).then(() => {
-            alert("삭제완료");
+            message.success("삭제완료");
             closeModal();
             setState("delete");
         })
+        
+        confirmParam.txt = '삭제';
+        confirmParam.action = delAction;
+        confirmModal(confirmParam);
     }
 
     // 일일보고 필터링
-    const filterBogo = () => {
-        if (state === 'updateModal') {
-            return viewMyDailyReport.filter(
-                (node) => moment(node.regist_date).format("YYYY-MM-DD") === dailyReport.regist_date
-            )
-        }
+    const filterBogo = (date) => {
+        return viewMyDailyReport.filter(
+            (node) => moment(node.regist_date).format("YYYY-MM-DD") === date
+        )
     }
 
     // 일보 읽기
     const readBogo = () => {
-        const resultTxt = filterBogo();
+        let resultTxt = [];
         if (state === 'updateModal') {
+            resultTxt = filterBogo(dailyReport.regist_date);
             setReadBogoArr(resultTxt[0]);
             setDailyReport({
                 ...dailyReport,
                 report: resultTxt[0].report,
                 plan: resultTxt[0].plan
             })
+        } else if (state === 'insertModal') {
+            const yesterday = moment(dailyReport.regist_date).subtract(1, 'days').format("YYYY-MM-DD");
+            resultTxt = filterBogo(yesterday);
+            setDailyReport({
+                ...dailyReport,
+                report: resultTxt.length > 0 ? resultTxt[0].plan : '◎'
+            })
+            return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
         }
-        return resultTxt ? resultTxt[0].report : '◎'
+        return resultTxt.length > 0 ? resultTxt[0].report : '◎';
     }
     
     // 익일 계획 읽기
     const readPlan = () => {
-        const resultTxt = filterBogo();
-        return resultTxt ? resultTxt[0].plan : '◎'
+        let resultTxt = [];
+        if (state === 'updateModal') {
+            resultTxt = filterBogo(dailyReport.regist_date);
+        }
+        return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
 
     // 전체 보기

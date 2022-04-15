@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Button, Table } from 'antd';
+import { Layout, Button, Table, message } from 'antd';
 import Auth from '../../_hoc/auth'
 import Axios from 'axios';
+import { useSelector } from 'react-redux';
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 
 const Approve_signup = () => {
-
+    
     // antd
     const { Content } = Layout;
 
     // 렌더링을 위한 state
     const [state, setState] = useState();
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : '',
+        content : ''
+    }
 
     // 가입대기열 불러오기
     const [stanbyList, setStanbyList] = useState([]);
@@ -30,85 +41,37 @@ const Approve_signup = () => {
         Axios.post('/api/approve-sign-up', {id : userId})
         .then((response) => {
             if(response.data.msg === "success"){
-                alert("가입승인완료");
+                message.success("가입승인완료");
                 setState(response);
             }
             else{
-                alert(response.data.msg);
+                message.error(response.data.msg);
             }
         })
     }
 
     // 가입거절 클릭
-    const rejectHandler = (event, value) => {  
-        event.preventDefault();
+    const rejectHandler = (event, value) => {
         const userId = value;
         console.log(value);
-        const confirmAction = window.confirm("가입을 거절하시겠습니까? 해당 사용자는 가입승인 대기열에서 삭제됩니다.");
-        
-        if(confirmAction) { //yes 선택
+
+        const actionDel = () => {
             Axios.post('/api/reject-sign-up', {id : userId})
             .then((response) => {
                 if(response.data.msg === "success"){
-                    alert("가입거절 완료");
+                    message.success("가입거절 완료");
                     setState(response);
                 }
                 else{
-                    alert(response.data.msg);
+                    message.error(response.data.msg);
                 }
             })
         }
-        else {
-            event.preventDefault();
-        }  
-    }
 
-     // 관리자지정 클릭
-     const adminAppointHandler = (event, value) => {  
-        event.preventDefault();
-        const userId = value;
-        console.log(value);
-        const confirmAction = window.confirm("해당 유저를 관리자로 지정하시겠습니까?");
-        
-        if(confirmAction) { //yes 선택
-            Axios.post('/api/admin-appoint', {id : userId})
-            .then((response) => {
-                if(response.data.msg === "success"){
-                    alert("관리자 지정 완료");
-                    setState(response);
-                }
-                else{
-                    alert(response.data.msg);
-                }
-            })
-        }
-        else {
-            event.preventDefault();
-        }  
-    }
-
-    // 관리자해지 클릭
-    const adminRemoveHandler = (event, value) => {  
-        event.preventDefault();
-        const userId = value;
-        console.log(value);
-        const confirmAction = window.confirm("해당 관리자를 해지하시겠습니까?");
-        
-        if(confirmAction) { //yes 선택
-            Axios.post('/api/admin-remove', {id : userId})
-            .then((response) => {
-                if(response.data.msg === "success"){
-                    alert("관리자 해지 완료");
-                    setState(response);
-                }
-                else{
-                    alert(response.data.msg);
-                }
-            })
-        }
-        else {
-            event.preventDefault();
-        }  
+        confirmParam.txt = '거절';
+        confirmParam.action = actionDel;
+        confirmParam.content = "해당 사용자는 가입승인 대기열에서 삭제됩니다.";
+        confirmModal(confirmParam);
     }
 
     // table columns
@@ -159,22 +122,6 @@ const Approve_signup = () => {
                 </>
             )
         },
-        {
-            title: '권한부여',
-            dataIndex: 'y',
-            key: 'y',
-            align : 'center',
-            width : 150,
-            render : (title, row) => 
-            (  
-                <>
-                {row.status === 'N' ? <Button disabled>관리자지정</Button> : 
-                                      (row.auth === "관리자" ? <Button onClick={e => adminRemoveHandler(e, row.id)}>관리자해지</Button> 
-                                      : <Button onClick={e => adminAppointHandler(e, row.id)}>관리자지정</Button>)
-                } 
-                </>
-            )
-        },
       ];
       
     //date format 수정
@@ -207,4 +154,4 @@ const Approve_signup = () => {
     )
 }
 
-export default Auth(Approve_signup, true)
+export default Auth(Approve_signup, true, true )

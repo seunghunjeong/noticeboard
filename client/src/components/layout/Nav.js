@@ -76,6 +76,7 @@ function Nav(props) {
           </SubMenu>
           {admin === true && !isMobile ? <SubMenu key="setting" icon={<SettingOutlined />} title="설정">
                               <Menu.Item key="approve_signup"><Link to={`/setting/approve_signup`}>가입승인</Link></Menu.Item>   
+                              <Menu.Item key="user_management"><Link to={`/setting/user_management`}>유저관리</Link></Menu.Item>   
                               <Menu.Item key="setting_page"><Link to={`/setting/setting_page`}>게시판관리</Link></Menu.Item>   
                             </SubMenu> : null
           }

@@ -1,6 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
-import { Calendar, Button, Tag } from 'antd';
+import { useSelector } from 'react-redux';
+import Auth from '../../_hoc/auth'
+
+import '../../App.css';
+import { Calendar, Button, Tag, message } from 'antd';
 import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -9,11 +13,13 @@ import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import '../../App.css';
-import { useSelector } from 'react-redux';
-import Auth from '../../_hoc/auth'
-function Home() {
 
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
+
+
+
+function Home() {
     // 로딩처리를 위한 state
     const [loading, setLoading] = useState(null);
     // 캘린더 셀 렌더링을 위한 state
@@ -43,26 +49,47 @@ function Home() {
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 등록창 열고닫기
-    const openRegisterModal = () => { setRegisterModalOpen(true); };
+    const openRegisterModal = () => {
+        
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+        setRegisterModalOpen(true);
+        };
     const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
     const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 조회창 열고닫기
-    const openViewModal = () => { setViewModalOpen(true); GetDetailReport(); };
+    const openViewModal = () => {
+        
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+
+        setViewModalOpen(true); 
+        GetDetailReport(); 
+    };
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
+    const department = getUserData === undefined ? null : getUserData.department;
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
+
+    const [selectDept, setSelectDept] = useState('ICT 사업부');
 
     useEffect(() => {
         // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
         Axios.get('/report/getMyReport', {
             params: {
-                id: id
+                id: id,
+                department: department
             }
         }
         ).then((response) => {
@@ -70,7 +97,11 @@ function Home() {
         })
 
         // 전체 일일보고 데이터 불러오기
-        Axios.get('/report/getReportDetail'
+        Axios.get('/report/getReportDetail', {
+            params: {
+                department: department ?? selectDept
+            }
+        }
         ).then((res) => {
             setViewDetailReportList(res.data);
         })
@@ -81,7 +112,7 @@ function Home() {
             setViewModalOpen(false);
         }
 
-    }, [state, userId])
+    }, [state, userId, selectDept])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -122,13 +153,15 @@ function Home() {
                     }
                     <Button className="bogo_view" onClick={openViewModal}><BarsOutlined /></Button>
                 </li>
-                {listData.map(item => (
-                    <li key={"report" + item.idx}>
-                        <pre style={{ fontFamily: 'inherit' }}>
-                            {item.content}
-                        </pre>
-                    </li>
-                ))}
+                {
+                    listData.map(item => (
+                        <li key={"report" + item.idx}>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace:'pre-wrap' }}>
+                                {item.content}
+                            </pre>
+                        </li>
+                    ))
+                }
             </ul>
         );
     }
@@ -171,7 +204,7 @@ function Home() {
         setLoading(true);
         const id = userId;
         if (report.today === "") {
-            alert("내용을 입력해주세요.");
+            message.warning("내용을 입력해주세요.");
             setLoading(false);
             return;
         }
@@ -182,7 +215,7 @@ function Home() {
             date: selectDay.selectedValue.format('YYYY-MM-DD'),
             id: id
         }).then((res) => {
-            alert("등록완료");
+            message.success("등록완료");
             closeRegisterModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
@@ -203,7 +236,7 @@ function Home() {
     const updateReport = () => {
         setLoading(true);
         if (report === "") {
-            alert("내용을 입력해주세요");
+            message.warning("내용을 입력해주세요");
             return;
         }
         Axios.post('/report/update', {
@@ -212,7 +245,7 @@ function Home() {
             plan: report.tomorrow,
             date: dailyReportDetail.date
         }).then((res) => {
-            alert("수정완료");
+            message.success("수정완료");
             closeUpdateModal();
             setReport({ today: '', tomorrow: '' });
             setState(res);
@@ -220,22 +253,31 @@ function Home() {
         })
 
     }
+
+    // confirm param object
+    let confirmParam = {
+        txt: '',
+        action: ''
+    }
+
     // 보고 삭제
     const deleteReport = () => {
-        const confirmAction = window.confirm("삭제하시겠습니까?");
-
-        if (confirmAction) { //yes 선택
+        const delAction = () => {
             setLoading(true);
             Axios.post('/report/delete', {
                 idx: dailyReportDetail.idx,
             }).then((res) => {
-                alert("삭제완료");
+                message.success("삭제완료");
                 closeUpdateModal();
                 setReport({ today: '', tomorrow: '' });
                 setState(res);
                 setLoading(false);
             })
         }
+
+        confirmParam.txt = '삭제';
+        confirmParam.action = delAction;
+        confirmModal(confirmParam);
     }
 
     // 일일보고 상세보기
@@ -258,13 +300,16 @@ function Home() {
                         {
                             detailReportList
                                 .filter(item => moment(item.regist_date).format('YYYY-MM-DD') === day)
-                                .map((item) => (
-                                    <tr key={item.idx}>
-                                        <td className='writer'>{item.writer}님</td>
-                                        <td><pre>{item.report}</pre></td>
-                                        <td><pre>{item.plan}</pre></td>
-                                    </tr>
-                                ))
+                                .map((item) => {
+                                    let str = item.position;
+                                    return (
+                                        <tr key={item.idx}>
+                                            <td className='writer'>{item.writer} {str = str !== null ? str.substring(2) : null}</td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
+                                        </tr>
+                                    )
+                                })
                         }
                     </tbody>
                 </table>
@@ -272,10 +317,23 @@ function Home() {
         )
     }
 
+    // 익일 보고를 금일 보고에 넣기
+     const readBogo = () => {
+        const yesterday = moment(selectDay.selectedValue).subtract(1, 'days').format("YYYY-MM-DD");
+        const resultTxt = viewMyDailyReport.filter(
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
+        )
+        setReport({
+            ...report,
+            today : resultTxt.length > 0 ? resultTxt[0].plan : ''
+        });
+        return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
+    }
+
     return (
 
         <Fragment>
-
+            
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)',
@@ -288,7 +346,7 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header="ICT 사업부 일일 업무 보고" insert={submitReport} loading={loading}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={`${department} 일일 업무 보고`} insert={submitReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -301,12 +359,12 @@ function Home() {
                         </tr>
                     </thead>
                 </table>
-                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header="ICT 사업부 일일 업무 보고" update={updateReport} del={deleteReport} loading={loading}>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={`${department} 일일 업무 보고`} update={updateReport} del={deleteReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -324,7 +382,7 @@ function Home() {
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={selectDay.selectedValue.format('YYYY-MM-DD')}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={`${department} 일일 업무 보고`} day={selectDay.selectedValue.format('YYYY-MM-DD')}>
                 <GetDetailReport />
             </ReportViewModal>
 

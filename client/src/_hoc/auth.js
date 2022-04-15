@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { auth } from '../_actions/user_action'
 import { useNavigate } from "react-router-dom";
 
+import { message } from 'antd';
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function(SpecificComponent, option, adminRoute = null) {
 
@@ -16,11 +18,9 @@ export default function(SpecificComponent, option, adminRoute = null) {
         const navigate = useNavigate();
         const dispatch = useDispatch();
         const userId = sessionStorage.getItem("userId");
-
         let body = {
             userId : userId
         }
-        
         useEffect(() => {
 
             dispatch(auth(body))
@@ -29,7 +29,7 @@ export default function(SpecificComponent, option, adminRoute = null) {
                 if(!response.payload.isAuth){
                     //로그인한 유저만 출입이 가능한 페이지
                     if(option){
-                        alert("로그인을 해야합니다.");
+                        message.warning("로그인을 해야합니다.");
                         navigate("/");
                     }
                     //아무나출입
@@ -41,13 +41,15 @@ export default function(SpecificComponent, option, adminRoute = null) {
                 else { 
                     //로그인한 유저는 출입 불가능한 페이지
                     if(!option && option !== null){
-                        alert("이미 로그인한 상태입니다.");
+                        message.warning("이미 로그인한 상태입니다.");
                         navigate("/home")
                     }
                     //로그인한 유저만 
                     else{
                         //관리자페이지
-                        if(adminRoute && !response.payload.isAdmin){
+                        console.log(response.payload.admin)
+                        if(adminRoute && !response.payload.admin){
+                            message.warning("관리자 전용 페이지입니다.");
                             navigate("/home")
                         } 
                      }

@@ -8,12 +8,12 @@ import BoardingRegisterPage from '../boardingPage/Board_register';
 import BoardingUpdatePage from '../boardingPage/Board_update';
 import AdminSetting from '../admin/Setting_page';
 import ApproveSignup from '../admin/Approve_signup';
+import UserManagement from '../admin/User_management';
 
 import HomePage from '../homePage/Home';
 import LoginPage from '../loginPage/Login';
 import JoinPage from '../joinPage/Join';
 import Map from '../modules/Maps';
-
 // components layout
 import MainLayout from './MainLayout';
 
@@ -32,6 +32,7 @@ const BrowserComponent = () => {
                     <Route path="/board_update/:idx/:category" element = {<BoardingUpdatePage/>}/>
                     <Route path="/setting/setting_page" element={<AdminSetting/>}/>
                     <Route path="/setting/approve_signup" element={<ApproveSignup/>}/>
+                    <Route path="/setting/user_management" element={<UserManagement/>}/>
                 </Route>
                 <Route path="/" element = {<LoginPage/>}/>
                 <Route path="/sign-up" element = {<JoinPage/>}/>

@@ -1,0 +1,7 @@
+.ant-modal-confirm-btns .ant-btn-default{
+    right: -70px;
+}
+
+.ant-modal-confirm-btns .ant-btn-primary{
+    right: 70px;
+}

@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import 'antd/dist/antd.less';
 import '../../App.css';
-import { Table, Layout, Button, Input, Select, Breadcrumb } from 'antd';
+import { Table, Layout, Button, Input, Select, Breadcrumb, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
@@ -23,7 +23,6 @@ function Board_list() {
 
   // 검색 param
   const [searchContent, setSearchContent] = useState({
-    filter: '',
     keyword: '',
     category : ''
   })
@@ -53,7 +52,6 @@ function Board_list() {
   // 카테고리 변경 시 검색어 초기화
   useEffect(() => {
     setSearchContent({
-      ...searchContent,
       keyword : '',
       category : category
     })
@@ -142,7 +140,7 @@ function Board_list() {
   // 게시글 검색
   const onSearch = (value, event) => {
     if(filter === '') {
-      alert('검색 조건을 선택해주세요.');
+      message.warning('검색 조건을 선택해주세요.');
     }
     setSearchContent({
       ...searchContent,

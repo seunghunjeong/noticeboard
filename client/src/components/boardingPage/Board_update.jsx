@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState }  from 'react'
 import Axios from 'axios';
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Card, Layout, Button, Input, Tabs, Divider, Tag, Select } from 'antd';
+import Auth from '../../_hoc/auth'
+
+import '../../App.css';
+import { Card, Layout, Button, Input, Tabs, Divider, Tag, Select, message } from 'antd';
 import { UnorderedListOutlined, EditOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@ckeditor/ckeditor5-build-classic';
-import '../../App.css';
-import Auth from '../../_hoc/auth'
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
 
 function Board_update() {
   // antd 변수
@@ -63,7 +66,7 @@ function Board_update() {
         if (response.data) {
           setBoardContent(response.data[0])
         } else {
-          alert("상세페이지 불러오기 실패");
+          message.error("상세페이지 불러오기 실패");
         }
       })
 
@@ -95,7 +98,7 @@ function Board_update() {
     let content = boardUpdateContent.content;
     let category = boardContent.category ?? boardUpdateContent.category;
     if (title === "") {
-      alert('제목을 입력해주세요.');
+      message.warning('제목을 입력해주세요.');
       return;
     }
     else if (content === "") {
@@ -123,22 +126,26 @@ function Board_update() {
     formData.append('category', category);
     formData.append('udt', 'udt');
 
-    const confirmAction = window.confirm("해당 게시글을 수정 하시겠습니까?");
-
-    if (confirmAction) { //yes 선택
+    const upAction = () => {
       setLoading(true);
       Axios.post('/board/api/updateBoard', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         }
       }).then(() => {
-        alert('수정완료');
+        message.success('수정완료');
         setLoading(false);
         navigate(`/board_list/${category}`);
       })
-    } else {
-      event.preventDefault();
     }
+
+    // confirm param object
+    let confirmParam = {
+      txt : '수정',
+      action : upAction
+    }
+
+    confirmModal(confirmParam);
   };
 
   // 목록으로 이동
@@ -164,7 +171,6 @@ function Board_update() {
       </>
     )
   }
-
 
   //render
   return (

@@ -1,14 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
-import { Layout, Avatar, Drawer } from 'antd';
-import {BarsOutlined, LoginOutlined } from '@ant-design/icons';
-
 import { Link } from 'react-router-dom';
 import { logout} from '../../_actions/user_action';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import MobileStyle from '../../App_mobile.module.css';
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
@@ -16,6 +11,11 @@ import Auth from '../../_hoc/auth'
 
 // nav
 import NavLayout from './Nav';
+
+import { Layout, Avatar, Drawer, message } from 'antd';
+import {BarsOutlined, LoginOutlined } from '@ant-design/icons';
+import MobileStyle from '../../App_mobile.module.css';
+
 
 function header(props) {
     // main에서 받아온 props
@@ -41,11 +41,11 @@ function header(props) {
         dispatch(logout())
         .then(response => {
             if(response.payload.logoutSuccess === true){
-                alert("로그아웃 완료");
+                message.success("로그아웃 완료");
                 navigate("/");
             }
             else { 
-                alert(response.payload.logoutSuccess);
+                message.error(response.payload.logoutSuccess);
             }
         });
     }
