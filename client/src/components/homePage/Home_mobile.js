@@ -118,7 +118,7 @@ function Home() {
         ).then((response) => {
             setViewMyDailyReport(response.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
@@ -130,7 +130,7 @@ function Home() {
         ).then((res) => {
             setViewDailyReport(res.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
 
     // 월 단위 캘린더 랜더링할 내용
@@ -314,7 +314,20 @@ function Home() {
                 plan: resultTxt[0].plan
             })
         } else if (state === 'insertModal') {
-            const yesterday = moment(dailyReport.regist_date).subtract(1, 'days').format("YYYY-MM-DD");
+            const dayCnt = moment(dailyReport.regist_date).weekday();
+            let subNumb = 1;
+            switch(dayCnt) {
+                case 1 : 
+                    subNumb = 3;
+                    break;
+                case 6 :
+                case 7 :
+                        return '◎';
+                default :
+                    subNumb = 1;
+                    break;
+            }
+            const yesterday = moment(dailyReport.regist_date).subtract(subNumb, 'days').format("YYYY-MM-DD");
             resultTxt = filterBogo(yesterday);
             setDailyReport({
                 ...dailyReport,
@@ -347,8 +360,8 @@ function Home() {
         const reportList = detailReportList.map((item) => (
             <tr key={item.idx}>
                 <td className='writer'>{item.writer}</td>
-                <td><pre>{item.report}</pre></td>
-                <td><pre>{item.plan}</pre></td>
+                <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
+                <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
             </tr>
             
         ));

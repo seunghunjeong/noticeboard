@@ -112,7 +112,7 @@ function Home() {
             setViewModalOpen(false);
         }
 
-    }, [state, userId, selectDept])
+    }, [state, userId, selectDept, department])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -319,7 +319,20 @@ function Home() {
 
     // 익일 보고를 금일 보고에 넣기
      const readBogo = () => {
-        const yesterday = moment(selectDay.selectedValue).subtract(1, 'days').format("YYYY-MM-DD");
+        const dayCnt = moment(selectDay.selectedValue).weekday();
+        let subNumb = 1;
+        switch(dayCnt) {
+            case 1 : 
+                subNumb = 3;
+                break;
+            case 6 :
+            case 7 :
+                    return '◎';
+            default :
+                subNumb = 1;
+                break;
+        }
+        const yesterday = moment(selectDay.selectedValue).subtract(subNumb, 'days').format("YYYY-MM-DD");
         const resultTxt = viewMyDailyReport.filter(
                 (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
         )
