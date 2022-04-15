@@ -319,7 +319,8 @@ function Home() {
 
     // 익일 보고를 금일 보고에 넣기
      const readBogo = () => {
-        const dayCnt = moment(selectDay.selectedValue).weekday();
+        const dateToday = selectDay.selectedValue;
+        const dayCnt = moment(dateToday).weekday();
         let subNumb = 1;
         switch(dayCnt) {
             case 1 : 
@@ -332,7 +333,7 @@ function Home() {
                 subNumb = 1;
                 break;
         }
-        const yesterday = moment(selectDay.selectedValue).subtract(subNumb, 'days').format("YYYY-MM-DD");
+        const yesterday = moment(dateToday).subtract(subNumb, 'days').format("YYYY-MM-DD");
         const resultTxt = viewMyDailyReport.filter(
                 (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
         )

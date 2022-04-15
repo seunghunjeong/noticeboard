@@ -157,7 +157,7 @@ function Board_detail() {
   
   //render
   return (
-    <Content className='contnetDetail' style={{ margin : '16px', height : '100%' }}>
+    <Content className='mainDetailContent'>
       
       <PageHeader
       key='keyPage'
