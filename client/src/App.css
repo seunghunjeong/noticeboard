@@ -152,8 +152,8 @@
 
 /* 메인 콘텐트 */
 .mainDetailContent {
-  margin: '16px';
-  height: '100%';
+  margin: 16px;
+  height: 100%;
 }
 
 .mainDetailContent td, .mainDetailContent th, .mainDetailContent table {
