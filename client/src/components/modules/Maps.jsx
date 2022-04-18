@@ -22,11 +22,11 @@ const Maps = () => {
                     maxZoom={18}
                     minZoom={8}
                 />
-                {/* <Marker position={position}>
+                <Marker position={position}>
                     <Popup>
                         <span>입력</span>
                     </Popup>
-                </Marker> */}
+                </Marker>
             </MapContainer>
         </>
 

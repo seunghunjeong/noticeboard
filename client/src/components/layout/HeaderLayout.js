@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Axios from 'axios';
 import { Link } from 'react-router-dom';
-import { logout} from '../../_actions/user_action';
+import { logout } from '../../_actions/user_action';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
 
 import '../../App.css';
-import { Layout, Button, message } from 'antd';
+import { Layout, Button, message, Avatar, Badge } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
 
 function HeaderLayout() {
-    
+
     //antd 
     const { Header } = Layout;
 
@@ -24,42 +26,63 @@ function HeaderLayout() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // 렌더링을 위한 state
+    const [state, setState] = useState();
+
+    const [stanbyList, setStanbyList] = useState([]);
+    useEffect(() => {
+        Axios.get('/api/getStandby_signup')
+            .then((response) => {
+                setStanbyList(response.data);
+            })
+        console.log(stanbyList.length);
+    }, [state])
+
+
+
     //로그아웃 클릭
     const onLogoutHandler = (event) => {
         event.preventDefault();
 
         dispatch(logout())
-        .then(response => {
-            if(response.payload.logoutSuccess === true){
-                message.success("로그아웃 완료");
-                navigate("/");
-            }
-            else { 
-                message.error(response.payload.logoutSuccess);
-            }
-        });
+            .then(response => {
+                if (response.payload.logoutSuccess === true) {
+                    message.success("로그아웃 완료");
+                    navigate("/");
+                }
+                else {
+                    message.error(response.payload.logoutSuccess);
+                }
+            });
     }
 
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
             {/* <div className="main-logo"/> */}
-          
+
             {
-                isAuth === true ?  <div>
-                                        <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}
-                                            onClick={onLogoutHandler}>
-                                            로그아웃 
-                                        </Button>
-                                        <span  style={{color : "white", float : "right"}}>{userName}님 환영합니다!</span>
-                                    </div> : null
+                isAuth === true ? <div>
+                    <Button type="primary" danger style={{ width: '150px', float: "right", margin: "15px 20px" }}
+                        onClick={onLogoutHandler}>
+                        로그아웃
+                    </Button>
+                    <span style={{ color: "white", float: "right" }}>
+                        {
+                            isAdmin &&
+                            <Badge dot>
+                                <Avatar style={{background:'none'}} shape="square" icon={<BellOutlined />} />
+                            </Badge>
+                        } {userName}님 환영합니다!
+                    </span>
+                </div> : null
             }
             {
                 isAuth === false || isAuth === null ? <div>
-                                        <Button type="primary" danger style={{ width : '150px', float : "right", margin : "15px 20px" }}>
-                                            <Link to={'/'}>로그인</Link>
-                                        </Button>
-                                        <span  style={{color : "white", float : "right"}}>로그인을 해주세요.</span>
-                                    </div> : null 
+                    <Button type="primary" danger style={{ width: '150px', float: "right", margin: "15px 20px" }}>
+                        <Link to={'/'}>로그인</Link>
+                    </Button>
+                    <span style={{ color: "white", float: "right" }}>로그인을 해주세요.</span>
+                </div> : null
             }
         </Header>
     )
