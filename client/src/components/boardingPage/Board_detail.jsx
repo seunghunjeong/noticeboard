@@ -186,7 +186,7 @@ function Board_detail() {
   
   //render
   return (
-    <Content className='mainDetailContent'>
+    <Content className='mainDetailContent' style={{ padding : '16px 16px 0'}}>
       <div style={{ marginBottom: '16px', position: 'relative', height: '32px' }}>
         <Tabs style={{ float: 'left' }} defaultActiveKey="2">
           <TabPane
@@ -208,7 +208,7 @@ function Board_detail() {
 
       </div>
 
-      <Card style={{ width: '100%', height: '170px' }}>
+      <Card style={{ width: '100%', height: '170px', boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}>
         <p className='title' style={{ fontSize: '30px', marginBottom: '16px' }}>{BoardDetail.title}</p>
         <p className='writer'>작성자 |
           <span style={{ fontWeight: 'bold' }}> {BoardDetail.writer}</span>
@@ -216,7 +216,7 @@ function Board_detail() {
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
       <Card>
-        <div style={{ width: '100%', position: 'relative', bottom: '0', left: '0' }}>
+        <div style={{ width: '100%', position: 'relative', bottom: '0', left: '0'}}>
           {/* <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider> */}
           첨부파일 :
           <Tag style={{ marginLeft: '10px' }}>
@@ -224,7 +224,7 @@ function Board_detail() {
           </Tag>
         </div>
       </Card>
-      <Card style={{ width: '100%' }}>
+      <Card style={{ width: '100%', boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}>
         <div className='content'>
           {ReactHtmlParser(BoardDetail.content)}
         </div>

@@ -162,7 +162,7 @@ function Board_list() {
       </div>
       <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
              pagination={{position: ["bottomCenter"]}} 
-             footer={() => 'total : ' + dataLength }
+             footer={() => 'total : ' + dataLength}
       /> 
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select

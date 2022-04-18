@@ -150,6 +150,16 @@
   display : none;
 }
 
+/* antd table border without pagination */
+.ant-table.ant-table-bordered {
+  box-shadow : rgba(0, 0, 0, 0.16) 0px 1px 4px
+}
+
+/*home => 새글소식 card 수정*/
+.newBoardCard.ant-card-type-inner .ant-card-body{
+  padding: 5px 10px;
+}
+
 /* 메인 콘텐트 */
 .mainDetailContent {
   margin: '16px';

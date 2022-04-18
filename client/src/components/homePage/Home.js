@@ -1,23 +1,27 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
 import '../../App.css';
-import { Calendar, Button, Tag, message } from 'antd';
-import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined } from '@ant-design/icons';
+import { Calendar, Button, Tag, message, Card, Typography, Layout, Timeline, Badge } from 'antd';
+import { PlusSquareOutlined, EditOutlined, BarsOutlined, CheckOutlined, SmileTwoTone, PlusOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
 import ReportRegisterModal from '../modals/DailyReportRegister';
 import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
+import TimeLineRegisterModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
-
+// antd variable
+const { Text} = Typography;
+const { Meta } = Card;
 
 function Home() {
     // 로딩처리를 위한 state
@@ -44,10 +48,16 @@ function Home() {
         today: "",
         tomorrow: ""
     });
+
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [timelineModalOpen, setTimelineModalOpen] = useState(false);
+
+    //새글 알림
+    const [newBoardList, setNewBoardList] = useState([]);
+
     // 등록창 열고닫기
     const openRegisterModal = () => {
         
@@ -56,7 +66,7 @@ function Home() {
             return;
         }
         setRegisterModalOpen(true);
-        };
+    };
     const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
@@ -73,7 +83,17 @@ function Home() {
         GetDetailReport(); 
     };
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
-
+    // 타임라인 등록창 열고닫기
+    const openTimelineModal = () => {
+        
+        if(department === null && !isAdmin) {
+            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
+            return;
+        }
+        setTimelineModalOpen(true);
+    };
+    const closeTimelineModal = () => { setTimelineModalOpen(false);};
+    
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
@@ -105,6 +125,12 @@ function Home() {
         ).then((res) => {
             setViewDetailReportList(res.data);
         })
+
+        // 새 글 목록 가져오기
+        Axios.get('/home/getNewBoardList').then((res) => {
+            setNewBoardList(res.data);
+        })
+
 
         return () => {
             setRegisterModalOpen(false);
@@ -318,7 +344,7 @@ function Home() {
     }
 
     // 익일 보고를 금일 보고에 넣기
-     const readBogo = () => {
+    const readBogo = () => {
         const dateToday = selectDay.selectedValue;
         const dayCnt = moment(dateToday).weekday();
         let subNumb = 1;
@@ -344,14 +370,122 @@ function Home() {
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
 
-    return (
+    // 새 글 목록 가져오기
+    const GetNewBoardList = () => {
 
-        <Fragment>
-            
+        const newBoard = newBoardList;
+        return (
+            <>
+                {
+                    newBoard.map((e) =>
+                        <Link to={`/board_detail/${e.idx}/${e.category}`}>
+                            <Card hoverable = "true" 
+                                  title = {e.title} type="inner"
+                                  style={{ width: '100%', marginTop: 16}} className="newBoardCard">
+                                <span style={{ fontSize : '12px', color : 'gray'}}>게시판 : {e.category}</span>
+                                <span style={{ fontSize : '12px', color : 'gray', marginLeft : 10}}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                            </Card>
+                        </Link>
+                        
+                    )
+                } 
+            </>
+        )
+    }
+
+    return (
+        <Layout style={{flexDirection : 'row'}}>
+            <div>
+                {/* 이벤트 타임라인 */}
+                <Card style={{
+                        margin: '16px 0 0 16px',
+                        width : '300px',
+                        height: '400px',
+                        borderRadius : '10px',
+                        boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                }}>
+                    <div>
+                        <SmileTwoTone style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
+                        <Text strong style={{marginLeft : '5px', fontSize: '16px'}}>이벤트 타임라인 </Text>
+                    </div>
+                    
+                    <Timeline  style={{ marginTop : '20px', marginBottom : '20px', paddingTop : '5px', paddingLeft : '7px', overflow : 'auto', width: '100%', height : '260px'}}> 
+                        {/* 이번주 이벤트 */}
+                        <Timeline.Item color="green"><Text strong>이번주 일정</Text>
+                            <p>
+                                <span style={{ fontSize: '12px', marginRight : '5px'}}>2022.04.18 월</span>
+                                <Tag color="magenta">연차</Tag>
+                                <span>박가연</span>
+                            </p>  
+                            <p>
+                                <span style={{ fontSize: '12px', marginRight : '5px'}}>2022.04.18 월</span>
+                                <Tag color="magenta">연차</Tag>
+                                <span>박가연</span>
+                            </p>  
+                            <p>
+                                <span style={{ fontSize: '12px', marginRight : '5px'}}>2022.04.18 월</span>
+                                <Tag color="magenta">연차</Tag>
+                                <span>박가연</span>
+                            </p>  
+                            <p>
+                                <span style={{ fontSize: '12px', marginRight : '5px'}}>2022.04.18 월</span>
+                                <Tag color="magenta">연차</Tag>
+                                <span>박가연</span>
+                            </p>  
+                            <p>
+                                <span style={{ fontSize: '12px', marginRight : '5px'}}>2022.04.18 월</span>
+                                <Tag color="magenta">연차</Tag>
+                                <span>박가연</span>
+                            </p>  
+                        </Timeline.Item>
+                        {/* 다음주 이벤트 */}
+                        <Timeline.Item color="gray" style={{color : 'grey'}}>다음주 일정
+                            <p>
+                                nodata
+                            </p>  
+                        </Timeline.Item>
+                    </Timeline>
+                    <Button
+                        type="dashed"
+                        onClick={openTimelineModal}
+                        style={{ width: '100%'}}
+                        icon={<PlusOutlined />}
+                    >
+                        일정추가하기
+                    </Button>
+                </Card>
+                {/* 새글 알림 */}
+                <Card style={{
+                        margin: '16px 0 0 16px',
+                        width : '300px',
+                        height: '49%',
+                        borderRadius : '10px',
+                        boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                }}>
+                    <div>
+                        <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
+                        <Text strong style={{marginLeft : '5px', fontSize: '16px'}}>새 소식</Text><Badge count={3} offset={[5, -5]}></Badge>
+                    </div>
+                    {/* 새소식 데이터 받아오기 */}
+                    <GetNewBoardList/>
+                    <Link to={`/board_list/공지사항`}>
+                        <Button
+                            type="dashed"
+                            style={{ width: '100%', marginTop : 16}}
+                        >
+                            더보기
+                        </Button>
+                    </Link>
+                </Card>
+            </div>  
+
             <Calendar style={{
                 margin: '16px 16px 0 16px',
-                height: 'calc(100% - 134px)',
-                padding: '16px'
+                width : 'calc(100% - 300px)',
+                height: '98%',
+                padding: '16px',
+                borderRadius : '10px',
+                boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}
                 locale={locale}
                 fullscreen={true}
@@ -400,7 +534,25 @@ function Home() {
                 <GetDetailReport />
             </ReportViewModal>
 
-        </Fragment>
+            {/* 타임라인 등록 팝업 */}
+            <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} header={`${department} 일일 업무 보고`} insert={submitReport} loading={loading}>
+                <div>
+                    <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
+                    <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
+                </div>
+                <table style={{ width: '100%' }}>
+                    <thead>
+                        <tr>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>금일 실적</th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>익일 계획</th>
+                        </tr>
+                    </thead>
+                </table>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
+            </TimeLineRegisterModal>
+        </Layout>
+      
     )
 }
 
