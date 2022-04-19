@@ -18,6 +18,7 @@ import TimeLineRegisterModal from '../modals/TimelineRegister';
 import TimeLineUpdateModal from '../modals/TimelineUpdate';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import 'moment/locale/ko'
 
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
