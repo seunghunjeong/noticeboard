@@ -4,8 +4,9 @@ import Auth from '../../_hoc/auth'
 
 
 
-const Maps = () => {
+const Maps = (props) => {
 
+    const {update} = props
 
     const [state, setState] = useState({
         lat : 37.4858838,
@@ -22,11 +23,11 @@ const Maps = () => {
                     maxZoom={18}
                     minZoom={8}
                 />
-                {/* <Marker position={position}>
+                <Marker position={position}>
                     <Popup>
                         <span>입력</span>
                     </Popup>
-                </Marker> */}
+                </Marker>
             </MapContainer>
         </>
 

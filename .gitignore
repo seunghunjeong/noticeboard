@@ -28,6 +28,7 @@ client/node_modules
 server/node_modules
 server/config/config.env
 server/logs
+client/public/leaflet
 
 # debugger
 .vscode
