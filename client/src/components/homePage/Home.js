@@ -491,7 +491,7 @@ function Home() {
 
         return (
             <>
-                <Tag color={thisColor}>{props.value}</Tag>
+                <Tag style={{fontSize:'10px'}} color={thisColor}>{props.value}</Tag>
             </>
         )
     }
