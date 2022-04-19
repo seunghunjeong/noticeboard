@@ -483,7 +483,9 @@ function Home() {
         let thisColor = "";
         if(props.value === "연차") thisColor = "magenta";   
         else if (props.value === "오전반차") thisColor = "gold";
-        else if (props.value === "오후반차") thisColor = "green";     
+        else if (props.value === "오후반차") thisColor = "green"; 
+        else if (props.value === "출장") thisColor = "lime"; 
+        else if (props.value === "외근") thisColor = "volcano";            
         else if (props.value === "병가") thisColor = "cyan";  
         else if (props.value === "경조휴가") thisColor = "geekblue";    
 
@@ -651,7 +653,7 @@ function Home() {
             {/* 타임라인 등록 팝업 */}
             <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>휴가유형선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span>
                     {/* <Select mode="tags" style={{ width: '100%' }} placeholder="휴가유형선택" onChange={handleChange}>
                         {leaveTypechildren}
                     </Select> */}
@@ -662,6 +664,10 @@ function Home() {
                             <Option value="오전반차">오전반차</Option>
                             <Option value="오후반차">오후반차</Option>
                         </OptGroup>
+                        <OptGroup label="업무">
+                            <Option value="출장">출장</Option>
+                            <Option value="외근">외근</Option>
+                        </OptGroup>
                         <OptGroup label="기타">
                             <Option value="병가">병가</Option>
                             <Option value="경조휴가">경조휴가</Option>
@@ -670,7 +676,7 @@ function Home() {
                 </div>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>휴가날짜선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
@@ -681,7 +687,7 @@ function Home() {
             {/* 타임라인 수정 팝업 */}
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>휴가유형선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span>
                     {/* <Select mode="tags" style={{ width: '100%' }} placeholder="휴가유형선택" onChange={handleChange}>
                         {leaveTypechildren}
                     </Select> */}
@@ -692,6 +698,10 @@ function Home() {
                             <Option value="오전반차">오전반차</Option>
                             <Option value="오후반차">오후반차</Option>
                         </OptGroup>
+                        <OptGroup label="업무">
+                            <Option value="출장">출장</Option>
+                            <Option value="외근">외근</Option>
+                        </OptGroup>
                         <OptGroup label="기타">
                             <Option value="병가">병가</Option>
                             <Option value="경조휴가">경조휴가</Option>
@@ -700,7 +710,7 @@ function Home() {
                 </div>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>휴가날짜선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
