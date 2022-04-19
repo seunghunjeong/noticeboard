@@ -1,8 +1,11 @@
 import React from 'react';
 import './DailyReport.css'
-import { Button, Card } from 'antd';
+import { Button, Card, Typography } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import Loader from '../modals/Loader';
+
+//antd
+const { Title } = Typography;
 
 const TimelineRegister = (props) => {
 
@@ -24,20 +27,19 @@ const TimelineRegister = (props) => {
         <div className={display ? 'openModal modal' : 'modal'}>
             
             <Card className="Card">
-                <header style={{ width : '100%', height : 40 }}>
-                    <Button style={{ position: 'absolute', top: 8, right : 8, fontSize : 20 }} className="closeView" onClick={close}>
+                <header style={{ width : '100%', height : 45 }}>
+                    <Title level={3} style={{ float : 'left' }} >일정추가</Title>
+                    <Button style={{ float : 'right', fontSize : 18, padding : 0 }} className="closeView" onClick={close}>
                         <CloseOutlined />
                     </Button>
                 </header>
                 <main>{props.children}</main>
-                <footer>
-                    {
-                        loading ? <Loader /> :
-                                <Button type="primary" danger style={{ position: 'absolute', bottom : 8, right : 8}} className="insert" onClick={insert}>
-                                    추가
-                                </Button>
-                    }
-                </footer>
+                {
+                    loading ? <Loader /> :
+                            <Button type="primary" danger style={{float : 'right'}} className="insert" onClick={insert}>
+                                추가
+                            </Button>
+                }
             </Card>
             
         </div>
