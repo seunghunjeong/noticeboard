@@ -174,3 +174,8 @@
   padding-left: 1.5em;
   padding-right: 1.5em;
 }
+
+.ant-badge-dot {
+  right: 8px;
+  top: 8px;
+}
