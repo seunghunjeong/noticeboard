@@ -190,3 +190,13 @@
   right: 8px;
   top: 8px;
 }
+
+/*timeline select*/
+p.hoverable {
+  cursor: pointer;
+  width: 100%;
+}
+
+p.hoverable:hover {
+  color : rgb(103, 103, 161);
+}

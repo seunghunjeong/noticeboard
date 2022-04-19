@@ -26,6 +26,7 @@ router.post("/getTimelineThisWeekList", (req, res) => {
 
     const sqlQuery = "SELECT * FROM board.timelineInfo"   
                    + " WHERE leave_start BETWEEN ? AND ?"
+                   + " ORDER BY leave_start ASC"
  
     db.query(sqlQuery, [this_monday, this_sunday], (err, result) => {
         if (err) {
@@ -41,6 +42,7 @@ router.post("/getTimelineNextWeekList", (req, res) => {
 
     const sqlQuery = "SELECT * FROM board.timelineInfo"   
                    + " WHERE leave_start BETWEEN ? AND ?"
+                   + " ORDER BY leave_start ASC"
  
     db.query(sqlQuery, [next_monday, next_sunday], (err, result) => {
         if (err) {
@@ -57,11 +59,11 @@ router.post("/timelineRegister", (req, res) => {
     const userid = req.body.userid;
     const username = req.body.username;
     const selectLeaveType = req.body.selectLeaveType;
-    const selectLeaveDate = req.body.selectLeaveDate;
+    const selectLeaveDateStart = req.body.selectLeaveDateStart;
     
     const sqlQuery = "INSERT INTO board.timelineInfo (userid, username, leave_type, leave_start) VALUES (?, ?, ?, ?)"
                   
-    db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDate], (err, result) => {
+    db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDateStart], (err, result) => {
         if (err) {
             logger.error(err);
         }

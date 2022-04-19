@@ -8,7 +8,12 @@
     z-index: 99;
     background-color: rgba(0, 0, 0, 0.6);
   }
-  .modal button {
+  .modal section button {
+    outline: none;
+    cursor: pointer;
+    border: 0;
+  }
+  .modal header button {
     outline: none;
     cursor: pointer;
     border: 0;
@@ -24,7 +29,7 @@
     overflow: hidden;
   }
   .modal > .Card {
-    width: 500px;
+    width: 450px;
     /* max-width: 400px; */
     margin: 0 auto;
     border-radius: 0.3rem;
