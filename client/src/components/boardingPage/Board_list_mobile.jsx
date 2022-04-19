@@ -100,7 +100,6 @@ function Board_list() {
     page : 1,
     pageSize : 4
     });
-
   }, [category])
 
   // 페이지 이동

@@ -7,7 +7,6 @@ import Auth from '../../_hoc/auth'
 
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import Logo from '../layout/cmworld-logo.png';
 import { useCookies } from 'react-cookie';
 import crypto from 'crypto-js';
 
@@ -87,7 +86,7 @@ function Login() {
         <div style={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%', height:'100vh', background: '#001529', color: '#fff'}}>
             <Form name="normal_login" className="login-form" initialValues={{ remember: true }} onFinish={onSubmitHandler}>
                 <div className='login-logo' style={{marginBottom : "50px"}}>
-                    <img src={Logo} width="99px" height='26px'/>
+                    <p style={{color:'white'}}>로고자리</p>
                 </div>
                 {/* <div className="login-title" style={{fontSize : "30px", textAlign : 'center', marginBottom : "20px", color : 'white'}}>LOGIN</div> */}
                 <Form.Item rules={[{ required: true, message: '아이디를 입력하세요.'}]} initialValue={{id : Id}}> 

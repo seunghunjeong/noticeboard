@@ -36,7 +36,6 @@
 
 .main-logo{
   width: 200px; height: 64px;
-  background: no-repeat url(../src/components/layout/cmworld-logo.png) center;
   float: left;
   text-align: center;
 }
