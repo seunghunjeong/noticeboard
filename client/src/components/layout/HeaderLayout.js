@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../_actions/user_action';
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-// 사용자 정보 가져오기
-import { useSelector } from 'react-redux';
-
-import '../../App.css';
+import { useDispatch, useSelector  } from "react-redux";
 import { Layout, Button, message, Avatar, Badge } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
+import '../../App.css';
 
-function HeaderLayout() {
+function HeaderLayout(props) {
 
     //antd 
     const { Header } = Layout;
-
+    const { stanbyList } = props;
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userName = getUserData === undefined ? null : getUserData.userName;
@@ -25,20 +20,6 @@ function HeaderLayout() {
     //페이지이동
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    // 렌더링을 위한 state
-    const [state, setState] = useState();
-
-    const [stanbyList, setStanbyList] = useState([]);
-    useEffect(() => {
-        Axios.get('/api/getStandby_signup')
-            .then((response) => {
-                setStanbyList(response.data);
-            })
-        console.log(stanbyList.length);
-    }, [state])
-
-
 
     //로그아웃 클릭
     const onLogoutHandler = (event) => {
@@ -68,11 +49,16 @@ function HeaderLayout() {
                     </Button>
                     <span style={{ color: "white", float: "right" }}>
                         {
-                            isAdmin &&
-                            <Badge dot>
-                                <Avatar style={{background:'none'}} shape="square" icon={<BellOutlined />} />
-                            </Badge>
-                        } {userName}님 환영합니다!
+                            isAdmin && stanbyList.filter(i => i.status === 'N').length === 0 ?
+                                <Badge>
+                                    <Avatar style={{ background: 'none' }} shape="square" icon={<BellOutlined />} />
+                                </Badge>
+                                :
+                                <Badge dot>
+                                    <Avatar onClick={()=>{navigate('/setting/approve_signup')}} style={{ background: 'none', cursor:'pointer' }} shape="square" icon={<BellOutlined />} />
+                                </Badge>
+                        }
+                        {userName}님 환영합니다!
                     </span>
                 </div> : null
             }

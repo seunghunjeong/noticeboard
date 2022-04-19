@@ -4,8 +4,9 @@ import Auth from '../../_hoc/auth'
 
 
 
-const Maps = () => {
+const Maps = (props) => {
 
+    const {update} = props
 
     const [state, setState] = useState({
         lat : 37.4858838,
