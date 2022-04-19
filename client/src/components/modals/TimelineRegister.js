@@ -36,7 +36,7 @@ const TimelineRegister = (props) => {
                 <main>{props.children}</main>
                 {
                     loading ? <Loader /> :
-                            <Button type="primary" danger style={{float : 'right'}} className="insert" onClick={insert}>
+                            <Button style={{float : 'right'}} className="insert" onClick={insert}>
                                 추가
                             </Button>
                 }

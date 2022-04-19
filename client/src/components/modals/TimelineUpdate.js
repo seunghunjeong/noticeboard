@@ -10,7 +10,7 @@ const { Title } = Typography;
 const TimelineUpdate = (props) => {
 
     // 부모로부터 값을 받아옴
-    const { display, close, insert, loading } = props;
+    const { display, close, update, del, loading } = props;
 
     return (
         // 클래스명 변경을 통해 활성화 / 비활성화
@@ -25,12 +25,12 @@ const TimelineUpdate = (props) => {
                 </header>
                 <main>{props.children}</main>
                
-                <Button danger style={{float : 'right', marginLeft : 10}} className="delete" onClick={insert}>
+                <Button danger style={{float : 'right', marginLeft : 10}} className="delete" onClick={del}>
                     삭제
                 </Button>
                 {
                     loading ? <Loader /> :
-                            <Button style={{float : 'right'}} className="update" onClick={insert}>
+                            <Button style={{float : 'right'}} className="update" onClick={update}>
                                 수정
                             </Button>
                 }
