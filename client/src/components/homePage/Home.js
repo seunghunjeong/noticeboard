@@ -94,14 +94,7 @@ function Home() {
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     
     // 타임라인 등록창 열고닫기
-    const openTimelineModal = () => {
-        
-        if(department === null && !isAdmin) {
-            message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
-            return;
-        }
-        setTimelineModalOpen(true);
-    };
+    const openTimelineModal = () => {setTimelineModalOpen(true);};
     const closeTimelineModal = () => { setTimelineModalOpen(false);};
     
     //사용자 정보 받아오기
@@ -113,14 +106,13 @@ function Home() {
 
     const [selectDept, setSelectDept] = useState('ICT 사업부');
 
-    //이번주/다음주 날짜 데이터 계산하기
-    let this_monday = moment().day(1).format('YYYY-MM-DD');
-    let this_sunday = moment().day(7).format('YYYY-MM-DD');
-    let next_monday = moment().day(8).format('YYYY-MM-DD');
-    let next_sunday = moment().day(14).format('YYYY-MM-DD');
-
-
     useEffect(() => {
+         //이번주/다음주 날짜 데이터 계산하기
+        let this_monday = moment().day(1).format('YYYY-MM-DD');
+        let this_sunday = moment().day(7).format('YYYY-MM-DD');
+        let next_monday = moment().day(8).format('YYYY-MM-DD');
+        let next_sunday = moment().day(14).format('YYYY-MM-DD');
+
         // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
         Axios.get('/report/getMyReport', {
@@ -166,7 +158,6 @@ function Home() {
             //console.log(res.data)
         })
 
-
         return () => {
             setRegisterModalOpen(false);
             setUpdateModalOpen(false);
@@ -174,7 +165,7 @@ function Home() {
             setTimelineModalOpen(false);
         }
 
-    }, [state, userId, selectDept, department, this_monday, this_sunday, next_monday, next_sunday])
+    }, [state, userId, selectDept, department])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -471,13 +462,28 @@ function Home() {
             if (res.status === 200) {
                 message.success("일정추가완료");
                 closeTimelineModal();
+                setState(res);
                 setLoading(false);
             }
             else message.error("일정추가오류");
         })
     }
 
+    // 휴가 종류값에 따른 태그색상 변경
+    const ChangeTagColor = (props) => {
+        let thisColor = "";
+        if(props.value === "연차") thisColor = "magenta";   
+        else if (props.value === "오전반차") thisColor = "gold";
+        else if (props.value === "오후반차") thisColor = "green";     
+        else if (props.value === "병가") thisColor = "cyan";  
+        else if (props.value === "경조휴가") thisColor = "geekblue";    
 
+        return (
+            <>
+                <Tag color={thisColor}>{props.value}</Tag>
+            </>
+        )
+    }
     // 이번주 타임라인 목록 가져오기
     const GetThisWeekTimeline = () => {
 
@@ -489,8 +495,7 @@ function Home() {
                     thisWeekList.length !== 0 ?   thisWeekList.map((e) =>
                                     <p>
                                         <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
-                                        {/* 태그 속성별 색상바꾸는 함수만들기 */}
-                                        <Tag color="magenta">{e.leave_type}</Tag>
+                                        <ChangeTagColor value = {e.leave_type}/>
                                         <span>{e.username}</span>
                                     </p> )  : <p><span>일정없음</span></p>
                 } 
@@ -509,8 +514,7 @@ function Home() {
                     nextWeekList.length !== 0 ?   nextWeekList.map((e) =>
                                     <p>
                                         <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
-                                        {/* 태그 속성별 색상바꾸는 함수만들기 */}
-                                        <Tag color="magenta">{e.leave_type}</Tag>
+                                        <ChangeTagColor value = {e.leave_type}/>
                                         <span>{e.username}</span>
                                     </p> )  : <p><span>일정없음</span></p>
                 } 
