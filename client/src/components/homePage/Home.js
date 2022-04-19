@@ -5,14 +5,10 @@ import { Link } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
 import '../../App.css';
-import {
-    Select, Calendar, DatePicker, Button,
-    Tag, message, Card, Typography, Layout, Timeline, Badge
-} from 'antd';
-import {
-    PlusSquareOutlined, EditOutlined, BarsOutlined,
-    CheckOutlined, SmileTwoTone, PlusOutlined, FieldTimeOutlined
-} from '@ant-design/icons';
+import { Select, Calendar, DatePicker, Button, 
+        Tag, message, Card, Typography, Layout, Timeline, Badge } from 'antd';
+import { PlusSquareOutlined, EditOutlined, BarsOutlined, 
+        CheckOutlined, SmileTwoTone, PlusOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
 import ReportRegisterModal from '../modals/DailyReportRegister';
@@ -28,7 +24,7 @@ import 'moment/locale/ko'
 import confirmModal from '../modals/ConfirmModal_mobile';
 
 // antd variable
-const { Text } = Typography;
+const { Text} = Typography;
 const { Option, OptGroup } = Select;
 const { RangePicker } = DatePicker;
 
@@ -75,8 +71,8 @@ function Home() {
 
     // 등록창 열고닫기
     const openRegisterModal = () => {
-
-        if (department === null && !isAdmin) {
+        
+        if(department === null && !isAdmin) {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
@@ -88,24 +84,24 @@ function Home() {
     const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 조회창 열고닫기
     const openViewModal = () => {
-
-        if (department === null && !isAdmin) {
+        
+        if(department === null && !isAdmin) {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
 
-        setViewModalOpen(true);
-        GetDetailReport();
+        setViewModalOpen(true); 
+        GetDetailReport(); 
     };
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
-
+    
     // 타임라인 등록창 열고닫기
-    const openTimelineModal = () => { setTimelineModalOpen(true); };
-    const closeTimelineModal = () => { setTimelineModalOpen(false); };
+    const openTimelineModal = () => {setTimelineModalOpen(true);};
+    const closeTimelineModal = () => { setTimelineModalOpen(false);};
     // 타임라인 수정창 열고닫기
-    const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); };
-    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); };
-
+    const openTimelineUpdateModal = () => {setTimelineUpdateModalOpen(true);};
+    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false);};
+    
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
@@ -116,7 +112,7 @@ function Home() {
     const [selectDept, setSelectDept] = useState('ICT 사업부');
 
     useEffect(() => {
-        //이번주/다음주 날짜 데이터 계산하기
+         //이번주/다음주 날짜 데이터 계산하기
         let this_monday = moment().day(1).format('YYYY-MM-DD');
         let this_sunday = moment().day(7).format('YYYY-MM-DD');
         let next_monday = moment().day(8).format('YYYY-MM-DD');
@@ -151,17 +147,17 @@ function Home() {
 
         // 이번주 타임라인 목록 가져오기
         Axios.post(('/home/getTimelineThisWeekList'), {
-            this_monday: this_monday,
-            this_sunday: this_sunday
+            this_monday : this_monday,
+            this_sunday : this_sunday
         }).then((res) => {
             setTimelineThisWeekList(res.data);
             //console.log(res.data)
         })
 
         // 다음주 타임라인 목록 가져오기
-        Axios.post(('/home/getTimelineNextWeekList'), {
-            next_monday: next_monday,
-            next_sunday: next_sunday
+         Axios.post(('/home/getTimelineNextWeekList'), {
+            next_monday : next_monday,
+            next_sunday : next_sunday
         }).then((res) => {
             setTimelineNextWeekList(res.data);
             //console.log(res.data)
@@ -219,7 +215,7 @@ function Home() {
                 {
                     listData.map(item => (
                         <li key={"report" + item.idx}>
-                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace:'pre-wrap' }}>
                                 {item.content}
                             </pre>
                         </li>
@@ -368,8 +364,8 @@ function Home() {
                                     return (
                                         <tr key={item.idx}>
                                             <td className='writer'>{item.writer} {str = str !== null ? str.substring(2) : null}</td>
-                                            <td><pre style={{ whiteSpace: 'pre-wrap' }}>{item.report}</pre></td>
-                                            <td><pre style={{ whiteSpace: 'pre-wrap' }}>{item.plan}</pre></td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
+                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
                                         </tr>
                                     )
                                 })
@@ -385,24 +381,24 @@ function Home() {
         const dateToday = selectDay.selectedValue;
         const dayCnt = moment(dateToday).weekday();
         let subNumb = 1;
-        switch (dayCnt) {
-            case 1:
+        switch(dayCnt) {
+            case 1 : 
                 subNumb = 3;
                 break;
-            case 6:
-            case 7:
-                return '◎';
-            default:
+            case 6 :
+            case 7 :
+                    return '◎';
+            default :
                 subNumb = 1;
                 break;
         }
         const yesterday = moment(dateToday).subtract(subNumb, 'days').format("YYYY-MM-DD");
         const resultTxt = viewMyDailyReport.filter(
-            (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
+                (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
         )
         setReport({
             ...report,
-            today: resultTxt.length > 0 ? resultTxt[0].plan : ''
+            today : resultTxt.length > 0 ? resultTxt[0].plan : ''
         });
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
@@ -414,19 +410,18 @@ function Home() {
         return (
             <>
                 {
-                    newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"))
-                        .map((e) =>
-                            <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.title}>
-                                <Card hoverable="true"
-                                    title={e.title} type="inner"
-                                    style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
-                                    <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
-                                    <span style={{ fontSize: '12px', color: 'gray', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
-                                </Card>
-                            </Link>
-
-                        )
-                }
+                    newBoard.map((e) =>
+                        <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.title}>
+                            <Card hoverable = "true" 
+                                  title = {e.title} type="inner"
+                                  style={{ width: '100%', marginTop: 16}} className="newBoardCard">
+                                <span style={{ fontSize : '12px', color : 'gray'}}>게시판 : {e.category}</span>
+                                <span style={{ fontSize : '12px', color : 'gray', marginLeft : 10}}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                            </Card>
+                        </Link>
+                        
+                    )
+                } 
             </>
         )
     }
@@ -436,7 +431,7 @@ function Home() {
     // 휴가 선택 날짜
     let selectLeaveDateStart = "";
     let selectLeaveDateEnd = "";
-
+    
     function leaveTypeHandler(value) {
         selectLeaveType = value
         //console.log(`selected ${selectLeaveType}`);
@@ -449,14 +444,14 @@ function Home() {
         console.log(selectLeaveDateStart);
         console.log(selectLeaveDateEnd);
     }
-
+    
     // 일정 등록하기
-    const timelineRegisterHandler = () => {
+    const timelineRegisterHandler  = () => {
         setLoading(true);
 
         const id = userId;
         const name = userName;
-
+        
         if (selectLeaveType === "") {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
@@ -469,10 +464,10 @@ function Home() {
         }
 
         Axios.post('/home/timelineRegister', {
-            selectLeaveType: selectLeaveType,
-            selectLeaveDateStart: selectLeaveDateStart,
-            userid: id,
-            username: name
+            selectLeaveType : selectLeaveType,
+            selectLeaveDateStart : selectLeaveDateStart,
+            userid : id,
+            username : name
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정추가완료");
@@ -487,13 +482,13 @@ function Home() {
     // 휴가 종류값에 따른 태그색상 변경
     const ChangeTagColor = (props) => {
         let thisColor = "";
-        if (props.value === "연차") thisColor = "magenta";
+        if(props.value === "연차") thisColor = "magenta";   
         else if (props.value === "오전반차") thisColor = "gold";
-        else if (props.value === "오후반차") thisColor = "green";
-        else if (props.value === "출장") thisColor = "lime";
-        else if (props.value === "외근") thisColor = "volcano";
-        else if (props.value === "병가") thisColor = "cyan";
-        else if (props.value === "경조휴가") thisColor = "geekblue";
+        else if (props.value === "오후반차") thisColor = "green"; 
+        else if (props.value === "출장") thisColor = "lime"; 
+        else if (props.value === "외근") thisColor = "volcano";            
+        else if (props.value === "병가") thisColor = "cyan";  
+        else if (props.value === "경조휴가") thisColor = "geekblue";    
 
         return (
             <>
@@ -506,7 +501,7 @@ function Home() {
     const GetThisWeekTimeline = () => {
 
         const thisWeekList = timelineThisWeekList;
-
+        
         return (
             <>
                 {
@@ -525,7 +520,7 @@ function Home() {
     const GetNextWeekTimeline = () => {
 
         const nextWeekList = timelineNextWeekList;
-
+        
         return (
             <>
                 {
@@ -541,36 +536,34 @@ function Home() {
     }
 
 
-    return (
-        <Layout style={{ flexDirection: 'row' }}>
+    return ( 
+        <Layout style={{flexDirection : 'row'}}>
             <div>
                 {/* 이벤트 타임라인 */}
                 <Card style={{
-                    margin: '16px 0 0 16px',
-                    width: '300px',
-                    height: '400px',
-                    borderRadius: '10px',
-                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                        margin: '16px 0 0 16px',
+                        width : '300px',
+                        height: '400px',
+                        borderRadius : '10px',
+                        boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                 }}>
                     <div>
-                        <SmileTwoTone style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
-                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>이벤트 타임라인 </Text>
+                        <SmileTwoTone style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
+                        <Text strong style={{marginLeft : '5px', fontSize: '16px'}}>이벤트 타임라인 </Text>
                     </div>
-
-                    <Timeline style={{ marginTop: '20px', marginBottom: '20px', paddingTop: '5px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
+                    
+                    <Timeline  style={{ marginTop : '10px', marginBottom : '20px', paddingTop : '5px', paddingLeft : '7px', overflow : 'auto', width: '100%', height : '260px'}}> 
                         {/* 이번주 이벤트 */}
-                        <Timeline.Item color="green"><Text strong>이번주 일정</Text>
-                            <GetThisWeekTimeline />
-                        </Timeline.Item>
+                        <p style={{marginBottom : '10px'}}><Text strong> 이번주 일정</Text></p>
+                        <GetThisWeekTimeline/>
                         {/* 다음주 이벤트 */}
-                        <Timeline.Item color="gray" style={{ color: 'grey' }}>다음주 일정
-                            <GetNextWeekTimeline />
-                        </Timeline.Item>
+                        <p style={{ marginTop : '10px', marginBottom : '10px'}}><Text style={{color : 'grey'}}> 다음주 일정</Text></p>
+                        <GetNextWeekTimeline/>
                     </Timeline>
                     <Button
                         type="dashed"
                         onClick={openTimelineModal}
-                        style={{ width: '100%' }}
+                        style={{ width: '100%'}}
                         icon={<PlusOutlined />}
                     >
                         일정추가하기
@@ -578,38 +571,36 @@ function Home() {
                 </Card>
                 {/* 새글 알림 */}
                 <Card style={{
-                    margin: '16px 0 0 16px',
-                    width: '300px',
-                    height: '49%',
-                    borderRadius: '10px',
-                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                        margin: '16px 0 0 16px',
+                        width : '300px',
+                        height: '49%',
+                        borderRadius : '10px',
+                        boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                 }}>
                     <div>
-                        <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
-                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>새 소식</Text><Badge count={
-                            newBoardList.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD")).length
-                        } offset={[5, -5]}></Badge>
+                        <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
+                        <Text strong style={{marginLeft : '5px', fontSize: '16px'}}>새 소식</Text><Badge count={3} offset={[5, -5]}></Badge>
                     </div>
                     {/* 새소식 데이터 받아오기 */}
-                    <GetNewBoardList />
-                    {/* <Link to={`/board_list/공지사항`}>
+                    <GetNewBoardList/>
+                    <Link to={`/board_list/공지사항`}>
                         <Button
                             type="dashed"
-                            style={{ width: '100%', marginTop: 16 }}
+                            style={{ width: '100%', marginTop : 16}}
                         >
                             더보기
                         </Button>
-                    </Link> */}
+                    </Link>
                 </Card>
-            </div>
+            </div>  
 
             <Calendar style={{
                 margin: '16px 16px 0 16px',
-                width: 'calc(100% - 300px)',
+                width : 'calc(100% - 300px)',
                 height: '98%',
                 padding: '16px',
-                borderRadius: '10px',
-                boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                borderRadius : '10px',
+                boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}
                 locale={locale}
                 fullscreen={true}
@@ -678,9 +669,9 @@ function Home() {
                         </OptGroup>
                     </Select>
                 </div>
-                <div style={{ height: 32, marginBottom: 12 }}>
+                <div style={{height : 32, marginBottom : 12 }}>
                     {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
@@ -708,9 +699,9 @@ function Home() {
                         </OptGroup>
                     </Select>
                 </div>
-                <div style={{ height: 32, marginBottom: 12 }}>
+                <div style={{height : 32, marginBottom : 12 }}>
                     {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span>
+                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
