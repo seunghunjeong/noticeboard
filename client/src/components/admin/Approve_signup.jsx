@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Layout, Button, Table, message } from 'antd';
 import Auth from '../../_hoc/auth'
 import Axios from 'axios';
-import { useSelector } from 'react-redux';
-
+import { useOutletContext } from 'react-router-dom';
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
@@ -13,8 +12,9 @@ const Approve_signup = () => {
     // antd
     const { Content } = Layout;
 
-    // 렌더링을 위한 state
-    const [state, setState] = useState();
+    const state = useOutletContext();
+    const setState = state[1];
+    const stanbyList = state[3];
 
     // confirm param object
     let confirmParam = {
@@ -23,15 +23,6 @@ const Approve_signup = () => {
         content : ''
     }
 
-    // 가입대기열 불러오기
-    const [stanbyList, setStanbyList] = useState([]);
-    useEffect(() => {
-        Axios.get('/api/getStandby_signup')
-        .then((response) => {
-            setStanbyList(response.data);
-        })
-    }, [state])
-    
     // 가입수락 클릭
     const approveHandler = (event, value) => {  
         event.preventDefault();
