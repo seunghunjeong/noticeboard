@@ -16,15 +16,16 @@ const User_management = () => {
     // antd
     const { Content } = Layout;
 
+    
     // 렌더링을 위한 state
     const [state, setState] = useState();
 
     // 직급부여 modal
     const [userModal, setUserModal] = useState(false);
-    const openModal = (idx, d, p, n) => {
+    const openModal = (i, d, p, n) => {
         setUserModal(true);
         setManagemanet({
-            idx: idx,
+            idx: i,
             department: d,
             position: p,
             name: n
@@ -168,7 +169,7 @@ const User_management = () => {
     //table rows
     const data = [];
     userList.map(element => {
-        if (element.id !== 'admin') {
+        if (element.id !== 'admin' && element.status !== 'N') {
             data.push({
                 key: element.id,
                 id: element.id,

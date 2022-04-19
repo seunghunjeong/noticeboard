@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { Button, Input, Table, Layout, message } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
 import Auth from '../../_hoc/auth'
-
 import AddCategoryModal from '../modals/AddCategory';
 import Axios from 'axios';
 

@@ -93,7 +93,8 @@ function header(props) {
                                         로그아웃 
                                     </LoginOutlined>
                                      <NavDrawer />
-                                    </div> : ''
+                                    </div> : 
+                                    <div className={MobileStyle.logoutM}><NavDrawer /></div>
             }
         </Header>
     )
