@@ -391,7 +391,9 @@ function Home() {
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(80vh)',
-                padding : '10px'
+                padding : '10px',
+                borderRadius : '10px',
+                boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}
                 locale={locale}
                 fullscreen={true}
