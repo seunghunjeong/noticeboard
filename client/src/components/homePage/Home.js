@@ -80,12 +80,13 @@ function Home() {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
+        document.body.style.overflow = "hidden";
         setRegisterModalOpen(true);
     };
-    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
+    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset";  };
     // 수정창 열고닫기
-    const openUpdateModal = () => { setUpdateModalOpen(true); };
-    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
+    const openUpdateModal = () => { setUpdateModalOpen(true); document.body.style.overflow = "hidden";};
+    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset"; };
     // 조회창 열고닫기
     const openViewModal = () => {
 
@@ -93,18 +94,18 @@ function Home() {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
-
+        document.body.style.overflow = "hidden";
         setViewModalOpen(true);
         GetDetailReport();
     };
-    const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
+    const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset"; };
 
     // 타임라인 등록창 열고닫기
-    const openTimelineModal = () => { setTimelineModalOpen(true); };
-    const closeTimelineModal = () => { setTimelineModalOpen(false); };
+    const openTimelineModal = () => { setTimelineModalOpen(true); document.body.style.overflow = "hidden";};
+    const closeTimelineModal = () => { setTimelineModalOpen(false);  document.body.style.overflow = "unset";};
     // 타임라인 수정창 열고닫기
-    const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); };
-    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); };
+    const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); document.body.style.overflow = "hidden";};
+    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); document.body.style.overflow = "unset";};
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
