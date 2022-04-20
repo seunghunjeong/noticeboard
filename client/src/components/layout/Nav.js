@@ -17,8 +17,7 @@ function Nav(props) {
   const categoryList = props.props;
   const admin = props.admin;
   //사용자 정보 받아오기
-  const getUserData = useSelector(state => state.user.userData);
-  const userName = useSelector(state => state.user.userData.userName);
+  const getUserData = props.user;
 
   //페이지이동
   const navigate = useNavigate();
@@ -109,13 +108,13 @@ function Nav(props) {
               <Avatar src={<Image src="https://picsum.photos/200/200.jpg" />} size={'large'}/>
               </td>
                <td>
-                {userName}            
+                {getUserData.userName}            
                 <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
                   로그아웃 
                 </LoginOutlined>
                 <span className={MobileStyle.avtNav}>
-                  <BellOutlined onClick={alert} />
-                  <FileDoneOutlined className={MobileStyle.avtHeader} onClick={alert1}/>
+                  <FileDoneOutlined onClick={alert} />
+                  <BellOutlined className={MobileStyle.avtHeader} onClick={alert1}/>
                 </span>
                </td>
             </tr>
