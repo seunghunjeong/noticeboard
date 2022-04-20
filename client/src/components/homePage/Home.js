@@ -4,22 +4,22 @@ import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
+import TimelineInfo from './TimelineInfo';
+
 import '../../App.css';
 import {
-    Select, Calendar, DatePicker, Button,
-    Tag, message, Card, Typography, Layout, Timeline, Badge
+    Calendar, Button,
+    Tag, message, Card, Typography, Layout, Badge
 } from 'antd';
 import {
     PlusSquareOutlined, EditOutlined, BarsOutlined,
-    CheckOutlined, SmileTwoTone, PlusOutlined, FieldTimeOutlined
+    CheckOutlined, FieldTimeOutlined
 } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
 import ReportRegisterModal from '../modals/DailyReportRegister';
 import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
-import TimeLineRegisterModal from '../modals/TimelineRegister';
-import TimeLineUpdateModal from '../modals/TimelineUpdate';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import 'moment/locale/ko'
@@ -29,8 +29,6 @@ import confirmModal from '../modals/ConfirmModal_mobile';
 
 // antd variable
 const { Text } = Typography;
-const { Option, OptGroup } = Select;
-const { RangePicker } = DatePicker;
 
 function Home() {
     // 로딩처리를 위한 state
@@ -61,17 +59,10 @@ function Home() {
     //새글 알림
     const [newBoardList, setNewBoardList] = useState([]);
 
-    //이번주 일정 타임라인
-    const [timelineThisWeekList, setTimelineThisWeekList] = useState([]);
-    //다음주 일정 타임라인
-    const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
-
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [viewModalOpen, setViewModalOpen] = useState(false);
-    const [timelineModalOpen, setTimelineModalOpen] = useState(false);
-    const [timelineUpdateModalOpen, setTimelineUpdateModalOpen] = useState(false);
 
     // 등록창 열고닫기
     const openRegisterModal = () => {
@@ -80,12 +71,13 @@ function Home() {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
+        document.body.style.overflow = "hidden";
         setRegisterModalOpen(true);
     };
-    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
+    const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset"; };
     // 수정창 열고닫기
-    const openUpdateModal = () => { setUpdateModalOpen(true); };
-    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
+    const openUpdateModal = () => { setUpdateModalOpen(true); document.body.style.overflow = "hidden"; };
+    const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset"; };
     // 조회창 열고닫기
     const openViewModal = () => {
 
@@ -93,18 +85,11 @@ function Home() {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
-
+        document.body.style.overflow = "hidden";
         setViewModalOpen(true);
         GetDetailReport();
     };
-    const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
-
-    // 타임라인 등록창 열고닫기
-    const openTimelineModal = () => { setTimelineModalOpen(true); };
-    const closeTimelineModal = () => { setTimelineModalOpen(false); };
-    // 타임라인 수정창 열고닫기
-    const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); };
-    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); };
+    const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); document.body.style.overflow = "unset"; };
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
@@ -116,11 +101,6 @@ function Home() {
     const [selectDept, setSelectDept] = useState('ICT 사업부');
 
     useEffect(() => {
-        //이번주/다음주 날짜 데이터 계산하기
-        let this_monday = moment().day(1).format('YYYY-MM-DD');
-        let this_sunday = moment().day(7).format('YYYY-MM-DD');
-        let next_monday = moment().day(8).format('YYYY-MM-DD');
-        let next_sunday = moment().day(14).format('YYYY-MM-DD');
 
         // 자신이 작성한 전체 일일보고 받아오기
         const id = userId;
@@ -149,30 +129,11 @@ function Home() {
             setNewBoardList(res.data);
         })
 
-        // 이번주 타임라인 목록 가져오기
-        Axios.post(('/home/getTimelineThisWeekList'), {
-            this_monday: this_monday,
-            this_sunday: this_sunday
-        }).then((res) => {
-            setTimelineThisWeekList(res.data);
-            //console.log(res.data)
-        })
-
-        // 다음주 타임라인 목록 가져오기
-        Axios.post(('/home/getTimelineNextWeekList'), {
-            next_monday: next_monday,
-            next_sunday: next_sunday
-        }).then((res) => {
-            setTimelineNextWeekList(res.data);
-            //console.log(res.data)
-        })
-
         return () => {
             setRegisterModalOpen(false);
             setUpdateModalOpen(false);
             setViewModalOpen(false);
-            setTimelineModalOpen(false);
-            setTimelineUpdateModalOpen(false);
+
         }
 
     }, [state, userId, selectDept, department])
@@ -439,191 +400,11 @@ function Home() {
         )
     }
 
-    // 휴가 선택 유형
-    let selectLeaveType = ""; //state로 바꿔야할듯
-    // 휴가 선택 날짜
-    let selectLeaveDateStart = "";
-    let selectLeaveDateEnd = "";
-
-    function leaveTypeHandler(value) {
-        selectLeaveType = value
-        //console.log(`selected ${selectLeaveType}`);
-    }
-
-    function leaveDateHandler(dates, dateStrings) {
-        selectLeaveDateStart = dateStrings[0]
-        selectLeaveDateEnd = dateStrings[1]
-
-        console.log(selectLeaveDateStart);
-        console.log(selectLeaveDateEnd);
-    }
-
-    // 일정 등록하기
-    const timelineRegisterHandler = () => {
-        setLoading(true);
-
-        const id = userId;
-        const name = userName;
-
-        if (selectLeaveType === "") {
-            message.warning("휴가 유형을 선택해 주세요.");
-            setLoading(false);
-            return;
-        }
-        else if (selectLeaveDateStart === "") {
-            message.warning("휴가 날짜를 선택해 주세요.");
-            setLoading(false);
-            return;
-        }
-
-        Axios.post('/home/timelineRegister', {
-            selectLeaveType: selectLeaveType,
-            selectLeaveDateStart: selectLeaveDateStart,
-            userid: id,
-            username: name
-        }).then((res) => {
-            if (res.status === 200) {
-                message.success("일정추가완료");
-                closeTimelineModal();
-                setState(res);
-                setLoading(false);
-            }
-            else message.error("일정추가오류");
-        })
-    }
-
-    // 휴가 종류값에 따른 태그색상 변경
-    const ChangeTagColor = (props) => {
-        let thisColor = "";
-        if (props.value === "연차") thisColor = "magenta";
-        else if (props.value === "오전반차") thisColor = "gold";
-        else if (props.value === "오후반차") thisColor = "green";
-        else if (props.value === "출장") thisColor = "lime";
-        else if (props.value === "외근") thisColor = "volcano";
-        else if (props.value === "병가") thisColor = "cyan";
-        else if (props.value === "경조휴가") thisColor = "geekblue";
-
-        return (
-            <>
-                <Tag style={{ fontSize: 11, padding: '0 2px' }} color={thisColor}>{props.value}</Tag>
-            </>
-        )
-    }
-
-    // 이번주 타임라인 목록 가져오기
-    const GetThisWeekTimeline = () => {
-
-        const thisWeekList = timelineThisWeekList;
-
-        return (
-            <>
-                {
-                    thisWeekList.length !== 0 ? thisWeekList.map((e, index) => {
-                        const username = e.username.split(',');
-                        const leave_type = e.leave_type.split(',');
-                        const idx = e.idx.split(',');
-                        return (
-                            <>
-                                <div key={"thisWeek" + e.leave_type}>
-                                    <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={"thisWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
-                        )
-
-                    })
-                        :
-                        <p><span>일정없음</span></p>
-                }
-            </>
-        )
-    }
-
-    // 다음주 타임라인 목록 가져오기
-    const GetNextWeekTimeline = () => {
-
-        const nextWeekList = timelineNextWeekList;
-
-        return (
-            <>
-                {
-                    nextWeekList.length !== 0 ? nextWeekList.map((e, index) => {
-                        const username = e.username.split(',');
-                        const leave_type = e.leave_type.split(',');
-                        const idx = e.idx.split(',');
-                        return (
-                            <>
-                                <div key={"nextWeek" + e.leave_type}>
-                                    <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={"nextWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
-                        )
-
-                    })
-                        :
-                        <p><span>일정없음</span></p>
-                }
-            </>
-        )
-    }
-
-
     return (
         <Layout style={{ flexDirection: 'row' }}>
             <div>
                 {/* 이벤트 타임라인 */}
-                <Card style={{
-                    margin: '16px 0 0 16px',
-                    width: '300px',
-                    height: '400px',
-                    borderRadius: '10px',
-                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
-                }}>
-                    <div>
-                        <SmileTwoTone style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
-                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>이벤트 타임라인 </Text>
-                    </div>
-
-                    <Timeline style={{ marginTop: '10px', marginBottom: '20px', paddingTop: '5px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
-                        {/* 이번주 이벤트 */}
-                        <p style={{ marginBottom: '10px' }}><Text strong> 이번주 일정</Text></p>
-                        <GetThisWeekTimeline />
-                        {/* 다음주 이벤트 */}
-                        <p style={{ marginTop: '10px', marginBottom: '10px' }}><Text strong style={{ color: 'grey' }}> 다음주 일정</Text></p>
-                        <GetNextWeekTimeline />
-                    </Timeline>
-                    <Button
-                        type="dashed"
-                        onClick={openTimelineModal}
-                        style={{ width: '100%' }}
-                        icon={<PlusOutlined />}
-                    >
-                        일정추가하기
-                    </Button>
-                </Card>
+                <TimelineInfo />
                 {/* 새글 알림 */}
                 <Card style={{
                     margin: '16px 0 0 16px',
@@ -698,64 +479,6 @@ function Home() {
                 <GetDetailReport />
             </ReportViewModal>
 
-            {/* 타임라인 등록 팝업 */}
-            <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
-                    <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
-                        <OptGroup label="기본">
-                            <Option value="연차">연차</Option>
-                            <Option value="오전반차">오전반차</Option>
-                            <Option value="오후반차">오후반차</Option>
-                        </OptGroup>
-                        <OptGroup label="업무">
-                            <Option value="출장">출장</Option>
-                            <Option value="외근">외근</Option>
-                        </OptGroup>
-                        <OptGroup label="기타">
-                            <Option value="병가">병가</Option>
-                            <Option value="경조휴가">경조휴가</Option>
-                        </OptGroup>
-                    </Select>
-                </div>
-                <div style={{ height: 32, marginBottom: 12 }}>
-                    {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
-                </div>
-                {/* <div style={{height : 32 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
-                    <span>0개</span>
-                </div> */}
-            </TimeLineRegisterModal>
-            {/* 타임라인 수정 팝업 */}
-            <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
-                    <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
-                        <OptGroup label="기본">
-                            <Option value="연차">연차</Option>
-                            <Option value="오전반차">오전반차</Option>
-                            <Option value="오후반차">오후반차</Option>
-                        </OptGroup>
-                        <OptGroup label="업무">
-                            <Option value="출장">출장</Option>
-                            <Option value="외근">외근</Option>
-                        </OptGroup>
-                        <OptGroup label="기타">
-                            <Option value="병가">병가</Option>
-                            <Option value="경조휴가">경조휴가</Option>
-                        </OptGroup>
-                    </Select>
-                </div>
-                <div style={{ height: 32, marginBottom: 12 }}>
-                    {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
-                </div>
-                {/* <div style={{height : 32 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
-                    <span>0개</span>
-                </div> */}
-            </TimeLineUpdateModal>
         </Layout>
     )
 }
