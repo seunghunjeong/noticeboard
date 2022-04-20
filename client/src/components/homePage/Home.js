@@ -507,7 +507,7 @@ function Home() {
                 {
                     thisWeekList.length !== 0 ?   thisWeekList.map((e) =>
                                     <Timeline.Item color="green" className = "hoverable" onClick={openTimelineUpdateModal}>
-                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
+                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('MM.DD ddd')}</span>
                                         <ChangeTagColor value = {e.leave_type}/>
                                         <span>{e.username}</span>
                                     </Timeline.Item> )  : <p><span>일정없음</span></p>
@@ -525,8 +525,8 @@ function Home() {
             <>
                 {
                     nextWeekList.length !== 0 ?   nextWeekList.map((e) =>
-                                    <Timeline.Item color="grey" className = "hoverable" value = {e.idx} onClick = {openTimelineUpdateModal}>
-                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
+                                    <Timeline.Item color="grey" className = "hoverable" value = {e.idx} onClick = {openTimelineUpdateModal} style={{color : 'grey'}}>
+                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('MM.DD ddd')}</span>
                                         <ChangeTagColor value = {e.leave_type}/>
                                         <span>{e.username}</span>
                                     </Timeline.Item> )  : <p><span>일정없음</span></p>
@@ -557,7 +557,7 @@ function Home() {
                         <p style={{marginBottom : '10px'}}><Text strong> 이번주 일정</Text></p>
                         <GetThisWeekTimeline/>
                         {/* 다음주 이벤트 */}
-                        <p style={{ marginTop : '10px', marginBottom : '10px'}}><Text style={{color : 'grey'}}> 다음주 일정</Text></p>
+                        <p style={{ marginTop : '10px', marginBottom : '10px'}}><Text strong style={{color : 'grey'}}> 다음주 일정</Text></p>
                         <GetNextWeekTimeline/>
                     </Timeline>
                     <Button
