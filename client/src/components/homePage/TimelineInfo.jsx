@@ -167,12 +167,12 @@ function TimelineInfo() {
                             <>
                                 <div key={"thisWeek" + e.leave_type}>
                                     <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
+                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
                                         {
                                             username.map((e, index) =>
                                                 <div key={"thisWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
+                                                    <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
+                                                        - <ChangeTagColor value={leave_type[index]} />
                                                         <span>{username[index]}</span>
                                                     </p>
                                                 </div>
@@ -207,12 +207,12 @@ function TimelineInfo() {
                             <>
                                 <div key={"nextWeek" + e.leave_type}>
                                     <Timeline.Item color="gray">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
+                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
                                         {
                                             username.map((e, index) =>
                                                 <div key={"nextWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
+                                                    <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
+                                                        - <ChangeTagColor value={leave_type[index]} />
                                                         <span>{username[index]}</span>
                                                     </p>
                                                 </div>
