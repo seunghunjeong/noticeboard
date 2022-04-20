@@ -1,5 +1,5 @@
 import { Layout, Menu, Avatar, Image, message } from 'antd';
-import { HomeOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, SettingOutlined, BellOutlined, FileDoneOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isMobile } from "react-device-detect";
@@ -19,13 +19,13 @@ function Nav(props) {
   //사용자 정보 받아오기
   const getUserData = useSelector(state => state.user.userData);
   const userName = useSelector(state => state.user.userData.userName);
-  
- //페이지이동
- const navigate = useNavigate();
- const dispatch = useDispatch();
 
- //로그아웃 클릭
- const onLogoutHandler = (event) => {
+  //페이지이동
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  //로그아웃 클릭
+  const onLogoutHandler = (event) => {
      event.preventDefault();
 
      dispatch(logout())
@@ -38,7 +38,7 @@ function Nav(props) {
              message.error(response.payload.logoutSuccess);
          }
      });
- }
+  }
 
   //antd 
   const { Sider } = Layout;
@@ -87,6 +87,15 @@ function Nav(props) {
     return [tmpSub];
   }
 
+  const alert = () => {
+    message.info('t');
+  }
+
+  const alert1 = () => {
+    message.info('f');
+  }
+
+
   // nav Component divide
   const NavDiv = () => {
     return(
@@ -98,14 +107,20 @@ function Nav(props) {
             <tr style={{fontSize:'1.5em'}}>
               <td rowSpan={2} width={'60vw'} style={{textAlign:'center'}}>
               <Avatar src={<Image src="https://picsum.photos/200/200.jpg" />} size={'large'}/>
-                </td><td>
-                  {userName}            
-                  <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
-                                        로그아웃 
-                                    </LoginOutlined></td>
+              </td>
+               <td>
+                {userName}            
+                <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
+                  로그아웃 
+                </LoginOutlined>
+                <span className={MobileStyle.avtNav}>
+                  <BellOutlined onClick={alert} />
+                  <FileDoneOutlined className={MobileStyle.avtHeader} onClick={alert1}/>
+                </span>
+               </td>
             </tr>
             <tr style={{fontSize:'0.7em'}}>
-              <td>{getUserData.department} / {getUserData.position.substr(2)}</td>
+              <td>{getUserData.department} / {getUserData.department !== null ? getUserData.position.substr(2) : navigate("/")}</td>
             </tr>
           </table>
         </>

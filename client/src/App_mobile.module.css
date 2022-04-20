@@ -7,11 +7,15 @@
 /* header */
 .avtHeader {
   bottom: 0.25em;
-  margin: 0 0.25em;
+  margin: 0 0.5em;
 }
 
 .btnHeader {
   margin: 0 0.25em;
+}
+
+.avtNav {
+  float: right;
 }
 
 .logoutM {

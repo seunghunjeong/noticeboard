@@ -185,7 +185,7 @@ function Board_list() {
       {
         viewContent.length !== 0 ?
         <div  style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
-         <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={4}/>
+         <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt ? listCnt[0].cnt : 0}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={4}/>
         </div>
         :
         null
