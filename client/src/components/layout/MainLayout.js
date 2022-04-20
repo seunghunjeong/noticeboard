@@ -10,15 +10,21 @@ import HeaderLayout from './HeaderLayout';
 import FooterLayout from './footer';
 
 
-function MainLayout(props) {
+function MainLayout() {
 
   const [state, setState] = useState('');
   const [boardCategory, setBoardCategory] = useState([]);
+  const [stanbyList, setStanbyList] = useState([]);
 
   useEffect(() => {
     Axios.post('/nav/getCategory')
       .then((res) => {
         setBoardCategory(res.data);
+      })
+
+    Axios.get('/api/getStandby_signup')
+      .then((response) => {
+        setStanbyList(response.data);
       })
   }, [state]);
 
@@ -31,8 +37,8 @@ function MainLayout(props) {
       <NavLayout props={boardCategory} admin={admin} state={state}> </NavLayout>
       {/* 본문 */}
       <Layout className="site-layout">
-        <HeaderLayout />
-        <Outlet context={[state, setState, boardCategory]}/>
+        <HeaderLayout stanbyList={stanbyList}/>
+        <Outlet context={[state, setState, boardCategory, stanbyList]} />
         <FooterLayout />
       </Layout>
     </Layout>

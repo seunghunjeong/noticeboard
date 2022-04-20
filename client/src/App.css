@@ -149,3 +149,34 @@
 .ant-picker-calendar-mode-switch {
   display : none;
 }
+
+/* 메인 콘텐트 */
+.mainDetailContent {
+  margin: 16px;
+  height: 100%;
+}
+
+.mainDetailContent td, .mainDetailContent th, .mainDetailContent table {
+  border: solid black;
+  width: auto;
+  overflow: auto;
+}
+
+.mainDetailContent th {
+  background-color: lightgray;
+}
+
+.mainDetailContent blockquote {
+  border-left: 5px solid #ccc;
+  font-style: italic;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+.ant-badge-dot {
+  right: 8px;
+  top: 8px;
+}

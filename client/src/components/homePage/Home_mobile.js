@@ -118,7 +118,7 @@ function Home() {
         ).then((response) => {
             setViewMyDailyReport(response.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
     // 전체 일일보고 데이터 불러오기
     useEffect(() => {
@@ -130,7 +130,7 @@ function Home() {
         ).then((res) => {
             setViewDailyReport(res.data);
         })
-    }, [state, userId])
+    }, [state, userId,department])
 
 
     // 월 단위 캘린더 랜더링할 내용
@@ -304,9 +304,10 @@ function Home() {
 
     // 일보 읽기
     const readBogo = () => {
+        const dateToday = dailyReport.regist_date;
         let resultTxt = [];
         if (state === 'updateModal') {
-            resultTxt = filterBogo(dailyReport.regist_date);
+            resultTxt = filterBogo(dateToday);
             setReadBogoArr(resultTxt[0]);
             setDailyReport({
                 ...dailyReport,
@@ -314,7 +315,20 @@ function Home() {
                 plan: resultTxt[0].plan
             })
         } else if (state === 'insertModal') {
-            const yesterday = moment(dailyReport.regist_date).subtract(1, 'days').format("YYYY-MM-DD");
+            const dayCnt = moment(dateToday).weekday();
+            let subNumb = 1;
+            switch(dayCnt) {
+                case 1 : 
+                    subNumb = 3;
+                    break;
+                case 6 :
+                case 7 :
+                        return '◎';
+                default :
+                    subNumb = 1;
+                    break;
+            }
+            const yesterday = moment(dateToday).subtract(subNumb, 'days').format("YYYY-MM-DD");
             resultTxt = filterBogo(yesterday);
             setDailyReport({
                 ...dailyReport,
@@ -377,7 +391,9 @@ function Home() {
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(80vh)',
-                padding : '10px'
+                padding : '10px',
+                borderRadius : '10px',
+                boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}
                 locale={locale}
                 fullscreen={true}
