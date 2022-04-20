@@ -234,7 +234,8 @@ function TimelineInfo() {
 
 
     return (
-        <Layout style={{ flexDirection: 'row' }}>
+        <>
+        
             <div>
                 {/* 이벤트 타임라인 */}
                 <Card style={{
@@ -322,7 +323,7 @@ function TimelineInfo() {
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
             </TimeLineUpdateModal>
-        </Layout>
+        </>
     )
 }
 
