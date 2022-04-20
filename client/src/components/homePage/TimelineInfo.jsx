@@ -3,10 +3,9 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
 
-import '../../App.css';
 import {
     Select, DatePicker, Button,
-    Tag, message, Card, Typography, Layout, Timeline
+    Tag, message, Card, Typography, Timeline
 } from 'antd';
 import {
     SmileTwoTone, PlusOutlined 
@@ -234,7 +233,8 @@ function TimelineInfo() {
 
 
     return (
-        <Layout style={{ flexDirection: 'row' }}>
+        <>
+        
             <div>
                 {/* 이벤트 타임라인 */}
                 <Card style={{
@@ -322,7 +322,7 @@ function TimelineInfo() {
                     <RangePicker onChange={leaveDateHandler} />
                 </div>
             </TimeLineUpdateModal>
-        </Layout>
+        </>
     )
 }
 
