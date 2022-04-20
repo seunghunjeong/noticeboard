@@ -3,10 +3,9 @@ import Axios from 'axios';
 import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
 
-import '../../App.css';
 import {
     Select, DatePicker, Button,
-    Tag, message, Card, Typography, Layout, Timeline
+    Tag, message, Card, Typography, Timeline
 } from 'antd';
 import {
     SmileTwoTone, PlusOutlined 

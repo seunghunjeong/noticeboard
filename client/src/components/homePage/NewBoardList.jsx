@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
-import '../../App.css';
 import {
  Card, Typography, Badge
 } from 'antd';
@@ -13,9 +12,6 @@ import {
 } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import moment from 'moment';
-import 'moment/locale/ko'
-
-// modal confirm
 
 // antd variable
 const { Text } = Typography;
