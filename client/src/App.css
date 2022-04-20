@@ -191,11 +191,11 @@
 }
 
 /*timeline select*/
-p.hoverable {
+.hoverable {
   cursor: pointer;
   width: 100%;
 }
 
-p.hoverable:hover {
+.hoverable:hover {
   color : rgb(103, 103, 161);
 }
