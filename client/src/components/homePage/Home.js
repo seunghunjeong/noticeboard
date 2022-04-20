@@ -427,7 +427,7 @@ function Home() {
     }
 
     // 휴가 선택 유형
-    let selectLeaveType = "연차"; //state로 바꿔야할듯
+    let selectLeaveType = ""; //state로 바꿔야할듯
     // 휴가 선택 날짜
     let selectLeaveDateStart = "";
     let selectLeaveDateEnd = "";
@@ -645,9 +645,9 @@ function Home() {
 
             {/* 타임라인 등록 팝업 */}
             <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
-                <div style={{ height: 32, marginBottom: 12 }}>
-                    <span style={{ width: 40, height: 40, marginRight: 20 }}>유형선택</span>
-                    <Select defaultValue="연차" style={{ width: 200 }} onChange={leaveTypeHandler}>
+                <div style={{height : 32, marginBottom : 12 }}>
+                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
+                    <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -663,10 +663,9 @@ function Home() {
                         </OptGroup>
                     </Select>
                 </div>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
-                    <RangePicker onChange={leaveDateHandler} />
+                <div style={{ height: 32, marginBottom: 12 }}>
+                    {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
+                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
                     <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
@@ -675,9 +674,9 @@ function Home() {
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
-                <div style={{ height: 32, marginBottom: 12 }}>
-                    <span style={{ width: 40, height: 40, marginRight: 20 }}>유형선택</span>
-                    <Select defaultValue="연차" style={{ width: 200 }} onChange={leaveTypeHandler}>
+                <div style={{height : 32, marginBottom : 12 }}>
+                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
+                    <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -693,10 +692,9 @@ function Home() {
                         </OptGroup>
                     </Select>
                 </div>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    {/* 휴가 종류에따라 날짜 데이터 당일인지 시작날짜와 끝날짜 넣을지 고민 */}
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>날짜선택</span>
-                    <RangePicker onChange={leaveDateHandler} />
+                <div style={{ height: 32, marginBottom: 12 }}>
+                    {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
+                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
                 </div>
                 {/* <div style={{height : 32 }}>
                     <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>

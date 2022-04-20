@@ -137,6 +137,10 @@
   font-weight: bold;
 }
 
+.ant-picker-range input{
+  text-align: center;
+}
+
 .ant-picker-date-panel .ant-picker-content th:nth-child(1), .ant-picker-date-panel .ant-picker-content th:nth-child(7) {
   color : red
 }
