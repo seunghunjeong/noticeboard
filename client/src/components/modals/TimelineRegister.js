@@ -8,7 +8,7 @@ import Loader from '../modals/Loader';
 const { Title } = Typography;
 
 const TimelineRegister = (props) => {
-
+    
     // 부모로부터 값을 받아옴
     const { display, close, insert, loading } = props;
 
