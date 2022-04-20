@@ -8,7 +8,7 @@ const logger = require('../logger');
 router.get("/getNewBoardList", (req, res) => {
  
     // select 시작
-    const sqlQuery = "SELECT * FROM board.noticeboard ORDER BY regist_date desc limit 3";//limit 3 = 3개만 보여주기(postSql)
+    const sqlQuery = "SELECT * FROM board.noticeboard ORDER BY regist_date "//desc limit 3";//limit 3 = 3개만 보여주기(postSql)
 
     // ?에 키워드 넣기.
     db.query(sqlQuery, (err, result) => {
