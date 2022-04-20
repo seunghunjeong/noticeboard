@@ -251,7 +251,8 @@ router.post('/auth', (req, res, next) => {
         id: null,
         isAuth: false,
         admin: false,
-        department : null
+        department : null,
+        position : null
       });
     }
     // 인증실패
@@ -261,7 +262,8 @@ router.post('/auth', (req, res, next) => {
         id: null,
         isAuth: false,
         admin: false,
-        department : null
+        department : null,
+        position : null
       });
     }
     // 인증성공
