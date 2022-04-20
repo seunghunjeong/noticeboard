@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { logout} from '../../_actions/user_action';
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 // 사용자 정보 가져오기
 import { useSelector } from 'react-redux';
@@ -12,8 +9,8 @@ import Auth from '../../_hoc/auth'
 // nav
 import NavLayout from './Nav';
 
-import { Layout, Avatar, Drawer, message } from 'antd';
-import {BarsOutlined, LoginOutlined } from '@ant-design/icons';
+import { Layout, Avatar, Drawer } from 'antd';
+import {BarsOutlined } from '@ant-design/icons';
 import MobileStyle from '../../App_mobile.module.css';
 
 
@@ -29,26 +26,6 @@ function header(props) {
     const getUserData = useSelector(state => state.user.userData);
     const userName = getUserData === undefined ? null : getUserData.userName;
     const isAuth = getUserData === undefined ? null : getUserData.isAuth;
-    
-    //페이지이동
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    //로그아웃 클릭
-    const onLogoutHandler = (event) => {
-        event.preventDefault();
-
-        dispatch(logout())
-        .then(response => {
-            if(response.payload.logoutSuccess === true){
-                message.success("로그아웃 완료");
-                navigate("/");
-            }
-            else { 
-                message.error(response.payload.logoutSuccess);
-            }
-        });
-    }
 
     // nav창 열기
     const NavDrawer = () => {
@@ -88,10 +65,6 @@ function header(props) {
                                     <Avatar className={MobileStyle.avtHeader}
                                     style={{backgroundColor : '#EE6F57'}}
                                     >{userName.substr(0,1)}</Avatar>
-                                    
-                                    <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
-                                        로그아웃 
-                                    </LoginOutlined>
                                      <NavDrawer />
                                     </div> : 
                                     <div className={MobileStyle.logoutM}><NavDrawer /></div>

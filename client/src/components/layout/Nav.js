@@ -1,14 +1,45 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Avatar, Image, message } from 'antd';
 import { HomeOutlined, ProfileOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isMobile } from "react-device-detect";
+import MobileStyle from '../../App_mobile.module.css';
+// 사용자 정보 가져오기
+import { useSelector } from 'react-redux';
+import { logout} from '../../_actions/user_action';
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import {LoginOutlined } from '@ant-design/icons';
 
 function Nav(props) {
 
   const categoryList = props.props;
   const admin = props.admin;
+  //사용자 정보 받아오기
+  const getUserData = useSelector(state => state.user.userData);
+  const userName = useSelector(state => state.user.userData.userName);
   
+ //페이지이동
+ const navigate = useNavigate();
+ const dispatch = useDispatch();
+
+ //로그아웃 클릭
+ const onLogoutHandler = (event) => {
+     event.preventDefault();
+
+     dispatch(logout())
+     .then(response => {
+         if(response.payload.logoutSuccess === true){
+             message.success("로그아웃 완료");
+             navigate("/");
+         }
+         else { 
+             message.error(response.payload.logoutSuccess);
+         }
+     });
+ }
+
   //antd 
   const { Sider } = Layout;
   const { SubMenu } = Menu;
@@ -61,10 +92,26 @@ function Nav(props) {
     return(
       <>
       {  !isMobile ?
-        <Link to={'/home'}> <div className="main-logo" onClick={logoHome}/></Link> : null
+        <Link to={'/home'}> <div className="main-logo" onClick={logoHome}/></Link> : 
+        <>
+          <table style={{background:'rgb(0, 21, 41)',width:'70vw', height:'64px', color:'whitesmoke'}}>
+            <tr style={{fontSize:'1.5em'}}>
+              <td rowSpan={2} width={'60vw'} style={{textAlign:'center'}}>
+              <Avatar src={<Image src="https://picsum.photos/200/200.jpg" />} size={'large'}/>
+                </td><td>
+                  {userName}            
+                  <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
+                                        로그아웃 
+                                    </LoginOutlined></td>
+            </tr>
+            <tr style={{fontSize:'0.7em'}}>
+              <td>{getUserData.department} / {getUserData.position.substr(2)}</td>
+            </tr>
+          </table>
+        </>
       }
         <Menu className='menu_nav' selectedKeys={state} onClick={handleClick} theme='dark' defaultOpenKeys={returnSub} mode="inline">
-          <Menu.Item key="home" icon={<HomeOutlined />}>
+          <Menu.Item key="home" icon={<HomeOutlined />} style={{marginTop:'0px'}} >
             <Link to={'/home'}>홈</Link>
           </Menu.Item>
           <SubMenu key="board" icon={<ProfileOutlined />} title="게시판">

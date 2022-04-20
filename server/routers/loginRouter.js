@@ -271,7 +271,8 @@ router.post('/auth', (req, res, next) => {
         id: result[0].id,
         isAuth: true,
         admin: result[0].auth === 1 ? true : false,
-        department : result[0].department
+        department : result[0].department,
+        position : result[0].position
       });
     }
   });

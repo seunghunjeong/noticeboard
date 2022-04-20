@@ -356,15 +356,12 @@ function Home() {
 
         detailReportList = detailReportList.filter(
             (node) => moment(node.regist_date).format("YYYY-MM-DD") === day
-        ) 
-
-        const reportList = detailReportList.map((item) => (
+        ).map((item) => (
             <tr key={item.idx}>
                 <td className='writer'>{item.writer}</td>
                 <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
                 <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
             </tr>
-            
         ));
 
         return (
@@ -378,7 +375,7 @@ function Home() {
                         </tr>
                     </thead>
                     <tbody>
-                        {reportList}
+                        {detailReportList}
                     </tbody>
                 </table>
                 {/* {reportList} */}
