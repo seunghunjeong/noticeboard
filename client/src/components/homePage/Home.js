@@ -411,23 +411,29 @@ function Home() {
     const GetNewBoardList = () => {
 
         const newBoard = newBoardList;
+        //최근 7일 이내 게시글 전체
+        const recent7days = newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"));
+        //최근 7일 이내 게시글 중에서 3개만 추출
+        const recent3contents = recent7days.filter((e, index) =>  index < 3 );
+        console.log(recent3contents.length)
         return (
             <>
                 {
-                    newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"))
-                        .map((e, index) =>
-                            index + 1 <= newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD")).length - 3 ? null :
-                                <>
-                                    <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.title}>
-                                        <Card hoverable="true"
-                                            title={e.title} type="inner"
-                                            style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
-                                            <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
-                                            <span style={{ fontSize: '12px', color: 'gray', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
-                                        </Card>
-                                    </Link>
-                                </>
+                    recent3contents.length > 0 ?    
+                        recent3contents.map((e) =>
+                            <>
+                                <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
+                                    <Card hoverable="true"
+                                        title={e.title} type="inner"
+                                        style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
+                                        <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
+                                        <span style={{ fontSize: '12px', color: 'gray', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                                    </Card>
+                                </Link>
+                            </>
                         )
+                        :
+                        <p style={{textAlign : "center", color : "grey", lineHeight : 20}}>새 소식 없음</p>
                 }
             </>
         )
@@ -513,7 +519,7 @@ function Home() {
             <>
                 {
                     thisWeekList.length !== 0 ? thisWeekList.map((e) =>
-                        <Timeline.Item color="green" className="hoverable" onClick={openTimelineUpdateModal}>
+                        <Timeline.Item color="green" className="hoverable" key={e.idx} onClick={openTimelineUpdateModal}>
                             <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
                             <ChangeTagColor value={e.leave_type} />
                             <span>{e.username}</span>
@@ -532,7 +538,7 @@ function Home() {
             <>
                 {
                     nextWeekList.length !== 0 ? nextWeekList.map((e) =>
-                        <Timeline.Item color="grey" className="hoverable" value={e.idx} onClick={openTimelineUpdateModal} style={{ color: 'grey' }}>
+                        <Timeline.Item color="grey" className="hoverable" key={e.idx} onClick={openTimelineUpdateModal} style={{ color: 'grey' }}>
                             <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
                             <ChangeTagColor value={e.leave_type} />
                             <span>{e.username}</span>
