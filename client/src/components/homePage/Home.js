@@ -410,18 +410,18 @@ function Home() {
         return (
             <>
                 {
-                    newBoard.map((e) =>
-                        <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.title}>
-                            <Card hoverable = "true" 
-                                  title = {e.title} type="inner"
-                                  style={{ width: '100%', marginTop: 16}} className="newBoardCard">
-                                <span style={{ fontSize : '12px', color : 'gray'}}>게시판 : {e.category}</span>
-                                <span style={{ fontSize : '12px', color : 'gray', marginLeft : 10}}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
-                            </Card>
-                        </Link>
-                        
-                    )
-                } 
+                    newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"))
+                        .map((e) =>
+                            <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.title}>
+                                <Card hoverable="true"
+                                    title={e.title} type="inner"
+                                    style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
+                                    <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
+                                    <span style={{ fontSize: '12px', color: 'gray', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                                </Card>
+                            </Link>
+                        )
+                }
             </>
         )
     }
@@ -571,11 +571,11 @@ function Home() {
                 </Card>
                 {/* 새글 알림 */}
                 <Card style={{
-                        margin: '16px 0 0 16px',
-                        width : '300px',
-                        height: '49%',
-                        borderRadius : '10px',
-                        boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                    margin: '16px 0 0 16px',
+                    width: '300px',
+                    height: '48.5%',
+                    borderRadius: '10px',
+                    boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                 }}>
                     <div>
                         <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
