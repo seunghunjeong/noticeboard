@@ -497,7 +497,7 @@ function Home() {
 
         return (
             <>
-                <Tag style = {{fontSize : 11, padding : '0 2px'}} color={thisColor}>{props.value}</Tag>
+                <Tag style={{ fontSize: 11, padding: '0 2px' }} color={thisColor}>{props.value}</Tag>
             </>
         )
     }
@@ -510,13 +510,13 @@ function Home() {
         return (
             <>
                 {
-                    thisWeekList.length !== 0 ?   thisWeekList.map((e) =>
-                                    <Timeline.Item color="green" className = "hoverable" onClick={openTimelineUpdateModal}>
-                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
-                                        <ChangeTagColor value = {e.leave_type}/>
-                                        <span>{e.username}</span>
-                                    </Timeline.Item> )  : <p><span>일정없음</span></p>
-                } 
+                    thisWeekList.length !== 0 ? thisWeekList.map((e) =>
+                        <Timeline.Item color="green" className="hoverable" onClick={openTimelineUpdateModal}>
+                            <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
+                            <ChangeTagColor value={e.leave_type} />
+                            <span>{e.username}</span>
+                        </Timeline.Item>) : <p><span>일정없음</span></p>
+                }
             </>
         )
     }
@@ -529,13 +529,13 @@ function Home() {
         return (
             <>
                 {
-                    nextWeekList.length !== 0 ?   nextWeekList.map((e) =>
-                                    <Timeline.Item color="grey" className = "hoverable" value = {e.idx} onClick = {openTimelineUpdateModal}>
-                                        <span style={{ fontSize: '12px', marginRight : '5px'}}>{moment(e.leave_start).format('YYYY-MM-DD ddd')}</span>
-                                        <ChangeTagColor value = {e.leave_type}/>
-                                        <span>{e.username}</span>
-                                    </Timeline.Item> )  : <p><span>일정없음</span></p>
-                } 
+                    nextWeekList.length !== 0 ? nextWeekList.map((e) =>
+                        <Timeline.Item color="grey" className="hoverable" value={e.idx} onClick={openTimelineUpdateModal} style={{ color: 'grey' }}>
+                            <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
+                            <ChangeTagColor value={e.leave_type} />
+                            <span>{e.username}</span>
+                        </Timeline.Item>) : <p><span>일정없음</span></p>
+                }
             </>
         )
     }
@@ -557,15 +557,13 @@ function Home() {
                         <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>이벤트 타임라인 </Text>
                     </div>
 
-                    <Timeline style={{ marginTop: '20px', marginBottom: '20px', paddingTop: '5px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
+                    <Timeline style={{ marginTop: '10px', marginBottom: '20px', paddingTop: '5px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
                         {/* 이번주 이벤트 */}
-                        <Timeline.Item color="green"><Text strong>이번주 일정</Text>
-                            <GetThisWeekTimeline />
-                        </Timeline.Item>
+                        <p style={{ marginBottom: '10px' }}><Text strong> 이번주 일정</Text></p>
+                        <GetThisWeekTimeline />
                         {/* 다음주 이벤트 */}
-                        <Timeline.Item color="gray" style={{ color: 'grey' }}>다음주 일정
-                            <GetNextWeekTimeline />
-                        </Timeline.Item>
+                        <p style={{ marginTop: '10px', marginBottom: '10px' }}><Text strong style={{ color: 'grey' }}> 다음주 일정</Text></p>
+                        <GetNextWeekTimeline />
                     </Timeline>
                     <Button
                         type="dashed"
@@ -592,14 +590,6 @@ function Home() {
                     </div>
                     {/* 새소식 데이터 받아오기 */}
                     <GetNewBoardList />
-                    {/* <Link to={`/board_list/공지사항`}>
-                        <Button
-                            type="dashed"
-                            style={{ width: '100%', marginTop: 16 }}
-                        >
-                            더보기
-                        </Button>
-                    </Link> */}
                 </Card>
             </div>
 
@@ -660,8 +650,8 @@ function Home() {
 
             {/* 타임라인 등록 팝업 */}
             <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span>
+                <div style={{ height: 32, marginBottom: 12 }}>
+                    <span style={{ width: 40, height: 40, marginRight: 20 }}>유형선택</span>
                     <Select defaultValue="연차" style={{ width: 200 }} onChange={leaveTypeHandler}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
@@ -690,8 +680,8 @@ function Home() {
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
-                <div style={{height : 32, marginBottom : 12 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span>
+                <div style={{ height: 32, marginBottom: 12 }}>
+                    <span style={{ width: 40, height: 40, marginRight: 20 }}>유형선택</span>
                     <Select defaultValue="연차" style={{ width: 200 }} onChange={leaveTypeHandler}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
