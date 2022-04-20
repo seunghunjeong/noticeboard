@@ -435,8 +435,8 @@ function Home() {
                     recent3contents.length > 0 ?    
                         recent3contents.map((e) =>
                             <>
-                                <Link to={`/board_detail/${e.idx}/${e.category}`} >
-                                    <Card hoverable="true" key={e.idx}
+                                <Link to={`/board_detail/${e.idx}/${e.category}`}>
+                                    <Card hoverable="true"
                                         title={e.title} type="inner"
                                         style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
                                         <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
@@ -536,33 +536,12 @@ function Home() {
         return (
             <>
                 {
-                    thisWeekList.length !== 0 ? thisWeekList.map((e, index) => {
-                        const username = e.username.split(',');
-                        const leave_type = e.leave_type.split(',');
-                        const idx = e.idx.split(',');
-                        return (
-                            <>
-                                <div key={"thisWeek" + e.leave_type}>
-                                    <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={"thisWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
-                        )
-
-                    })
-                        :
-                        <p><span>일정없음</span></p>
+                    thisWeekList.length !== 0 ? thisWeekList.map((e) =>
+                        <Timeline.Item color="green" className="hoverable" key={e.idx} onClick={openTimelineUpdateModal}>
+                            <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
+                            <ChangeTagColor value={e.leave_type} />
+                            <span>{e.username}</span>
+                        </Timeline.Item>) : <p><span>일정없음</span></p>
                 }
             </>
         )
@@ -576,33 +555,12 @@ function Home() {
         return (
             <>
                 {
-                    nextWeekList.length !== 0 ? nextWeekList.map((e, index) => {
-                        const username = e.username.split(',');
-                        const leave_type = e.leave_type.split(',');
-                        const idx = e.idx.split(',');
-                        return (
-                            <>
-                                <div key={"nextWeek" + e.leave_type}>
-                                    <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')} </span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={"nextWeek" + idx[index]}>
-                                                    <p className="hoverable" style={{ marginBottom: '0px' }} onClick={openTimelineUpdateModal} >
-                                                        <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
-                        )
-
-                    })
-                        :
-                        <p><span>일정없음</span></p>
+                    nextWeekList.length !== 0 ? nextWeekList.map((e) =>
+                        <Timeline.Item color="grey" className="hoverable" key={e.idx} onClick={openTimelineUpdateModal} style={{ color: 'grey' }}>
+                            <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}</span>
+                            <ChangeTagColor value={e.leave_type} />
+                            <span>{e.username}</span>
+                        </Timeline.Item>) : <p><span>일정없음</span></p>
                 }
             </>
         )
