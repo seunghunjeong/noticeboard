@@ -578,8 +578,10 @@ function Home() {
                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                 }}>
                     <div>
-                        <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float : 'left' }}/>
-                        <Text strong style={{marginLeft : '5px', fontSize: '16px'}}>새 소식</Text><Badge count={3} offset={[5, -5]}></Badge>
+                        <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
+                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>새 소식</Text><Badge count={
+                            newBoardList.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD")).length
+                        } offset={[5, -5]}></Badge>
                     </div>
                     {/* 새소식 데이터 받아오기 */}
                     <GetNewBoardList />
