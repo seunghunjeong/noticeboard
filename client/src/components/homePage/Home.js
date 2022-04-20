@@ -5,25 +5,25 @@ import { Link } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 
 import '../../App.css';
+import 'antd/dist/antd.less';
 import {
     Select, Calendar, DatePicker, Button,
-    Tag, message, Card, Typography, Layout, Timeline, Badge
+    Tag, message, Card, Typography, Layout, Timeline, Badge, Input
 } from 'antd';
 import {
     PlusSquareOutlined, EditOutlined, BarsOutlined,
     CheckOutlined, SmileTwoTone, PlusOutlined, FieldTimeOutlined
 } from '@ant-design/icons';
-import 'antd/dist/antd.less';
-import locale from "antd/es/calendar/locale/ko_KR";
+import moment from 'moment';
+import 'moment/locale/ko'
+import locale from "antd/es/calendar/locale/ko_KR"; //언어설정
+
+//modal
 import ReportRegisterModal from '../modals/DailyReportRegister';
 import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
 import TimeLineRegisterModal from '../modals/TimelineRegister';
 import TimeLineUpdateModal from '../modals/TimelineUpdate';
-import TextArea from 'antd/lib/input/TextArea';
-import moment from 'moment';
-import 'moment/locale/ko'
-
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
@@ -31,6 +31,7 @@ import confirmModal from '../modals/ConfirmModal_mobile';
 const { Text } = Typography;
 const { Option, OptGroup } = Select;
 const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
 function Home() {
     // 로딩처리를 위한 state
@@ -65,6 +66,18 @@ function Home() {
     const [timelineThisWeekList, setTimelineThisWeekList] = useState([]);
     //다음주 일정 타임라인
     const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
+    //타임라인 추가
+    const [timelineAdd, setTimelineAdd] = useState({
+        selectLeaveType : "",
+        selectLeaveDateStart : ""
+    });
+    //타임라인 수정
+    const [timelineEdit, setTimelineEdit] = useState({
+        idx : "",
+        leaveType : "",
+        leave_start : "",
+        leave_end : ""
+    });
 
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -73,7 +86,7 @@ function Home() {
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
     const [timelineUpdateModalOpen, setTimelineUpdateModalOpen] = useState(false);
 
-    // 등록창 열고닫기
+    // 일일보고 등록창 열고닫기
     const openRegisterModal = () => {
 
         if (department === null && !isAdmin) {
@@ -83,10 +96,10 @@ function Home() {
         setRegisterModalOpen(true);
     };
     const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
-    // 수정창 열고닫기
+    // 일일보고 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
     const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
-    // 조회창 열고닫기
+    // 일일보고 조회창 열고닫기
     const openViewModal = () => {
 
         if (department === null && !isAdmin) {
@@ -113,7 +126,7 @@ function Home() {
     const department = getUserData === undefined ? null : getUserData.department;
     const isAdmin = getUserData === undefined ? null : getUserData.admin;
 
-    const [selectDept, setSelectDept] = useState('ICT 사업부');
+    //const [selectDept, setSelectDept] = useState('ICT 사업부');
 
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
@@ -137,7 +150,7 @@ function Home() {
         // 전체 일일보고 데이터 불러오기
         Axios.get('/report/getReportDetail', {
             params: {
-                department: department ?? selectDept
+                department: department //?? selectDept
             }
         }
         ).then((res) => {
@@ -174,8 +187,8 @@ function Home() {
             setTimelineModalOpen(false);
             setTimelineUpdateModalOpen(false);
         }
-
-    }, [state, userId, selectDept, department])
+    }, [state, userId, department])
+    //}, [state, userId, selectDept, department])
 
     // 월 단위 캘린더 랜더링할 내용
     const getListData = (value) => {
@@ -415,15 +428,15 @@ function Home() {
         const recent7days = newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"));
         //최근 7일 이내 게시글 중에서 3개만 추출
         const recent3contents = recent7days.filter((e, index) =>  index < 3 );
-        console.log(recent3contents.length)
+        //console.log(recent3contents.length)
         return (
             <>
                 {
                     recent3contents.length > 0 ?    
                         recent3contents.map((e) =>
                             <>
-                                <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
-                                    <Card hoverable="true"
+                                <Link to={`/board_detail/${e.idx}/${e.category}`} >
+                                    <Card hoverable="true" key={e.idx}
                                         title={e.title} type="inner"
                                         style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
                                         <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
@@ -440,51 +453,56 @@ function Home() {
     }
 
     // 휴가 선택 유형
-    let selectLeaveType = ""; //state로 바꿔야할듯
+    //let selectLeaveType = ""; //state로 바꿔야할듯
     // 휴가 선택 날짜
-    let selectLeaveDateStart = "";
-    let selectLeaveDateEnd = "";
+    //let selectLeaveDateStart = "";
+    //let selectLeaveDateEnd = "";
 
     function leaveTypeHandler(value) {
-        selectLeaveType = value
-        //console.log(`selected ${selectLeaveType}`);
+        setTimelineAdd({
+            selectLeaveType : value
+        })
     }
 
     function leaveDateHandler(dates, dateStrings) {
-        selectLeaveDateStart = dateStrings[0]
-        selectLeaveDateEnd = dateStrings[1]
-
-        console.log(selectLeaveDateStart);
-        console.log(selectLeaveDateEnd);
+        setTimelineAdd({
+            selectLeaveDateStart : dateStrings[0],
+            selectLeaveDateEnd : dateStrings[1]
+        })
     }
 
     // 일정 등록하기
     const timelineRegisterHandler = () => {
         setLoading(true);
-
+        console.log(timelineAdd)
         const id = userId;
         const name = userName;
 
-        if (selectLeaveType === "") {
+        if (timelineAdd.selectLeaveType === "") {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
             return;
         }
-        else if (selectLeaveDateStart === "") {
+        else if (timelineAdd.selectLeaveDateStart === "") {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
             return;
         }
 
         Axios.post('/home/timelineRegister', {
-            selectLeaveType: selectLeaveType,
-            selectLeaveDateStart: selectLeaveDateStart,
+            selectLeaveType: timelineAdd.selectLeaveType,
+            selectLeaveDateStart: timelineAdd.selectLeaveDateStart,
             userid: id,
             username: name
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정추가완료");
                 closeTimelineModal();
+                setTimelineAdd({
+                    selectLeaveType : "",
+                    selectLeaveDateStart : "",
+                    selectLeaveDateEnd : ""
+                }); //입력창 초기화(이게맞나)
                 setState(res);
                 setLoading(false);
             }
