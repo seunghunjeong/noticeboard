@@ -12,6 +12,11 @@ import { useNavigate } from "react-router-dom";
 
 import {LoginOutlined } from '@ant-design/icons';
 
+// 일정 가져오기
+import ScheduleModal from '../modals/Schedule_mobile';
+// 알람 가져오기
+import NewSosickModal from '../modals/NewSosick_mobile';
+
 function Nav(props) {
 
   const categoryList = props.props;
@@ -86,12 +91,48 @@ function Nav(props) {
     return [tmpSub];
   }
 
-  const alert = () => {
-    message.info('t');
+  const Schedule = () => {
+    // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModal = (e) => {
+       // 이벤트 전파 방지
+       e.stopPropagation();
+       setModalOpen(true);
+   };
+
+    const closeModal = () => {
+      setModalOpen(false);
+    }
+
+    return (
+      <>
+        <FileDoneOutlined onClick={openModal} />
+        <ScheduleModal display={modalOpen} close={closeModal} header={'일정'} userData={getUserData}/>
+      </>
+    )
   }
 
-  const alert1 = () => {
-    message.info('f');
+  const Sosick = (e) => {
+     // 팝업창 열고 닫기위한 상태값 , 열고닫는 함수
+     const [modalOpen, setModalOpen] = useState(false);
+
+     const openModal = (e) => {
+        // 이벤트 전파 방지
+        e.stopPropagation();
+        setModalOpen(true);
+    };
+ 
+     const closeModal = () => {
+       setModalOpen(false);
+     }
+
+    return (
+      <>
+        <BellOutlined className={MobileStyle.avtHeader} onClick={openModal}/>
+        <NewSosickModal  display={modalOpen} close={closeModal} header={'일정'} userData={getUserData}/>
+      </>
+    )
   }
 
 
@@ -113,8 +154,8 @@ function Nav(props) {
                   로그아웃 
                 </LoginOutlined>
                 <span className={MobileStyle.avtNav}>
-                  <FileDoneOutlined onClick={alert} />
-                  <BellOutlined className={MobileStyle.avtHeader} onClick={alert1}/>
+                  <Schedule />
+                  <Sosick />                  
                 </span>
                </td>
             </tr>

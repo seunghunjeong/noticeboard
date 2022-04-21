@@ -10,7 +10,7 @@ import Auth from '../../_hoc/auth'
 import NavLayout from './Nav';
 
 import { Layout, Avatar, Drawer } from 'antd';
-import { MenuOutlined, FileDoneOutlined } from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import MobileStyle from '../../App_mobile.module.css';
 
 
@@ -49,7 +49,7 @@ function header(props) {
         <>
             <MenuOutlined onClick={showDrawer} /> 
             <Drawer placement="right" onClose={navClose} visible={visible} closable={false} width={'70vw'} bodyStyle={{padding:0, backgroundColor: 'rgb(0, 21, 41)'}}>
-                <NavLayout props={boardCategory} admin={admin} state={ss}> </NavLayout>
+                <NavLayout props={boardCategory} admin={admin} state={ss} user={getUserData}> </NavLayout>
             </Drawer>
         </>
         );
