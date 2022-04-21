@@ -164,7 +164,6 @@ function TimelineInfo() {
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
                         return (
-                            <>
                                 <div key={"thisWeek" + e.leave_type}>
                                     <Timeline.Item color="green">
                                         <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
@@ -180,7 +179,6 @@ function TimelineInfo() {
                                         }
                                     </Timeline.Item>
                                 </div>
-                            </>
                         )
 
                     })
@@ -204,7 +202,6 @@ function TimelineInfo() {
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
                         return (
-                            <>
                                 <div key={"nextWeek" + e.leave_type}>
                                     <Timeline.Item color="gray">
                                         <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
@@ -220,7 +217,6 @@ function TimelineInfo() {
                                         }
                                     </Timeline.Item>
                                 </div>
-                            </>
                         )
 
                     })
