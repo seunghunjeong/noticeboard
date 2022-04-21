@@ -160,7 +160,13 @@
 
 /*home => 새글소식 card 수정*/
 .newBoardCard.ant-card-type-inner .ant-card-body{
-  padding: 5px 10px;
+  padding : 3px 10px;
+}
+.newBoardCard.ant-card-type-inner .ant-card-head{
+  min-height : 27px;
+}
+.newBoardCard.ant-card-type-inner .ant-card-head-title{
+  padding : 6px 0;
 }
 
 /* 메인 콘텐트 */

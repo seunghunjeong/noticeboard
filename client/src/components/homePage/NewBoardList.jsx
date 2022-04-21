@@ -44,7 +44,7 @@ function NewBoardList() {
         //const recent3contents = recent7days.filter((e, index) => index < 3);
         //console.log(recent3contents.length)
         return (
-            <div style={{height : 320, overflow : 'auto'}}>
+            <div style={{height : 325, overflow : 'auto'}}>
                 {
                     recent7days.length > 0 ?
                         recent7days.map((e) =>
