@@ -23,16 +23,20 @@ const { Option, OptGroup } = Select;
 const { RangePicker } = DatePicker;
 
 function TimelineInfo() {
+
     // 로딩처리를 위한 state
     const [loading, setLoading] = useState(null);
+    // 렌더링을 위한 state
+    const [state, setState] = useState();
     //이번주 일정 타임라인
     const [timelineThisWeekList, setTimelineThisWeekList] = useState([]);
     //다음주 일정 타임라인
     const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
     //타임라인 추가
     const [timelineAdd, setTimelineAdd] = useState({
-        selectLeaveType : "",
-        selectLeaveDateStart : ""
+        selectLeaveType : null,
+        selectLeaveDateStart : null,
+        selectLeaveDateEnd : null
     });
     //타임라인 수정
     const [timelineEdit, setTimelineEdit] = useState({
@@ -56,7 +60,7 @@ function TimelineInfo() {
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
-    const department = getUserData === undefined ? null : getUserData.department;
+    //const department = getUserData === undefined ? null : getUserData.department;
 
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
@@ -88,27 +92,16 @@ function TimelineInfo() {
             setTimelineUpdateModalOpen(false);
         }
 
-    }, [userId, department])
-
-    // 휴가 선택 유형
-    let selectLeaveType = "연차"; //state로 바꿔야할듯
-    // 휴가 선택 날짜
-    let selectLeaveDateStart = "";
-    let selectLeaveDateEnd = "";
+    }, [state])
 
     function leaveTypeHandler(value) {
-        selectLeaveType = value
-        //console.log(`selected ${selectLeaveType}`);
+        setTimelineAdd({...timelineAdd, selectLeaveType : value}) 
     }
 
     function leaveDateHandler(dates, dateStrings) {
-        selectLeaveDateStart = dateStrings[0]
-        selectLeaveDateEnd = dateStrings[1]
-
-        console.log(selectLeaveDateStart);
-        console.log(selectLeaveDateEnd);
+        setTimelineAdd({...timelineAdd, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
     }
-
+    console.log(timelineAdd)
     // 일정 등록하기
     const timelineRegisterHandler = () => {
         setLoading(true);
@@ -116,27 +109,31 @@ function TimelineInfo() {
         const id = userId;
         const name = userName;
 
-        if (selectLeaveType === "") {
+        if (timelineAdd.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
             return;
         }
-        else if (selectLeaveDateStart === "") {
+        else if ( timelineAdd.selectLeaveDateStart === null) {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
             return;
         }
 
         Axios.post('/home/timelineRegister', {
-            selectLeaveType: selectLeaveType,
-            selectLeaveDateStart: selectLeaveDateStart,
+            selectLeaveType: timelineAdd.selectLeaveType,
+            selectLeaveDateStart: timelineAdd.selectLeaveDateStart,
             userid: id,
             username: name
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정추가완료");
                 closeTimelineModal();
+                setState(res);
                 setLoading(false);
+                //모달 닫혔을 때 입력창 reset을 위함
+                setTimelineAdd({selectLeaveType : null}) 
+                setTimelineAdd({selectLeaveDateStart : null}) 
             }
             else message.error("일정추가오류");
         })
@@ -283,7 +280,8 @@ function TimelineInfo() {
              <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
-                    <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
+                    <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
+                            onChange={leaveTypeHandler} defaultValue={timelineAdd.selectLeaveType}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -301,7 +299,10 @@ function TimelineInfo() {
                 </div>
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
+                    <RangePicker locale={locale} style={{ width: '100%'}} 
+                        onChange={leaveDateHandler} 
+                        defaultValue={[timelineAdd.selectLeaveDateStart, timelineAdd.selectLeaveDateEnd]}
+                    />
                 </div>
                 {/* <div style={{height : 32 }}>
                     <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
@@ -312,7 +313,8 @@ function TimelineInfo() {
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
-                    <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} onChange={leaveTypeHandler}>
+                    <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} 
+                            onChange={leaveTypeHandler} defaultValue={timelineEdit.selectLeaveType}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -330,7 +332,10 @@ function TimelineInfo() {
                 </div>
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} onChange={leaveDateHandler} />
+                    <RangePicker locale={locale} style={{ width: '100%'}} 
+                        onChange={leaveDateHandler} format={'YYYY-MM-DD'}
+                        defaultValue={[moment(timelineEdit.selectLeaveDateStart, 'YYYY-MM-DD'), moment(timelineEdit.selectLeaveDateEnd, 'YYYY-MM-DD')]}
+                    />
                 </div>
                 {/* <div style={{height : 32 }}>
                     <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
