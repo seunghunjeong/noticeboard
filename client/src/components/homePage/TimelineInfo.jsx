@@ -40,10 +40,9 @@ function TimelineInfo() {
     });
     //타임라인 수정
     const [timelineEdit, setTimelineEdit] = useState({
-        idx : "",
-        leaveType : "",
-        leave_start : "",
-        leave_end : ""
+        selectLeaveType : null,
+        selectLeaveDateStart : '2022-10-10',
+        selectLeaveDateEnd : '2022-10-10'
     });
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
@@ -156,6 +155,9 @@ function TimelineInfo() {
             </>
         )
     }
+    const getTimelineInfo = (e, index) => {
+        console.log(index)
+    }
 
     // 이번주 타임라인 목록 가져오기
     const GetThisWeekTimeline = () => {
@@ -172,11 +174,11 @@ function TimelineInfo() {
                         return (
                             <>
                                 <div key={"thisWeek" + e.leave_type}>
-                                    <Timeline.Item color="green">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
+                                    <Timeline.Item color="blue">
+                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일</span>
                                         {
                                             username.map((e, index) =>
-                                                <div key={"thisWeek" + idx[index]}>
+                                                <div key={index}>
                                                     <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
                                                         - <ChangeTagColor value={leave_type[index]} />
                                                         <span>{username[index]}</span>
@@ -216,7 +218,7 @@ function TimelineInfo() {
                                         <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
                                         {
                                             username.map((e, index) =>
-                                                <div key={"nextWeek" + idx[index]}>
+                                                <div key={index}>
                                                     <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
                                                         - <ChangeTagColor value={leave_type[index]} />
                                                         <span>{username[index]}</span>
@@ -273,9 +275,6 @@ function TimelineInfo() {
                     </Button>
                 </Card>
             </div>
-
-            
-
              {/* 타임라인 등록 팝업 */}
              <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>

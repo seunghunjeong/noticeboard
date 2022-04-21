@@ -14,7 +14,7 @@ import {
 function Home() {
     
     return (
-        <Layout style={{ flexDirection: 'row' }}>
+        <Layout style={{ flexDirection: 'row'}}>
             <div>
                 {/* 이벤트 타임라인 */}
                 <TimelineInfo />
