@@ -24,7 +24,7 @@ import TimeLineUpdateModal from '../modals/TimelineUpdate';
 // antd variable
 const { Text } = Typography;
 const { Option, OptGroup } = Select;
-const { RangePicker } = DatePicker;
+//const { RangePicker } = DatePicker;
 
 function TimelineInfo() {
 
@@ -43,19 +43,24 @@ function TimelineInfo() {
         selectLeaveDateStart : null,
         selectLeaveDateEnd : null
     });
-    //타임라인 수정
-    // const [timelineEdit, setTimelineEdit] = useState({
-    //     selectLeaveType : null,
-    //     selectLeaveDateStart : null,
-    //     selectLeaveDateEnd : null,
-    // });
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
     const [timelineUpdateModalOpen, setTimelineUpdateModalOpen] = useState(false);
 
     // 타임라인 등록창 열고닫기
     const openTimelineModal = () => {setTimelineModalOpen(true); document.body.style.overflow = "hidden";}
-    const closeTimelineModal = () => { setTimelineModalOpen(false);  document.body.style.overflow = "unset";}
+    const closeTimelineModal = () => {
+        
+        //모달 닫혔을 때 입력창 reset을 위함
+        setTimelineState({
+             ...timelineState,
+             selectLeaveType : null,
+             selectLeaveDateStart : null,
+             selectLeaveDateEnd : null
+        })
+        setTimelineModalOpen(false);
+        document.body.style.overflow = "unset";
+    }
     // 타임라인 수정창 열고닫기
     const openTimelineUpdateModal = (idx) => { 
         
@@ -73,10 +78,18 @@ function TimelineInfo() {
             setTimelineUpdateModalOpen(true); 
             document.body.style.overflow = "hidden";
         })
-        
-
     }
-    const closeTimelineUpdateModal = () => {setTimelineUpdateModalOpen(false); document.body.style.overflow = "unset";}
+    const closeTimelineUpdateModal = () => {
+        //모달 닫혔을 때 입력창 reset을 위함
+        setTimelineState({
+            ...timelineState,
+            selectLeaveType : null,
+            selectLeaveDateStart : null,
+            selectLeaveDateEnd : null
+        })
+        setTimelineUpdateModalOpen(false); 
+        document.body.style.overflow = "unset";
+    }
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
@@ -119,8 +132,9 @@ function TimelineInfo() {
         setTimelineState({...timelineState, selectLeaveType : value}) 
     }
 
-    function leaveDateHandler(dates, dateStrings) {
-        setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
+    function leaveDateHandler(date, dateString) {
+        // setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
+        setTimelineState({...timelineState, selectLeaveDateStart : dateString})
     }
 
     // 일정 등록하기
@@ -151,9 +165,6 @@ function TimelineInfo() {
                 message.success("일정추가완료");
                 setState(res);
                 setLoading(false);
-                //모달 닫혔을 때 입력창 reset을 위함
-                setTimelineState({selectLeaveType : null}) 
-                setTimelineState({selectLeaveDateStart : null})
                 closeTimelineModal();
             }
             else message.error("일정추가오류");
@@ -166,7 +177,7 @@ function TimelineInfo() {
         action : ''
     }
     
-    // 일정 삭제 confirm모달
+    // 일정 삭제 confirm modal
     const onConfirmdel = () => {
         confirmParam.txt = '삭제';
         confirmParam.content = '관련된 일정이 모두 삭제됩니다.'
@@ -185,9 +196,6 @@ function TimelineInfo() {
                 message.success("일정삭제완료");
                 setState(res);
                 setLoading(false);
-                //모달 닫혔을 때 입력창 reset을 위함
-                setTimelineState({selectLeaveType : null}) 
-                setTimelineState({selectLeaveDateStart : null})
                 closeTimelineUpdateModal();
             }
             else message.error("일정삭제오류");
@@ -247,7 +255,6 @@ function TimelineInfo() {
             </>
         )
     }
-    console.log(timelineState.selectLeaveDateStart)
 
     // 다음주 타임라인 목록 가져오기
     const GetNextWeekTimeline = () => {
@@ -327,7 +334,7 @@ function TimelineInfo() {
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
-                            onChange={leaveTypeHandler} defaultValue={timelineState.selectLeaveType}>
+                            onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -345,9 +352,11 @@ function TimelineInfo() {
                 </div>
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} 
-                        onChange={leaveDateHandler} allowEmpty={[false, true]}
-                        defaultValue={[timelineState.selectLeaveDateStart, timelineState.selectLeaveDateEnd]}
+                    {/* <RangePicker locale={locale} style={{ width: '100%'}} 
+                        onChange={leaveDateHandler}  format='YYYY-MM-DD' allowEmpty={[false, false]}
+                    /> */}
+                    <DatePicker onChange={leaveDateHandler} locale={locale} style={{ width: '100%'}} format='YYYY-MM-DD'
+                                value={timelineState.selectLeaveDateStart !== null ? moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD') : null}
                     />
                 </div>
                 {/* <div style={{height : 32 }}>
@@ -378,10 +387,13 @@ function TimelineInfo() {
                 </div>
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
-                    <RangePicker locale={locale} style={{ width: '100%'}} 
-                        onChange={leaveDateHandler} format='YYYY-MM-DD' allowEmpty={[false, false]}
+                    {/* <RangePicker locale={locale} style={{ width: '100%'}} 
+                        onChange={leaveDateHandler} format='YYYY-MM-DD' allowEmpty={[false, false]} disabled={[false, true]}
                         value={[moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD'), moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD')]}
-                    />
+                    /> */}
+                     <DatePicker onChange={leaveDateHandler} locale={locale} style={{ width: '100%'}}
+                                 format='YYYY-MM-DD' value={moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD')}
+                     />
                 </div>
                 {/* <div style={{height : 32 }}>
                     <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
