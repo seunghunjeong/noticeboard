@@ -11,11 +11,15 @@ import {
     SmileTwoTone, PlusOutlined 
 } from '@ant-design/icons';
 import 'antd/dist/antd.less';
-import TimeLineRegisterModal from '../modals/TimelineRegister';
-import TimeLineUpdateModal from '../modals/TimelineUpdate';
 import locale from "antd/es/calendar/locale/ko_KR";
 import moment from 'moment';
 import 'moment/locale/ko'
+
+// modal confirm
+import confirmModal from '../modals/ConfirmModal_mobile';
+import TimeLineRegisterModal from '../modals/TimelineRegister';
+import TimeLineUpdateModal from '../modals/TimelineUpdate';
+
 
 // antd variable
 const { Text } = Typography;
@@ -33,33 +37,51 @@ function TimelineInfo() {
     //다음주 일정 타임라인
     const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
     //타임라인 추가
-    const [timelineAdd, setTimelineAdd] = useState({
+    const [timelineState, setTimelineState] = useState({
+        selectIdx : null,
         selectLeaveType : null,
         selectLeaveDateStart : null,
         selectLeaveDateEnd : null
     });
     //타임라인 수정
-    const [timelineEdit, setTimelineEdit] = useState({
-        selectLeaveType : null,
-        selectLeaveDateStart : '2022-10-10',
-        selectLeaveDateEnd : '2022-10-10'
-    });
+    // const [timelineEdit, setTimelineEdit] = useState({
+    //     selectLeaveType : null,
+    //     selectLeaveDateStart : null,
+    //     selectLeaveDateEnd : null,
+    // });
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
     const [timelineUpdateModalOpen, setTimelineUpdateModalOpen] = useState(false);
 
     // 타임라인 등록창 열고닫기
-    const openTimelineModal = () => { setTimelineModalOpen(true); document.body.style.overflow = "hidden";};
-    const closeTimelineModal = () => { setTimelineModalOpen(false);  document.body.style.overflow = "unset";};
+    const openTimelineModal = () => {setTimelineModalOpen(true); document.body.style.overflow = "hidden";}
+    const closeTimelineModal = () => { setTimelineModalOpen(false);  document.body.style.overflow = "unset";}
     // 타임라인 수정창 열고닫기
-    const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); document.body.style.overflow = "hidden";};
-    const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); document.body.style.overflow = "unset";};
+    const openTimelineUpdateModal = (idx) => { 
+        
+        // 선택한 타임라인의 정보 불러오기
+        Axios.post(('/home/getTimelineInfo'), {
+            idx : idx
+        }).then((res) => {
+            setTimelineState({
+                selectIdx : res.data[0].idx,
+                selectLeaveType : res.data[0].leave_type,
+                selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
+                selectLeaveDateEnd : null
+            });
+            console.log(timelineState)
+            setTimelineUpdateModalOpen(true); 
+            document.body.style.overflow = "hidden";
+        })
+        
+
+    }
+    const closeTimelineUpdateModal = () => {setTimelineUpdateModalOpen(false); document.body.style.overflow = "unset";}
 
     //사용자 정보 받아오기
     const getUserData = useSelector(state => state.user.userData);
     const userId = getUserData === undefined ? null : getUserData.id;
     const userName = getUserData === undefined ? null : getUserData.userName;
-    //const department = getUserData === undefined ? null : getUserData.department;
 
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
@@ -94,13 +116,13 @@ function TimelineInfo() {
     }, [state])
 
     function leaveTypeHandler(value) {
-        setTimelineAdd({...timelineAdd, selectLeaveType : value}) 
+        setTimelineState({...timelineState, selectLeaveType : value}) 
     }
 
     function leaveDateHandler(dates, dateStrings) {
-        setTimelineAdd({...timelineAdd, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
+        setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
     }
-    console.log(timelineAdd)
+
     // 일정 등록하기
     const timelineRegisterHandler = () => {
         setLoading(true);
@@ -108,36 +130,69 @@ function TimelineInfo() {
         const id = userId;
         const name = userName;
 
-        if (timelineAdd.selectLeaveType === null) {
+        if (timelineState.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
             return;
         }
-        else if ( timelineAdd.selectLeaveDateStart === null) {
+        else if ( timelineState.selectLeaveDateStart === null) {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
             return;
         }
 
         Axios.post('/home/timelineRegister', {
-            selectLeaveType: timelineAdd.selectLeaveType,
-            selectLeaveDateStart: timelineAdd.selectLeaveDateStart,
+            selectLeaveType: timelineState.selectLeaveType,
+            selectLeaveDateStart: timelineState.selectLeaveDateStart,
             userid: id,
             username: name
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정추가완료");
-                closeTimelineModal();
                 setState(res);
                 setLoading(false);
                 //모달 닫혔을 때 입력창 reset을 위함
-                setTimelineAdd({selectLeaveType : null}) 
-                setTimelineAdd({selectLeaveDateStart : null}) 
+                setTimelineState({selectLeaveType : null}) 
+                setTimelineState({selectLeaveDateStart : null})
+                closeTimelineModal();
             }
             else message.error("일정추가오류");
         })
     }
 
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : ''
+    }
+    
+    // 일정 삭제 confirm모달
+    const onConfirmdel = () => {
+        confirmParam.txt = '삭제';
+        confirmParam.content = '관련된 일정이 모두 삭제됩니다.'
+        confirmParam.action = timelineDeleteHandler;
+        confirmModal(confirmParam);
+    }
+
+    // 일정 삭제하기
+    const timelineDeleteHandler = () => {
+        setLoading(true);
+
+        Axios.post('/home/deleteTimelineOne', {
+            idx : timelineState.selectIdx
+        }).then((res) => {
+            if (res.status === 200) {
+                message.success("일정삭제완료");
+                setState(res);
+                setLoading(false);
+                //모달 닫혔을 때 입력창 reset을 위함
+                setTimelineState({selectLeaveType : null}) 
+                setTimelineState({selectLeaveDateStart : null})
+                closeTimelineUpdateModal();
+            }
+            else message.error("일정삭제오류");
+        })
+    }
     // 휴가 종류값에 따른 태그색상 변경
     const ChangeTagColor = (props) => {
         let thisColor = "";
@@ -155,9 +210,6 @@ function TimelineInfo() {
             </>
         )
     }
-    const getTimelineInfo = (e, index) => {
-        console.log(index)
-    }
 
     // 이번주 타임라인 목록 가져오기
     const GetThisWeekTimeline = () => {
@@ -172,32 +224,30 @@ function TimelineInfo() {
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
                         return (
-                            <>
-                                <div key={"thisWeek" + e.leave_type}>
-                                    <Timeline.Item color="blue">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일</span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={index}>
-                                                    <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
-                                                        - <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
+                            <div key={"thisWeek" + e.leave_type}>
+                                <Timeline.Item color="blue">
+                                    <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일</span>
+                                    {
+                                        username.map((e, index) =>
+                                            <div key={index}>
+                                                <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
+                                                    - <ChangeTagColor value={leave_type[index]} />
+                                                    <span>{username[index]}</span>
+                                                </p>
+                                            </div>
+                                        )
+                                    }
+                                </Timeline.Item>
+                            </div>
                         )
-
                     })
-                        :
-                        <p><span>일정없음</span></p>
+                    :
+                    <p><span>일정없음</span></p>
                 }
             </>
         )
     }
+    console.log(timelineState.selectLeaveDateStart)
 
     // 다음주 타임라인 목록 가져오기
     const GetNextWeekTimeline = () => {
@@ -212,28 +262,25 @@ function TimelineInfo() {
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
                         return (
-                            <>
-                                <div key={"nextWeek" + e.leave_type}>
-                                    <Timeline.Item color="gray">
-                                        <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
-                                        {
-                                            username.map((e, index) =>
-                                                <div key={index}>
-                                                    <p className="hoverable" style={{ marginBottom: '3px' }} onClick={openTimelineUpdateModal} >
-                                                        - <ChangeTagColor value={leave_type[index]} />
-                                                        <span>{username[index]}</span>
-                                                    </p>
-                                                </div>
-                                            )
-                                        }
-                                    </Timeline.Item>
-                                </div>
-                            </>
+                            <div key={"nextWeek" + e.leave_type}>
+                                <Timeline.Item color="gray">
+                                    <span style={{ fontSize: '12px', marginRight: '5px' }}>{moment(e.leave_start).format('MM.DD ddd')}요일 </span>
+                                    {
+                                        username.map((e, index) =>
+                                            <div key={index}>
+                                                <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
+                                                    - <ChangeTagColor value={leave_type[index]} />
+                                                    <span>{username[index]}</span>
+                                                </p>
+                                            </div>
+                                        )
+                                    }
+                                </Timeline.Item>
+                            </div>
                         )
-
                     })
-                        :
-                        <p><span>일정없음</span></p>
+                    :
+                    <p><span>일정없음</span></p>
                 }
             </>
         )
@@ -280,7 +327,7 @@ function TimelineInfo() {
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
-                            onChange={leaveTypeHandler} defaultValue={timelineAdd.selectLeaveType}>
+                            onChange={leaveTypeHandler} defaultValue={timelineState.selectLeaveType}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -299,8 +346,8 @@ function TimelineInfo() {
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
                     <RangePicker locale={locale} style={{ width: '100%'}} 
-                        onChange={leaveDateHandler} 
-                        defaultValue={[timelineAdd.selectLeaveDateStart, timelineAdd.selectLeaveDateEnd]}
+                        onChange={leaveDateHandler} allowEmpty={[false, true]}
+                        defaultValue={[timelineState.selectLeaveDateStart, timelineState.selectLeaveDateEnd]}
                     />
                 </div>
                 {/* <div style={{height : 32 }}>
@@ -309,11 +356,11 @@ function TimelineInfo() {
                 </div> */}
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
-            <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={timelineRegisterHandler} loading={loading}>
+            <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={onConfirmdel} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} 
-                            onChange={leaveTypeHandler} defaultValue={timelineEdit.selectLeaveType}>
+                            onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
                         <OptGroup label="기본">
                             <Option value="연차">연차</Option>
                             <Option value="오전반차">오전반차</Option>
@@ -332,8 +379,8 @@ function TimelineInfo() {
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
                     <RangePicker locale={locale} style={{ width: '100%'}} 
-                        onChange={leaveDateHandler} format={'YYYY-MM-DD'}
-                        defaultValue={[moment(timelineEdit.selectLeaveDateStart, 'YYYY-MM-DD'), moment(timelineEdit.selectLeaveDateEnd, 'YYYY-MM-DD')]}
+                        onChange={leaveDateHandler} format='YYYY-MM-DD' allowEmpty={[false, true]}
+                        value={[moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD'), moment('2022-05-01', 'YYYY-MM-DD')]}
                     />
                 </div>
                 {/* <div style={{height : 32 }}>
@@ -341,7 +388,6 @@ function TimelineInfo() {
                     <span>0개</span>
                 </div> */}
             </TimeLineUpdateModal>
-       
         </>
     )
 }

@@ -48,16 +48,16 @@ function NewBoardList() {
                 {
                     recent7days.length > 0 ?
                         recent7days.map((e) =>
-                            <>
-                                <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
-                                    <Card hoverable="true"
-                                        title={e.title} type="inner"
-                                        style={{ width: '100%', marginBottom: 20 }} className="newBoardCard">
-                                        <span style={{ fontSize: '12px', color: 'grey' }}>게시판 : {e.category}</span>
-                                        <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
-                                    </Card>
-                                </Link>
-                            </>
+                          
+                            <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
+                                <Card hoverable="true"
+                                    title={e.title} type="inner"
+                                    style={{ width: '100%', marginBottom: 20 }} className="newBoardCard">
+                                    <span style={{ fontSize: '12px', color: 'grey' }}>게시판 : {e.category}</span>
+                                    <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                                </Card>
+                            </Link>
+                          
                         )
                         :
                         <p style={{ textAlign: "center", color: "grey", lineHeight: 20 }}>새 소식 없음</p>
