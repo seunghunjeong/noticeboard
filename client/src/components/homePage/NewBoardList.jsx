@@ -35,25 +35,28 @@ function NewBoardList() {
         //최근 7일 이내 게시글 전체
         const recent7days = newBoard.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD"));
         //최근 7일 이내 게시글 중에서 3개만 추출
-        const recent3contents = recent7days.filter((e, index) => index < 3);
+        //const recent3contents = recent7days.filter((e, index) => index < 3);
+        //console.log(recent3contents.length)
         return (
-            <>
+            <div style={{height : 325, overflow : 'auto'}}>
                 {
-                    recent3contents.length > 0 ?
-                        recent3contents.map((e) =>
-                                <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
-                                    <Card hoverable="true"
-                                        title={e.title} type="inner"
-                                        style={{ width: '100%', marginTop: 30 }} className="newBoardCard">
-                                        <span style={{ fontSize: '12px', color: 'gray' }}>게시판 : {e.category}</span>
-                                        <span style={{ fontSize: '12px', color: 'gray', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
-                                    </Card>
-                                </Link>
+                    recent7days.length > 0 ?
+                        recent7days.map((e) =>
+                          
+                            <Link to={`/board_detail/${e.idx}/${e.category}`} key={e.idx}>
+                                <Card hoverable="true"
+                                    title={e.title} type="inner"
+                                    style={{ width: '100%', marginBottom: 20 }} className="newBoardCard">
+                                    <span style={{ fontSize: '12px', color: 'grey' }}>게시판 : {e.category}</span>
+                                    <span style={{ fontSize: '12px', color: 'grey', marginLeft: 10 }}>작성일 : {moment(e.regist_date).format('YYYY-MM-DD')}</span>
+                                </Card>
+                            </Link>
+                          
                         )
                         :
                         <p style={{ textAlign: "center", color: "grey", lineHeight: 20 }}>새 소식 없음</p>
                 }
-            </>
+            </div>
         )
     }
 
@@ -67,9 +70,9 @@ function NewBoardList() {
                 borderRadius: '10px',
                 boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}>
-                <div>
+                <div style={{ marginBottom : 16}}>
                     <FieldTimeOutlined style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
-                    <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>새 소식</Text><Badge count={
+                    <Text strong style={{ marginLeft: 5, marginBottom : 16, fontSize: '16px' }}>새 소식</Text><Badge count={
                         newBoardList.filter(e => moment(e.regist_date).format("YYYY-MM-DD") > moment().subtract(7, 'day').format("YYYY-MM-DD")).length
                     } offset={[5, -5]}></Badge>
                 </div>

@@ -215,7 +215,7 @@ function Board_detail() {
         </p>
         <p className='regist_date'>{moment(BoardDetail.regist_date).format('YYYY-MM-DD HH:mm')}</p>
       </Card>
-      <Card>
+      <Card style={{ width: '100%', boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}>
         <div style={{ width: '100%', position: 'relative', bottom: '0', left: '0'}}>
           {/* <Divider orientation="left" style={{ fontSize: '12px', fontWeight: 'bold' }}>첨부파일</Divider> */}
           첨부파일 :

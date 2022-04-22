@@ -75,4 +75,38 @@ router.post("/timelineRegister", (req, res) => {
     })
 })
 
+// timeline one view
+router.post("/getTimelineInfo", (req, res) => {
+    
+    const idx = req.body.idx;
+
+    const sqlQuery = "select *"
+                   + " FROM timelineInfo"
+                   + " WHERE idx = ?"
+ 
+    db.query(sqlQuery, [idx], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
+// timeline one delete
+router.post("/deleteTimelineOne", (req, res) => {
+    
+    const idx = req.body.idx;
+
+    const sqlQuery = "DELETE"
+                   + " FROM timelineInfo"
+                   + " WHERE idx = ?"
+ 
+    db.query(sqlQuery, [idx], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
 module.exports = router;

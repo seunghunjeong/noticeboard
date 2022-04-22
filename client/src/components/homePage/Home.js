@@ -6,6 +6,7 @@ import NewBoardList from './NewBoardList';
 import DailyReport from './DailyReport';
 
 import '../../App.css';
+import 'antd/dist/antd.less';
 import {
     Layout
 } from 'antd';
@@ -13,7 +14,7 @@ import {
 function Home() {
     
     return (
-        <Layout style={{ flexDirection: 'row' }}>
+        <Layout style={{ flexDirection: 'row'}}>
             <div>
                 {/* 이벤트 타임라인 */}
                 <TimelineInfo />
