@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../_actions/user_action';
 import { useDispatch, useSelector  } from "react-redux";
@@ -36,7 +36,6 @@ function HeaderLayout(props) {
                 }
             });
     }
-
     const dot = stanbyList.filter(i => i.status === 'N').length === 0 ? false : true;
 
     return (
@@ -53,7 +52,7 @@ function HeaderLayout(props) {
                         {
                             isAdmin?
                                 <Badge dot={dot}>
-                                    <Avatar onClick={()=>{if(dot)navigate('/setting/approve_signup')}} style={{ background: 'none', cursor:'pointer' }} shape="square" icon={<BellOutlined />} />
+                                    <Avatar onClick={()=>{if(dot)navigate('/setting/approve_signup')}} style={dot ? { background: 'none', cursor:'pointer'} : {background: 'none', cursor:'inherit'}} shape="square" icon={<BellOutlined />} />
                                 </Badge>
                                 :
                                 null
