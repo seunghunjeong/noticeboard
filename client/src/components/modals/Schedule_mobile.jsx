@@ -33,7 +33,7 @@ const ScheduleModal = (props) => {
     //다음주 일정 타임라인
     const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
 
-    // modal opne, close 를 위한 상태값을 보관하는 state
+   /*  // modal opne, close 를 위한 상태값을 보관하는 state
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
     const [timelineUpdateModalOpen, setTimelineUpdateModalOpen] = useState(false);
 
@@ -43,12 +43,8 @@ const ScheduleModal = (props) => {
     // 타임라인 수정창 열고닫기
     const openTimelineUpdateModal = () => { setTimelineUpdateModalOpen(true); document.body.style.overflow = "hidden";};
     const closeTimelineUpdateModal = () => { setTimelineUpdateModalOpen(false); document.body.style.overflow = "unset";};
+ */
 
-    //사용자 정보 받아오기
-    const userId = userData === undefined ? null : userData.id;
-    const userName = userData === undefined ? null : userData.userName;
-    const department = userData === undefined ? null : userData.department;
-   
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
         let this_monday = moment().day(1).format('YYYY-MM-DD');
@@ -75,14 +71,15 @@ const ScheduleModal = (props) => {
         })
 
         return () => {
-            setTimelineModalOpen(false);
-            setTimelineUpdateModalOpen(false);
+            /* setTimelineModalOpen(false);
+            setTimelineUpdateModalOpen(false); */
+            setLoading(false);
         }
 
-    }, [userId, department])
+    }, [])
 
     // 휴가 선택 유형
-    let selectLeaveType = "연차"; //state로 바꿔야할듯
+   /*  let selectLeaveType = "연차"; //state로 바꿔야할듯
     // 휴가 선택 날짜
     let selectLeaveDateStart = "";
     let selectLeaveDateEnd = "";
@@ -131,7 +128,7 @@ const ScheduleModal = (props) => {
             }
             else message.error("일정추가오류");
         })
-    }
+    } */
 
     // 휴가 종류값에 따른 태그색상 변경
     const ChangeTagColor = (props) => {
