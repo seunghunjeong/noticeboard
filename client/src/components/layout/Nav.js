@@ -144,24 +144,26 @@ function Nav(props) {
         <Link to={'/home'}> <div className="main-logo" onClick={logoHome}/></Link> : 
         <>
           <table style={{background:'rgb(0, 21, 41)',width:'70vw', height:'64px', color:'whitesmoke'}}>
-            <tr style={{fontSize:'1.5em'}}>
-              <td rowSpan={2} width={'60vw'} style={{textAlign:'center'}}>
-              <Avatar src={<Image src="https://picsum.photos/200/200.jpg" />} size={'large'}/>
-              </td>
-               <td>
-                {getUserData.userName}            
-                <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
-                  로그아웃 
-                </LoginOutlined>
-                <span className={MobileStyle.avtNav}>
-                  <Schedule />
-                  <Sosick />                  
-                </span>
-               </td>
-            </tr>
-            <tr style={{fontSize:'0.7em'}}>
-              <td>{getUserData.department} / {getUserData.department !== null ? getUserData.position.substr(2) : navigate("/")}</td>
-            </tr>
+            <tbody>
+              <tr style={{fontSize:'1.5em'}}>
+                <td rowSpan={2} width={'60vw'} style={{textAlign:'center'}}>
+                <Avatar src={<Image src="https://picsum.photos/200/200.jpg" />} size={'large'}/>
+                </td>
+                <td>
+                  {getUserData.userName}            
+                  <LoginOutlined key="userKsy" onClick={onLogoutHandler} className={MobileStyle.btnHeader}>
+                    로그아웃 
+                  </LoginOutlined>
+                  <span className={MobileStyle.avtNav}>
+                    <Schedule />
+                    <Sosick />                  
+                  </span>
+                </td>
+              </tr>
+              <tr style={{fontSize:'0.7em'}}>
+                <td>{getUserData.department} / {getUserData.department !== null ? getUserData.position.substr(2) : navigate("/")}</td>
+              </tr>
+            </tbody>
           </table>
         </>
       }
