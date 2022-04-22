@@ -30,7 +30,7 @@ const TimelineUpdate = (props) => {
                 </Button>
                 {
                     loading ? <Loader /> :
-                            <Button style={{float : 'right'}} disabled className="update" onClick={update}>
+                            <Button style={{float : 'right'}} className="update" onClick={update}>
                                 수정
                             </Button>
                 }

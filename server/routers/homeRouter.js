@@ -92,6 +92,27 @@ router.post("/getTimelineInfo", (req, res) => {
     })
 })
 
+// timeline one update
+router.post("/updateTimelineOne", (req, res) => {
+    
+    
+    const idx = req.body.idx;
+    const selectLeaveType = req.body.selectLeaveType;
+    const selectLeaveDateStart = req.body.selectLeaveDateStart;
+
+    const sqlQuery = "UPDATE timelineInfo"
+                   + " SET leave_type = ?, leave_start = ?"
+                   + " WHERE idx = ?"
+ 
+    db.query(sqlQuery, [selectLeaveType, selectLeaveDateStart, idx], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
+
 // timeline one delete
 router.post("/deleteTimelineOne", (req, res) => {
     

@@ -130,11 +130,13 @@ function TimelineInfo() {
 
     function leaveTypeHandler(value) {
         setTimelineState({...timelineState, selectLeaveType : value}) 
+        //console.log(timelineState.selectLeaveType)
     }
 
     function leaveDateHandler(date, dateString) {
         // setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
         setTimelineState({...timelineState, selectLeaveDateStart : dateString})
+        //console.log(timelineState.selectLeaveDateStart)
     }
 
     // 일정 등록하기
@@ -171,6 +173,36 @@ function TimelineInfo() {
         })
     }
 
+    // 일정 수정하기
+    const timelineUpdateHandler = () => {
+        setLoading(true);
+
+        if (timelineState.selectLeaveType === null) {
+            message.warning("휴가 유형을 선택해 주세요.");
+            setLoading(false);
+            return;
+        }
+        else if ( timelineState.selectLeaveDateStart === null) {
+            message.warning("휴가 날짜를 선택해 주세요.");
+            setLoading(false);
+            return;
+        }
+
+        Axios.post('/home/updateTimelineOne', {
+            idx : timelineState.selectIdx,
+            selectLeaveType: timelineState.selectLeaveType,
+            selectLeaveDateStart: timelineState.selectLeaveDateStart
+        }).then((res) => {
+            if (res.status === 200) {
+                message.success("일정수정완료");
+                setState(res);
+                setLoading(false);
+                closeTimelineUpdateModal();
+            }
+            else message.error("일정수정오류");
+        })
+    }
+
     // confirm param object
     let confirmParam = {
         txt : '',
@@ -180,7 +212,7 @@ function TimelineInfo() {
     // 일정 삭제 confirm modal
     const onConfirmdel = () => {
         confirmParam.txt = '삭제';
-        confirmParam.content = '관련된 일정이 모두 삭제됩니다.'
+        // confirmParam.content = '관련된 일정이 모두 삭제됩니다.'
         confirmParam.action = timelineDeleteHandler;
         confirmModal(confirmParam);
     }
@@ -205,11 +237,12 @@ function TimelineInfo() {
     const ChangeTagColor = (props) => {
         let thisColor = "";
         if (props.value === "연차") thisColor = "magenta";
-        else if (props.value === "오전반차") thisColor = "gold";
-        else if (props.value === "오후반차") thisColor = "green";
+        else if (props.value === "오전반차") thisColor = "green";
+        else if (props.value === "오후반차") thisColor = "gold";
         else if (props.value === "출장") thisColor = "lime";
         else if (props.value === "외근") thisColor = "volcano";
         else if (props.value === "병가") thisColor = "cyan";
+        else if (props.value === "여름휴가") thisColor = "#2db7f5";
         else if (props.value === "경조휴가") thisColor = "geekblue";
 
         return (
@@ -346,6 +379,7 @@ function TimelineInfo() {
                         </OptGroup>
                         <OptGroup label="기타">
                             <Option value="병가">병가</Option>
+                            <Option value="여름휴가">여름휴가</Option>
                             <Option value="경조휴가">경조휴가</Option>
                         </OptGroup>
                     </Select>
@@ -365,7 +399,7 @@ function TimelineInfo() {
                 </div> */}
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
-            <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineRegisterHandler} del={onConfirmdel} loading={loading}>
+            <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineUpdateHandler} del={onConfirmdel} loading={loading}>
                 <div style={{height : 32, marginBottom : 12 }}>
                     {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} 
@@ -381,6 +415,7 @@ function TimelineInfo() {
                         </OptGroup>
                         <OptGroup label="기타">
                             <Option value="병가">병가</Option>
+                            <Option value="여름휴가">여름휴가</Option>
                             <Option value="경조휴가">경조휴가</Option>
                         </OptGroup>
                     </Select>
@@ -392,7 +427,7 @@ function TimelineInfo() {
                         value={[moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD'), moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD')]}
                     /> */}
                      <DatePicker onChange={leaveDateHandler} locale={locale} style={{ width: '100%'}}
-                                 format='YYYY-MM-DD' value={moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD')}
+                                 format='YYYY-MM-DD' value={timelineState.selectLeaveDateStart !== null ? moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD') : null}
                      />
                 </div>
                 {/* <div style={{height : 32 }}>
