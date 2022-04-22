@@ -322,6 +322,11 @@ function Home() {
                     subNumb = 3;
                     break;
                 case 6 :
+                    return `◎ 작업
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`;
                 case 7 :
                         return '◎';
                 default :
@@ -345,8 +350,17 @@ function Home() {
         if (state === 'updateModal') {
             resultTxt = filterBogo(dailyReport.regist_date);
         }
+        if(moment(dailyReport.regist_date).weekday() === 6){
+            return `◎ 작업  
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`
+        }
+
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
+
 
     // 전체 보기
     const GetDetailReport = () => {
@@ -390,6 +404,8 @@ function Home() {
         )
     }
 
+    
+
     return (
         <Fragment>
             <Calendar style={{
@@ -404,7 +420,9 @@ function Home() {
                 dateCellRender={dateCellRender}
                 onSelect={onSelect}
             />
-            <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
+            <Modal state={state} display={modalOpen} close={closeModal} header={
+                moment(dailyReport.regist_date).weekday() !== 6 ? "일일 보고" : "주간 보고"
+            } insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
                 <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 
@@ -418,7 +436,9 @@ function Home() {
             </Modal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={dailyReport.regist_date}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={
+                 moment(dailyReport.regist_date).weekday() !== 6 ? "ICT 사업부 일일 업무 보고" : "ICT 사업부 주간 업무 보고"
+            } day={dailyReport.regist_date}>
                 <GetDetailReport />
             </ReportViewModal>
         </Fragment>

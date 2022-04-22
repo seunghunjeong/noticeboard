@@ -50,27 +50,27 @@ function Home() {
     const [viewModalOpen, setViewModalOpen] = useState(false);
     // 등록창 열고닫기
     const openRegisterModal = () => {
-        
-        if(department === null && !isAdmin) {
+
+        if (department === null && !isAdmin) {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
         setRegisterModalOpen(true);
-        };
+    };
     const closeRegisterModal = () => { setRegisterModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 수정창 열고닫기
     const openUpdateModal = () => { setUpdateModalOpen(true); };
     const closeUpdateModal = () => { setUpdateModalOpen(false); setReport({ today: '', tomorrow: '' }); };
     // 조회창 열고닫기
     const openViewModal = () => {
-        
-        if(department === null && !isAdmin) {
+
+        if (department === null && !isAdmin) {
             message.info('부서 정보가 없습니다. 관리자에게 문의하세요')
             return;
         }
 
-        setViewModalOpen(true); 
-        GetDetailReport(); 
+        setViewModalOpen(true);
+        GetDetailReport();
     };
     const closeViewModal = () => { setViewModalOpen(false); setReport({ today: '', tomorrow: '' }); };
 
@@ -140,6 +140,7 @@ function Home() {
     // 월 단위 캘린더 랜더링하는 함수 
     const dateCellRender = (value) => {
         const listData = getListData(value);
+
         return (
             <ul className="events">
                 <li className='bogo'>
@@ -156,7 +157,7 @@ function Home() {
                 {
                     listData.map(item => (
                         <li key={"report" + item.idx}>
-                            <pre style={{ fontFamily: 'inherit', whiteSpace:'pre-wrap' }}>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
                                 {item.content}
                             </pre>
                         </li>
@@ -293,10 +294,10 @@ function Home() {
                         <tr>
                             <th scope="cols" className='title'>이름</th>
                             <th scope="cols" className='today'>
-                                { moment(day).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                                {moment(day).weekday() !== 6 ? '금일 실적' : '금주 실적'}
                             </th>
                             <th scope="cols" className='tomorrow'>
-                                { moment(day).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                                {moment(day).weekday() !== 6 ? '익일 계획' : '차주 계획'}
                             </th>
                         </tr>
                     </thead>
@@ -309,8 +310,8 @@ function Home() {
                                     return (
                                         <tr key={item.idx}>
                                             <td className='writer'>{item.writer} {str = str !== null ? str.substring(2) : null}</td>
-                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.report}</pre></td>
-                                            <td><pre style={{whiteSpace:'pre-wrap'}}>{item.plan}</pre></td>
+                                            <td><pre style={{ whiteSpace: 'pre-wrap' }}>{item.report}</pre></td>
+                                            <td><pre style={{ whiteSpace: 'pre-wrap' }}>{item.plan}</pre></td>
                                         </tr>
                                     )
                                 })
@@ -322,42 +323,57 @@ function Home() {
     }
 
     // 익일 보고를 금일 보고에 넣기
-     const readBogo = () => {
+    const readBogo = () => {
         const dateToday = selectDay.selectedValue;
         const dayCnt = moment(dateToday).weekday();
         let subNumb = 1;
-        switch(dayCnt) {
-            case 1 : 
+        switch (dayCnt) {
+            case 1:
                 subNumb = 3;
                 break;
-            case 6 :
-            case 7 :
-                    return '◎';
-            default :
+            case 6:
+                return `◎ 작업
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`;
+            case 7:
+                return '◎';
+            default:
                 subNumb = 1;
                 break;
         }
         const yesterday = moment(dateToday).subtract(subNumb, 'days').format("YYYY-MM-DD");
         const resultTxt = viewMyDailyReport.filter(
-                (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
+            (node) => moment(node.regist_date).format("YYYY-MM-DD") === yesterday
         )
         setReport({
             ...report,
-            today : resultTxt.length > 0 ? resultTxt[0].plan : ''
+            today: resultTxt.length > 0 ? resultTxt[0].plan : ''
         });
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
+    }
+
+    const defaultValue = () => {
+        return moment(selectDay.selectedValue).weekday() !== 6 ? '◎'
+            :
+            `◎ 작업  
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`
     }
 
     return (
 
         <Fragment>
-            
+
             <Calendar style={{
                 margin: '16px 16px 0 16px',
                 height: 'calc(100% - 134px)',
                 padding: '16px',
-                borderRadius : '10px',
-                boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
+                borderRadius: '10px',
+                boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
             }}
                 locale={locale}
                 fullscreen={true}
@@ -366,7 +382,9 @@ function Home() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={`${department} 일일 업무 보고`} insert={submitReport} loading={loading}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } insert={submitReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -375,20 +393,22 @@ function Home() {
                     <thead>
                         <tr>
                             <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
-                                { moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적' } 
+                                {moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적'}
                             </th>
                             <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
-                                { moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                                {moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획'}
                             </th>
                         </tr>
                     </thead>
                 </table>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
-                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={defaultValue} name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={`${department} 일일 업무 보고`} update={updateReport} del={deleteReport} loading={loading}>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } update={updateReport} del={deleteReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -397,10 +417,10 @@ function Home() {
                     <thead>
                         <tr>
                             <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
-                                { moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적' } 
+                                {moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적'}
                             </th>
                             <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
-                                { moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                                {moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획'}
                             </th>
                         </tr>
                     </thead>
@@ -410,10 +430,11 @@ function Home() {
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={`${department} 일일 업무 보고`} day={selectDay.selectedValue.format('YYYY-MM-DD')}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } day={selectDay.selectedValue.format('YYYY-MM-DD')}>
                 <GetDetailReport />
             </ReportViewModal>
-
         </Fragment>
     )
 }
