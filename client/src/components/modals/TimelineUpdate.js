@@ -25,12 +25,12 @@ const TimelineUpdate = (props) => {
                 </header>
                 <main>{props.children}</main>
                
-                <Button danger style={{float : 'right', marginLeft : 10}} className="delete" onClick={del}>
+                <Button danger  style={{float : 'right', marginLeft : 10}} className="delete" onClick={del}>
                     삭제
                 </Button>
                 {
                     loading ? <Loader /> :
-                            <Button style={{float : 'right'}} className="update" onClick={update}>
+                            <Button style={{float : 'right'}} disabled className="update" onClick={update}>
                                 수정
                             </Button>
                 }

@@ -379,8 +379,8 @@ function TimelineInfo() {
                 <div style={{ height: 32, marginBottom: 12 }}>
                     {/* <span style={{ width: 40, height: 40, marginRight: 20 }}>날짜선택</span> */}
                     <RangePicker locale={locale} style={{ width: '100%'}} 
-                        onChange={leaveDateHandler} format='YYYY-MM-DD' allowEmpty={[false, true]}
-                        value={[moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD'), moment('2022-05-01', 'YYYY-MM-DD')]}
+                        onChange={leaveDateHandler} format='YYYY-MM-DD' allowEmpty={[false, false]}
+                        value={[moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD'), moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD')]}
                     />
                 </div>
                 {/* <div style={{height : 32 }}>
