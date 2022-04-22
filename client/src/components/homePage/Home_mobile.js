@@ -373,8 +373,12 @@ function Home() {
                     <thead>
                         <tr>
                             <th scope="cols" className='title'>이름</th>
-                            <th scope="cols" className='today'>금일 실적</th>
-                            <th scope="cols" className='tomorrow'>익일 계획</th>
+                            <th scope="cols" className='today'>
+                                { moment(day).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                            </th>
+                            <th scope="cols" className='tomorrow'>
+                                { moment(day).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -403,9 +407,13 @@ function Home() {
             <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
-                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 금일 실적 <FormOutlined /></Divider>
+                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 
+                    { moment(dailyReport.regist_date).weekday() !== 6 ? '금일 실적 ' : '금주 실적 ' }   
+                <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readBogo} name='today'></TextArea>
-                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 익일 계획 <FormOutlined /></Divider>
+                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}>
+                    { moment(dailyReport.regist_date).weekday() !== 6 ? '익일 계획 ' : '차주 계획 ' }     
+                <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readPlan} name='tomorrow'></TextArea>
             </Modal>
 

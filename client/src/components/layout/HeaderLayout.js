@@ -37,6 +37,8 @@ function HeaderLayout(props) {
             });
     }
 
+    const dot = stanbyList.filter(i => i.status === 'N').length === 0 ? false : true;
+
     return (
         <Header className="site-layout-background" style={{ padding: 0 }}>
             {/* <div className="main-logo"/> */}
@@ -49,14 +51,12 @@ function HeaderLayout(props) {
                     </Button>
                     <span style={{ color: "white", float: "right" }}>
                         {
-                            isAdmin && stanbyList.filter(i => i.status === 'N').length === 0 ?
-                                <Badge>
-                                    <Avatar style={{ background: 'none' }} shape="square" icon={<BellOutlined />} />
+                            isAdmin?
+                                <Badge dot={dot}>
+                                    <Avatar onClick={()=>{if(dot)navigate('/setting/approve_signup')}} style={{ background: 'none', cursor:'pointer' }} shape="square" icon={<BellOutlined />} />
                                 </Badge>
                                 :
-                                <Badge dot>
-                                    <Avatar onClick={()=>{navigate('/setting/approve_signup')}} style={{ background: 'none', cursor:'pointer' }} shape="square" icon={<BellOutlined />} />
-                                </Badge>
+                                null
                         }
                         {userName}님 환영합니다!
                     </span>
