@@ -301,8 +301,12 @@ function DailyReport() {
                     <thead>
                         <tr>
                             <th scope="cols" className='title'>이름</th>
-                            <th scope="cols" className='today'>금일 실적</th>
-                            <th scope="cols" className='tomorrow'>익일 계획</th>
+                            <th scope="cols" className='today'>
+                                { moment(day).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                            </th>
+                            <th scope="cols" className='tomorrow'>
+                                { moment(day).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -378,8 +382,12 @@ function DailyReport() {
                 <table style={{ width: '100%' }}>
                     <thead>
                         <tr>
-                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>금일 실적</th>
-                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>익일 계획</th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
+                                { moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                            </th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
+                                { moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획' }
+                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -396,8 +404,12 @@ function DailyReport() {
                 <table style={{ width: '100%' }}>
                     <thead>
                         <tr>
-                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>금일 실적</th>
-                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>익일 계획</th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
+                                { moment(selectDay.selectedValue).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                            </th>
+                            <th style={{ border: '1px solid #d9d9d9', backgroundColor: '#ededed' }}>
+                                { moment(selectDay.selectedValue).weekday() !== 6 ? '익일 계획' : '차주 계획' }
+                            </th>
                         </tr>
                     </thead>
                 </table>
