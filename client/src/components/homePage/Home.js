@@ -13,6 +13,7 @@ import ReportUpdateModal from '../modals/DailyReportUpdate';
 import ReportViewModal from '../modals/DailyReportView';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import 'moment/locale/ko'
 
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
