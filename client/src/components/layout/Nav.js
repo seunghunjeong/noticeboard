@@ -17,6 +17,10 @@ import ScheduleModal from '../modals/Schedule_mobile';
 // 알람 가져오기
 import NewSosickModal from '../modals/NewSosick_mobile';
 
+//antd 
+const { Sider } = Layout;
+const { SubMenu } = Menu;
+
 function Nav(props) {
 
   const categoryList = props.props;
@@ -43,10 +47,6 @@ function Nav(props) {
          }
      });
   }
-
-  //antd 
-  const { Sider } = Layout;
-  const { SubMenu } = Menu;
   
   const [state, setState] = useState();
   const ss = useState(props.state);

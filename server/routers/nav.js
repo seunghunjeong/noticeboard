@@ -32,4 +32,23 @@ router.post("/getCateGory", (req, res) => {
 
 })
 
+// 최근 업데이트된 게시판 카테고리 가져오기
+// router.post("/getNewBoardCategory", (req, res) => {
+
+//     const before3day = req.body.before3day;
+    
+//     const sqlQuery = "SELECT category, count(*)"
+//                    + " FROM noticeboard"
+//                    + " WHERE regist_date > ?"
+//                    + " GROUP BY category";
+
+//     db.query(sqlQuery, [before3day], (err, result) => {
+//         if (err) {
+//             logger.error(err);
+//         }
+//         res.send(result);
+//     });
+
+// })
+
 module.exports = router;

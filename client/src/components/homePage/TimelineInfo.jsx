@@ -28,6 +28,12 @@ const { Option, OptGroup } = Select;
 
 function TimelineInfo() {
 
+    //사용자 정보 받아오기
+    const getUserData = useSelector(state => state.user.userData);
+    const userId = getUserData === undefined ? null : getUserData.id;
+    const userName = getUserData === undefined ? null : getUserData.userName;
+    const isAdmin = getUserData === undefined ? null : getUserData.admin;
+
     // 로딩처리를 위한 state
     const [loading, setLoading] = useState(null);
     // 렌더링을 위한 state
@@ -54,6 +60,7 @@ function TimelineInfo() {
         //모달 닫혔을 때 입력창 reset을 위함
         setTimelineState({
              ...timelineState,
+             selectUserId : null,
              selectLeaveType : null,
              selectLeaveDateStart : null,
              selectLeaveDateEnd : null
@@ -70,19 +77,36 @@ function TimelineInfo() {
         }).then((res) => {
             setTimelineState({
                 selectIdx : res.data[0].idx,
+                selectUserId : res.data[0].userid,
                 selectLeaveType : res.data[0].leave_type,
                 selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
                 selectLeaveDateEnd : null
             });
-            console.log(timelineState)
-            setTimelineUpdateModalOpen(true); 
-            document.body.style.overflow = "hidden";
         })
+
+        //작성한 사람만 수정/삭제할 수 있도록
+        //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
+        let userIdConfrim = userId === timelineState.selectUserId ? true : false;
+        // if (isAdmin) {  //관리자일 경우 모두 수정 가능
+        //     userIdConfrim = true;
+        // }
+        console.log(userId)
+        console.log(timelineState.selectUserId)
+        console.log(userIdConfrim)
+        if(userIdConfrim){
+            setTimelineUpdateModalOpen(true);
+            document.body.style.overflow = "hidden";
+        }
+        else{
+            setTimelineUpdateModalOpen(false);
+            document.body.style.overflow = "unset";   
+        }
     }
     const closeTimelineUpdateModal = () => {
         //모달 닫혔을 때 입력창 reset을 위함
         setTimelineState({
             ...timelineState,
+            selectUserId : null,
             selectLeaveType : null,
             selectLeaveDateStart : null,
             selectLeaveDateEnd : null
@@ -90,11 +114,6 @@ function TimelineInfo() {
         setTimelineUpdateModalOpen(false); 
         document.body.style.overflow = "unset";
     }
-
-    //사용자 정보 받아오기
-    const getUserData = useSelector(state => state.user.userData);
-    const userId = getUserData === undefined ? null : getUserData.id;
-    const userName = getUserData === undefined ? null : getUserData.userName;
 
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
@@ -128,17 +147,19 @@ function TimelineInfo() {
 
     }, [state])
 
+    // 휴가 종류 선택
     function leaveTypeHandler(value) {
         setTimelineState({...timelineState, selectLeaveType : value}) 
         //console.log(timelineState.selectLeaveType)
     }
 
+    // 휴가 날짜 선택
     function leaveDateHandler(date, dateString) {
         // setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
         setTimelineState({...timelineState, selectLeaveDateStart : dateString})
         //console.log(timelineState.selectLeaveDateStart)
     }
-
+ 
     // 일정 등록하기
     const timelineRegisterHandler = () => {
         setLoading(true);
@@ -244,6 +265,7 @@ function TimelineInfo() {
         else if (props.value === "병가") thisColor = "cyan";
         else if (props.value === "여름휴가") thisColor = "#2db7f5";
         else if (props.value === "경조휴가") thisColor = "geekblue";
+        else if (props.value === "공지") thisColor = "red";
 
         return (
             <>
@@ -378,6 +400,7 @@ function TimelineInfo() {
                             <Option value="외근">외근</Option>
                         </OptGroup>
                         <OptGroup label="기타">
+                            <Option value="공지">공지</Option>
                             <Option value="병가">병가</Option>
                             <Option value="여름휴가">여름휴가</Option>
                             <Option value="경조휴가">경조휴가</Option>
@@ -414,6 +437,7 @@ function TimelineInfo() {
                             <Option value="외근">외근</Option>
                         </OptGroup>
                         <OptGroup label="기타">
+                            <Option value="공지">공지</Option>
                             <Option value="병가">병가</Option>
                             <Option value="여름휴가">여름휴가</Option>
                             <Option value="경조휴가">경조휴가</Option>

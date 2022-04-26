@@ -26,6 +26,12 @@ function MainLayout() {
       .then((response) => {
         setStanbyList(response.data);
       })
+
+    // Axios.get('/api/getNewBoardCategory'), {
+
+    // }.then((response) => {
+    //   setStanbyList(response.data);
+    // })
   }, [state]);
 
   //사용자 정보 받아오기
