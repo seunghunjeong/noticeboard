@@ -82,25 +82,16 @@ function TimelineInfo() {
                 selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
                 selectLeaveDateEnd : null
             });
+            
+            if(userId === res.data[0].userid){
+                setTimelineUpdateModalOpen(true);
+                document.body.style.overflow = "hidden";
+            }
+            else{
+                setTimelineUpdateModalOpen(false);
+                document.body.style.overflow = "unset";   
+            } 
         })
-
-        //작성한 사람만 수정/삭제할 수 있도록
-        //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
-        let userIdConfrim = userId === timelineState.selectUserId ? true : false;
-        // if (isAdmin) {  //관리자일 경우 모두 수정 가능
-        //     userIdConfrim = true;
-        // }
-        console.log(userId)
-        console.log(timelineState.selectUserId)
-        console.log(userIdConfrim)
-        if(userIdConfrim){
-            setTimelineUpdateModalOpen(true);
-            document.body.style.overflow = "hidden";
-        }
-        else{
-            setTimelineUpdateModalOpen(false);
-            document.body.style.overflow = "unset";   
-        }
     }
     const closeTimelineUpdateModal = () => {
         //모달 닫혔을 때 입력창 reset을 위함
