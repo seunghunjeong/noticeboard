@@ -84,7 +84,7 @@ function TimelineInfo() {
                 selectLeaveDateEnd : null
             });
             
-            if(userId === res.data[0].userid){
+            if(userId === res.data[0].userid || isAdmin){ //관리자거나 글작성자일 경우만 수정허용
                 setTimelineUpdateModalOpen(true);
                 document.body.style.overflow = "hidden";
             }
@@ -383,10 +383,10 @@ function TimelineInfo() {
             </div>
              {/* 타임라인 등록 팝업 */}
              <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
-                <div style={{ width : '100%', height : 32, marginBottom: 12}}>
+                {/* <div style={{ width : '100%', height : 32, marginBottom: 12}}>
                     <span style={{float : 'right'}}>0개</span>
                     <span style={{marginRight : 20, float : 'right' }}>잔여휴가일수</span>
-                </div>
+                </div> */}
                 <div style={{height : 32, marginBottom : 12 }}>
                     <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
                             onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
