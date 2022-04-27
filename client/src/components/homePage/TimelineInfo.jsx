@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Auth from '../../_hoc/auth'
 
 import {
-    Select, DatePicker, Button,
+    Select, DatePicker, Button, Input,
     Tag, message, Card, Typography, Timeline
 } from 'antd';
 import {
@@ -23,6 +23,7 @@ import TimeLineUpdateModal from '../modals/TimelineUpdate';
 
 // antd variable
 const { Text } = Typography;
+const { TextArea } = Input;
 const { Option, OptGroup } = Select;
 //const { RangePicker } = DatePicker;
 
@@ -150,6 +151,11 @@ function TimelineInfo() {
         setTimelineState({...timelineState, selectLeaveDateStart : dateString})
         //console.log(timelineState.selectLeaveDateStart)
     }
+
+    // 메모
+    const timelineMemoHandler = e => {
+        console.log(e);
+    };
  
     // 일정 등록하기
     const timelineRegisterHandler = () => {
@@ -377,8 +383,11 @@ function TimelineInfo() {
             </div>
              {/* 타임라인 등록 팝업 */}
              <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
+                <div style={{ width : '100%', height : 32, marginBottom: 12}}>
+                    <span style={{float : 'right'}}>0개</span>
+                    <span style={{marginRight : 20, float : 'right' }}>잔여휴가일수</span>
+                </div>
                 <div style={{height : 32, marginBottom : 12 }}>
-                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
                             onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
                         <OptGroup label="기본">
@@ -407,10 +416,9 @@ function TimelineInfo() {
                                 value={timelineState.selectLeaveDateStart !== null ? moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD') : null}
                     />
                 </div>
-                {/* <div style={{height : 32 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
-                    <span>0개</span>
-                </div> */}
+                <div style={{ marginBottom: 12}}>
+                    <TextArea className="timeline_memo" placeholder = "메모입력" allowClear onChange={timelineMemoHandler} />
+                </div>
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineUpdateHandler} del={onConfirmdel} loading={loading}>

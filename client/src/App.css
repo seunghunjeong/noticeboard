@@ -213,3 +213,8 @@
 .hoverable:hover {
   color : rgb(103, 103, 161);
 }
+
+
+.timeline_memo.ant-input[placeholder] {
+  text-align: center;
+}

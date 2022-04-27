@@ -205,7 +205,6 @@ function Board_detail() {
                               <Button style={{ marginRight: '10px', float: 'right' }} type="primary" onClick={onConfirmup} icon={<EditOutlined />}>수정</Button>
                           </div>: null
         }
-
       </div>
 
       <Card style={{ width: '100%', height: '170px', boxShadow : 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}>
@@ -233,4 +232,4 @@ function Board_detail() {
   )
 }
 
-export default Auth(Board_detail, null)
+export default Auth(Board_detail, null)   
