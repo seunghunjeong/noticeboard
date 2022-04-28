@@ -5,7 +5,7 @@ import MobileStyle from '../../App_mobile.module.css';
 
 const NewSosickModal = (props) => {
     // 부모로부터 값을 받아옴
-    const { display, close, header } = props;
+    const { display, close } = props;
 
     return (
         // 클래스명 변경을 통해 활성화 / 비활성화
