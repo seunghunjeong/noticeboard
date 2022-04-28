@@ -24,7 +24,7 @@ router.post("/getTimelineThisWeekList", (req, res) => {
     const this_monday = req.body.this_monday;
     const this_sunday = req.body.this_sunday;
 
-    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx"
+    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(memo) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
                    + " HAVING leave_start BETWEEN ? AND ?"
@@ -42,7 +42,7 @@ router.post("/getTimelineNextWeekList", (req, res) => {
     const next_monday = req.body.next_monday;
     const next_sunday = req.body.next_sunday;
 
-    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx"
+    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(memo) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
                    + " HAVING leave_start BETWEEN ? AND ?"
@@ -64,10 +64,11 @@ router.post("/timelineRegister", (req, res) => {
     const username = req.body.username;
     const selectLeaveType = req.body.selectLeaveType;
     const selectLeaveDateStart = req.body.selectLeaveDateStart;
-    
-    const sqlQuery = "INSERT INTO board.timelineInfo (userid, username, leave_type, leave_start) VALUES (?, ?, ?, ?)"
+    const memo = req.body.memo;
+
+    const sqlQuery = "INSERT INTO board.timelineInfo (userid, username, leave_type, leave_start, memo) VALUES (?, ?, ?, ?, ?)"
                   
-    db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDateStart], (err, result) => {
+    db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDateStart, memo], (err, result) => {
         if (err) {
             logger.error(err);
         }
@@ -99,12 +100,13 @@ router.post("/updateTimelineOne", (req, res) => {
     const idx = req.body.idx;
     const selectLeaveType = req.body.selectLeaveType;
     const selectLeaveDateStart = req.body.selectLeaveDateStart;
+    const memo = req.body.memo;
 
     const sqlQuery = "UPDATE timelineInfo"
-                   + " SET leave_type = ?, leave_start = ?"
+                   + " SET leave_type = ?, leave_start = ?, memo = ?"
                    + " WHERE idx = ?"
  
-    db.query(sqlQuery, [selectLeaveType, selectLeaveDateStart, idx], (err, result) => {
+    db.query(sqlQuery, [selectLeaveType, selectLeaveDateStart, memo, idx], (err, result) => {
         if (err) {
             logger.error(err);
         }

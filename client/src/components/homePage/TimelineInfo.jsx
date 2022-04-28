@@ -48,7 +48,8 @@ function TimelineInfo() {
         selectIdx : null,
         selectLeaveType : null,
         selectLeaveDateStart : null,
-        selectLeaveDateEnd : null
+        selectLeaveDateEnd : null,
+        memo : null
     });
     // modal opne, close 를 위한 상태값을 보관하는 state
     const [timelineModalOpen, setTimelineModalOpen] = useState(false);
@@ -64,7 +65,8 @@ function TimelineInfo() {
              selectUserId : null,
              selectLeaveType : null,
              selectLeaveDateStart : null,
-             selectLeaveDateEnd : null
+             selectLeaveDateEnd : null,
+             memo : null
         })
         setTimelineModalOpen(false);
         document.body.style.overflow = "unset";
@@ -81,7 +83,8 @@ function TimelineInfo() {
                 selectUserId : res.data[0].userid,
                 selectLeaveType : res.data[0].leave_type,
                 selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
-                selectLeaveDateEnd : null
+                selectLeaveDateEnd : null,
+                memo : res.data[0].memo
             });
             
             if(userId === res.data[0].userid || isAdmin){ //관리자거나 글작성자일 경우만 수정허용
@@ -101,7 +104,8 @@ function TimelineInfo() {
             selectUserId : null,
             selectLeaveType : null,
             selectLeaveDateStart : null,
-            selectLeaveDateEnd : null
+            selectLeaveDateEnd : null,
+            memo : null
         })
         setTimelineUpdateModalOpen(false); 
         document.body.style.overflow = "unset";
@@ -154,7 +158,7 @@ function TimelineInfo() {
 
     // 메모
     const timelineMemoHandler = e => {
-        console.log(e);
+        setTimelineState({...timelineState, memo : e.target.value}) 
     };
  
     // 일정 등록하기
@@ -179,7 +183,8 @@ function TimelineInfo() {
             selectLeaveType: timelineState.selectLeaveType,
             selectLeaveDateStart: timelineState.selectLeaveDateStart,
             userid: id,
-            username: name
+            username: name,
+            memo : timelineState.memo
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정추가완료");
@@ -209,7 +214,8 @@ function TimelineInfo() {
         Axios.post('/home/updateTimelineOne', {
             idx : timelineState.selectIdx,
             selectLeaveType: timelineState.selectLeaveType,
-            selectLeaveDateStart: timelineState.selectLeaveDateStart
+            selectLeaveDateStart: timelineState.selectLeaveDateStart,
+            memo : timelineState.memo
         }).then((res) => {
             if (res.status === 200) {
                 message.success("일정수정완료");
@@ -275,6 +281,7 @@ function TimelineInfo() {
     const GetThisWeekTimeline = () => {
 
         const thisWeekList = timelineThisWeekList;
+        //console.log(thisWeekList)
 
         return (
             <>
@@ -283,6 +290,8 @@ function TimelineInfo() {
                         const username = e.username.split(',');
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
+                        const memo = e.memo !== null ? e.memo.split(',') : null;
+                        
                         return (
                             <div key={"thisWeek" + e.leave_start}>
                                 <Timeline.Item color="blue">
@@ -293,6 +302,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
+                                                    {memo !== null && memo[index].length > 0 ? <span> : {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -320,6 +330,8 @@ function TimelineInfo() {
                         const username = e.username.split(',');
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
+                        const memo = e.memo !== null ? e.memo.split(',') : null;
+
                         return (
                             <div key={"nextWeek" + e.leave_start}>
                                 <Timeline.Item color="grey">
@@ -330,6 +342,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
+                                                    {memo !== null && memo[index].length > 0 ? <span> : {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -453,10 +466,9 @@ function TimelineInfo() {
                                  format='YYYY-MM-DD' value={timelineState.selectLeaveDateStart !== null ? moment(timelineState.selectLeaveDateStart, 'YYYY-MM-DD') : null}
                      />
                 </div>
-                {/* <div style={{height : 32 }}>
-                    <span style={{ width : 40, height : 40, marginRight : 20 }}>잔여휴가일수</span>
-                    <span>0개</span>
-                </div> */}
+                <div style={{ marginBottom: 12}}>
+                    <TextArea className="timeline_memo" placeholder = "메모입력" allowClear onChange={timelineMemoHandler} value={timelineState.memo} />
+                </div>
             </TimeLineUpdateModal>
         </>
     )
