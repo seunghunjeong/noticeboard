@@ -8,7 +8,7 @@ import {
     Tag, message, Card, Typography, Timeline
 } from 'antd';
 import {
-    SmileTwoTone, PlusOutlined 
+    SmileTwoTone, PlusOutlined, CaretRightOutlined
 } from '@ant-design/icons';
 import 'antd/dist/antd.less';
 import locale from "antd/es/calendar/locale/ko_KR";
@@ -267,8 +267,8 @@ function TimelineInfo() {
         else if (props.value === "외근") thisColor = "volcano";
         else if (props.value === "병가") thisColor = "cyan";
         else if (props.value === "여름휴가") thisColor = "#2db7f5";
-        else if (props.value === "경조휴가") thisColor = "geekblue";
-        else if (props.value === "공지") thisColor = "red";
+        else if (props.value === "경조휴가") thisColor = "#d5d5d5";
+        else if (props.value === "공지") thisColor = "#f50";
 
         return (
             <>
@@ -281,12 +281,12 @@ function TimelineInfo() {
     const GetThisWeekTimeline = () => {
 
         const thisWeekList = timelineThisWeekList;
-        //console.log(thisWeekList)
+        console.log(thisWeekList)
 
         return (
             <>
                 {
-                    thisWeekList.length !== 0 ? thisWeekList.map((e, index) => {
+                    thisWeekList.length > 0 ? thisWeekList.map((e, index) => {
                         const username = e.username.split(',');
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
@@ -302,7 +302,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
-                                                    {memo !== null && memo[index].length > 0 ? <span> : {memo[index]}</span> : null}
+                                                    {memo !== null && memo.length > 0 ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -342,7 +342,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
-                                                    {memo !== null && memo[index].length > 0 ? <span> : {memo[index]}</span> : null}
+                                                    {memo !== null && memo.length > 0 ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -430,7 +430,7 @@ function TimelineInfo() {
                     />
                 </div>
                 <div style={{ marginBottom: 12}}>
-                    <TextArea className="timeline_memo" placeholder = "메모입력" allowClear onChange={timelineMemoHandler} />
+                    <TextArea className="timeline_memo" placeholder = "메모입력" allowClear onChange={timelineMemoHandler} value={timelineState.memo}/>
                 </div>
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
