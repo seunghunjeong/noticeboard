@@ -343,7 +343,8 @@ function ScheduleModal(props) {
             {display ? (
                 <section>
                     <header style={{color:'black'}}>
-                        {header}
+                            <SmileTwoTone style={{ position:'relative', top:'5px' ,fontSize: '25px', color: '#08c', float: 'left' }} />
+                            <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>이벤트 타임라인 </Text>
                         <button style={{ position: 'absolute', top: '8px' }} className="closeView" onClick={close}>
                             &times;
                         </button>
@@ -358,12 +359,7 @@ function ScheduleModal(props) {
                                     borderRadius: '10px',
                                     boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
                                 }}>
-                                    <div>
-                                        <SmileTwoTone style={{ fontSize: '25px', color: '#08c', float: 'left' }} />
-                                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>이벤트 타임라인 </Text>
-                                    </div>
-
-                                    <Timeline style={{ marginTop: '10px', marginBottom: '20px', paddingTop: '5px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
+                                    <Timeline style={{ marginBottom: '20px', paddingLeft: '7px', overflow: 'auto', width: '100%', height: '260px' }}>
                                         {/* 이번주 이벤트 */}
                                         <p style={{ marginBottom: '10px' }}><Text strong> 이번주 일정</Text></p>
                                         <GetThisWeekTimeline />
