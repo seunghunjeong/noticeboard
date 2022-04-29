@@ -49,6 +49,18 @@ const Leave_count_setting = () => {
                     <Button onClick={() => {updateLeaveCount(row.id)}}>수정</Button>    
                 </>
             )
+        },
+        {
+            title: '연차사용내역보기',
+            dataIndex: 'leave_count',
+            key: 'leave_count',
+            align: 'center',
+            render: (title, row) =>
+            (
+                <>
+                    <Button onClick={() => {updateLeaveCount(row.id)}}>보기</Button>    
+                </>
+            )
         }
     ];
 

@@ -176,7 +176,7 @@ function TimelineInfo() {
     };
  
     // 일정 등록하기
-    const timelineRegisterHandler = () => {
+    const timelineRegisterHandler = (e) => {
         setLoading(true);
 
         const id = userId;
@@ -186,12 +186,12 @@ function TimelineInfo() {
         if(timelineState.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
-            return;
+            return e.preventDefault();
         }
         else if(timelineState.selectLeaveDateStart === null) {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
-            return;
+            return e.preventDefault();
         }
 
         /*
@@ -207,6 +207,13 @@ function TimelineInfo() {
         }
         else if(timelineState.selectLeaveType === "오전반차" || timelineState.selectLeaveType === "오후반차"){
             count -= 0.5;
+        }
+
+        //휴가 날짜 모자를 때 알림
+        if(count < 0) {
+            message.warning("연차 개수가 맞지않습니다.");
+            setLoading(false);
+            return e.preventDefault();
         }
 
         //등록
@@ -237,7 +244,7 @@ function TimelineInfo() {
     }
 
     // 일정 수정하기
-    const timelineUpdateHandler = () => {
+    const timelineUpdateHandler = (e) => {
         setLoading(true);
 
         const id = userId;
@@ -247,12 +254,12 @@ function TimelineInfo() {
         if (timelineState.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
-            return;
+            return e.preventDefault();
         }
         else if ( timelineState.selectLeaveDateStart === null) {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
-            return;
+            return e.preventDefault();
         }
 
         /*
@@ -274,6 +281,14 @@ function TimelineInfo() {
                  && (pre_leave_type === "오후반차" || pre_leave_type === "오전반차")){
             count -= 0.5;
         }
+
+        //휴가 날짜 모자를 때 알림
+        if(count < 0) {
+            message.warning("연차 개수가 맞지않습니다.");
+            setLoading(false);
+            return e.preventDefault();
+        }
+                
 
         Axios.post('/home/updateTimelineOne', {
             idx : timelineState.selectIdx,

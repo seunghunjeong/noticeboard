@@ -18,6 +18,8 @@ const LeaveManagement = () => {
     
     // 나의 연차 사용목록 가져오기
     const [myLeaveList, setMyLeaveList] = useState([]);
+     // 잔여 연차일수
+     const [leaveCount, setLeaveCount] = useState(0);
 
     useEffect(() => {
         Axios.post('/mypage/getMyleaveList', {id : userId})
@@ -25,7 +27,14 @@ const LeaveManagement = () => {
                 
                 console.log(response)
                 setMyLeaveList(response.data);
-            })
+        })
+
+        // 잔여 휴가일수 가져오기
+        Axios.post(('/home/getLeaveCount'), {
+            userid : userId
+        }).then((res) => {
+            setLeaveCount(res.data[0].leave_count);
+        })
     }, [userId])
 
     // table columns
@@ -37,7 +46,7 @@ const LeaveManagement = () => {
             align: 'center'
         },
         {
-            title: '연차종류',
+            title: '종류',
             dataIndex: 'leave_type',
             key: 'leave_type',
             align: 'center'
@@ -49,7 +58,7 @@ const LeaveManagement = () => {
     myLeaveList.map(element => {
         data.push({
             key : element.userid,
-            date : moment(element.leave_start).day(1).format('YYYY년 MM월 DD일 dddd'),
+            date : moment(element.leave_start).format('YYYY년 MM월 DD일 dddd'),
             leave_type : element.leave_type
         });
         return data;
@@ -59,10 +68,11 @@ const LeaveManagement = () => {
     return (
         <>
             <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
-                <p style={{ fontSize: "20px", fontWeight: "bold" }}>연차사용목록</p>
+                <p style={{ fontSize: "20px", fontWeight: "bold" }}>휴가사용목록</p>
                 <Table 
                     columns={columns} bordered  
                     dataSource={data}
+                    footer={() => '잔여휴가일수 : ' + leaveCount + "개"}
                 />
             </Content>
         </>
