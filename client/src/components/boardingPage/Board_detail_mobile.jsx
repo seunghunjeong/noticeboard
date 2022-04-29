@@ -52,7 +52,7 @@ function Board_detail() {
           message.error("상세페이지 불러오기 실패");
         }
       })
-  }, []);
+  }, [idx]);
   
   //작성한 사람만 수정/삭제할 수 있도록
   //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
@@ -181,7 +181,7 @@ function Board_detail() {
               <FilePath/>
             </Tag>
         </Card>
-        <Card key='keyBody' bodyStyle={{padding:'0.8em'}}>
+        <Card key='keyBody' bodyStyle={{padding:'0.8em', wordBreak:'break-all'}}>
           <div key='keyContent' className='content'>
               {ReactHtmlParser(BoardDetail.content)}
           </div>
