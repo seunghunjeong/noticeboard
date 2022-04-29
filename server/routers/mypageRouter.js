@@ -8,8 +8,7 @@ const logger = require('../logger');
 router.post("/getMyleaveList", (req, res) => {
 
     const id = req.body.id;
-    console.log(id)
- 
+
     // select 시작
     const sqlQuery = "SELECT * FROM board.timelineInfo"
                    + " WHERE userid = ?"
@@ -19,6 +18,7 @@ router.post("/getMyleaveList", (req, res) => {
                    + " OR leave_type = '오후반차'"
                    + " OR leave_type = '여름휴가'"
                    + " OR leave_type = '병가')"
+                   + " ORDER BY leave_start DESC"
 
     // ?에 키워드 넣기.
     db.query(sqlQuery, [id], (err, result) => {

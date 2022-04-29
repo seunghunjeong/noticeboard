@@ -78,11 +78,12 @@ const Leave_count_setting = () => {
             userid: id,
             count : leave_count_update
         }).then((res) => {
-            if (res.status === 200) {
+            console.log(res)
+            if (res.data !== "err" ) {
                 message.success("수정완료");
                 setState(res);
             }
-            else message.error("수정오류");
+            else message.error("수정오류. 알맞은 값을 입력하세요.");
         })
     }
 

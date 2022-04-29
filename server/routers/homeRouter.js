@@ -158,9 +158,11 @@ router.post("/updateLeaveCount", (req, res) => {
  
     db.query(sqlQuery, [leaveCount, id], (err, result) => {
         if (err) {
+            res.send("err");
             logger.error(err);
         }
         res.send(result);
+        
     })
 })
 
