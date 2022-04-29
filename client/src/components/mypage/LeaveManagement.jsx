@@ -33,7 +33,8 @@ const LeaveManagement = () => {
         Axios.post(('/home/getLeaveCount'), {
             userid : userId
         }).then((res) => {
-            if(res.data[0] > 0)
+            console.log(res)
+            if(res.data !== undefined)
             setLeaveCount(res.data[0].leave_count);
         })
     }, [userId])
@@ -80,4 +81,4 @@ const LeaveManagement = () => {
     )
 }
 
-export default Auth(LeaveManagement, true, true)
+export default Auth(LeaveManagement, true)

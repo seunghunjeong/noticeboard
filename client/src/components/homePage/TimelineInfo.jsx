@@ -133,7 +133,7 @@ function TimelineInfo() {
         Axios.post(('/home/getLeaveCount'), {
             userid : userId
         }).then((res) => {
-            if(res.data[0] > 0)
+            if(res.data !== undefined)
             setLeaveCount(res.data[0].leave_count);
         })
         // 이번주 타임라인 목록 가져오기

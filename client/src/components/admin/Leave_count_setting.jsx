@@ -4,21 +4,34 @@ import Auth from '../../_hoc/auth'
 
 // modal 
 import ListModal from '../modals/LeaveManagementList'
-import {Layout, Button, Table, message, Input,  List, Typography} from 'antd';
+
+import moment from 'moment';
+import 'moment/locale/ko'
+import {Layout, Button, Table, message, Input} from 'antd';
 
 // antd
 const { Content } = Layout;
+
 const Leave_count_setting = () => {
 
     // 렌더링을 위한 state
     const [state, setState] = useState();
     // 연차일수 변경값 
     const [leave_count_update, setLeave_count_update] = useState(null);
+    // 연차사용목록 리스트
+    const [usedLeaveList, setUsedLeaveList] = useState({});
 
     // modal상태값
     const [listModal, setListModal] = useState(false);
     const openModal = (id) => {
-        setListModal(true);
+
+        //선택한 사용자의 연차사용목록 불러오기
+        Axios.post('/mypage/getMyleaveList', {id : id})
+        .then((response) => {
+            setUsedLeaveList(response.data);
+            console.log(response.data)
+            setListModal(true);
+        })
     };
     const closeModal = () => { setListModal(false); };
 
@@ -93,26 +106,52 @@ const Leave_count_setting = () => {
         setLeave_count_update(value)
         console.log(leave_count_update)
     }
+
     const updateLeaveCount = (id) => {
         //연차개수 수정
         Axios.post('/home/updateLeaveCount', {
             userid: id,
             count : leave_count_update
         }).then((res) => {
-            if (res.data !== "err" ) {
+            console.log(res)
+            if (res.data.massege !== "err" ) {
                 message.success("수정완료");
                 setState(res);
             }
             else message.error("수정오류. 알맞은 값을 입력하세요.");
         })
     }
-    const dataList = [
-        'Racing car sprays burning fuel into crowd.',
-        'Japanese princess to wed commoner.',
-        'Australian walks 100km after outback crash.',
-        'Man charged over missing wedding girl.',
-        'Los Angeles battles huge wildfires.',
-      ];
+
+    // modal table columns
+    const columnsList = [
+        {
+            title: '날짜',
+            dataIndex: 'date',
+            key: 'date',
+            align: 'center'
+        },
+        {
+            title: '종류',
+            dataIndex: 'leave_type',
+            key: 'leave_type',
+            align: 'center'
+        }
+    ];
+
+    // 연차사용목록보기 클릭시 모달에 데이터 넣기
+    const usedLeaveData = [];
+    if(usedLeaveList.length > 0){
+        console.log(usedLeaveList)
+        usedLeaveList.map(element => {
+            usedLeaveData.push({
+                key : element.idx,
+                date : moment(element.leave_start).format('YYYY년 MM월 DD일 dddd'),
+                leave_type : element.leave_type
+            });
+            return usedLeaveData;
+        });
+    
+    }
 
     //render
     return (
@@ -125,16 +164,10 @@ const Leave_count_setting = () => {
                 />
             </Content>
             <ListModal display={listModal} close={closeModal} header={'사용목록'}>
-                <List
-                    header={<div>Header</div>}
-                    footer={<div>Footer</div>}
-                    bordered
-                    dataSource={dataList}
-                    renderItem={item => (
-                        <List.Item>
-                        <Typography.Text mark>[ITEM]</Typography.Text> {item}
-                    </List.Item>
-                )}
+                 <Table 
+                    columns={columnsList} bordered  
+                    dataSource={usedLeaveData}
+                    size="small"
                 />
             </ListModal>    
         </>
