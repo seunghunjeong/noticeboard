@@ -5,7 +5,7 @@ import Auth from '../../_hoc/auth'
 
 import moment from 'moment';
 import 'moment/locale/ko'
-import {Layout, Button, Table, message, Input, Card} from 'antd';
+import {Layout, Table} from 'antd';
 
 // antd
 const { Content } = Layout;
@@ -18,8 +18,8 @@ const LeaveManagement = () => {
     
     // 나의 연차 사용목록 가져오기
     const [myLeaveList, setMyLeaveList] = useState([]);
-     // 잔여 연차일수
-     const [leaveCount, setLeaveCount] = useState(0);
+    // 잔여 연차일수
+    const [leaveCount, setLeaveCount] = useState(0);
 
     useEffect(() => {
         Axios.post('/mypage/getMyleaveList', {id : userId})
@@ -57,7 +57,7 @@ const LeaveManagement = () => {
     const data = [];
     myLeaveList.map(element => {
         data.push({
-            key : element.userid,
+            key : element.idx,
             date : moment(element.leave_start).format('YYYY년 MM월 DD일 dddd'),
             leave_type : element.leave_type
         });
