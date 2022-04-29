@@ -39,11 +39,15 @@ function TimelineInfo() {
     const [loading, setLoading] = useState(null);
     // 렌더링을 위한 state
     const [state, setState] = useState();
-    //이번주 일정 타임라인
+    // 잔여 연차일수
+    const [leaveCount, setLeaveCount] = useState(0);
+    // 수정 전 leave_type을 저장하기 위한 변수
+    const [preLeaveTypeSave, setPreLeaveTypeSave] = useState();
+    // 이번주 일정 타임라인
     const [timelineThisWeekList, setTimelineThisWeekList] = useState([]);
-    //다음주 일정 타임라인
+    // 다음주 일정 타임라인
     const [timelineNextWeekList, setTimelineNextWeekList] = useState([]);
-    //타임라인 추가
+    // 타임라인 추가
     const [timelineState, setTimelineState] = useState({
         selectIdx : null,
         selectLeaveType : null,
@@ -86,6 +90,8 @@ function TimelineInfo() {
                 selectLeaveDateEnd : null,
                 memo : res.data[0].memo
             });
+
+            setPreLeaveTypeSave(res.data[0].leave_type); //휴가 종류 저장
             
             if(userId === res.data[0].userid || isAdmin){ //관리자거나 글작성자일 경우만 수정허용
                 setTimelineUpdateModalOpen(true);
@@ -98,6 +104,7 @@ function TimelineInfo() {
         })
     }
     const closeTimelineUpdateModal = () => {
+
         //모달 닫혔을 때 입력창 reset을 위함
         setTimelineState({
             ...timelineState,
@@ -107,10 +114,14 @@ function TimelineInfo() {
             selectLeaveDateEnd : null,
             memo : null
         })
+
+        setPreLeaveTypeSave(null); //휴가 종류 저장값 init -> 초기화 오류 방지
+
         setTimelineUpdateModalOpen(false); 
         document.body.style.overflow = "unset";
     }
 
+    // init
     useEffect(() => {
         //이번주/다음주 날짜 데이터 계산하기
         let this_monday = moment().day(1).format('YYYY-MM-DD');
@@ -118,6 +129,12 @@ function TimelineInfo() {
         let next_monday = moment().day(8).format('YYYY-MM-DD');
         let next_sunday = moment().day(14).format('YYYY-MM-DD');
 
+        // 잔여 휴가일수 가져오기
+        Axios.post(('/home/getLeaveCount'), {
+            userid : userId
+        }).then((res) => {
+            setLeaveCount(res.data[0].leave_count);
+        })
         // 이번주 타임라인 목록 가져오기
         Axios.post(('/home/getTimelineThisWeekList'), {
             this_monday: this_monday,
@@ -141,19 +158,16 @@ function TimelineInfo() {
             setTimelineUpdateModalOpen(false);
         }
 
-    }, [state])
+    }, [state, userId])
 
     // 휴가 종류 선택
     function leaveTypeHandler(value) {
         setTimelineState({...timelineState, selectLeaveType : value}) 
-        //console.log(timelineState.selectLeaveType)
     }
 
     // 휴가 날짜 선택
     function leaveDateHandler(date, dateString) {
-        // setTimelineState({...timelineState, selectLeaveDateStart : dateStrings[0], selectLeaveDateEnd : dateStrings[1]})
         setTimelineState({...timelineState, selectLeaveDateStart : dateString})
-        //console.log(timelineState.selectLeaveDateStart)
     }
 
     // 메모
@@ -167,18 +181,35 @@ function TimelineInfo() {
 
         const id = userId;
         const name = userName;
+        let count = leaveCount;
 
-        if (timelineState.selectLeaveType === null) {
+        if(timelineState.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
             return;
         }
-        else if ( timelineState.selectLeaveDateStart === null) {
+        else if(timelineState.selectLeaveDateStart === null) {
             message.warning("휴가 날짜를 선택해 주세요.");
             setLoading(false);
             return;
         }
 
+        /*
+        <연차 등록 계산>
+
+        연차, 병가, 여름휴가를 선택 - 1
+        오전반차나 오후반차를 선택 - 0.5
+        */
+        if(timelineState.selectLeaveType === "연차" || 
+           timelineState.selectLeaveType === "병가" || 
+           timelineState.selectLeaveType === "여름휴가"){
+            count -= 1;
+        }
+        else if(timelineState.selectLeaveType === "오전반차" || timelineState.selectLeaveType === "오후반차"){
+            count -= 0.5;
+        }
+
+        //등록
         Axios.post('/home/timelineRegister', {
             selectLeaveType: timelineState.selectLeaveType,
             selectLeaveDateStart: timelineState.selectLeaveDateStart,
@@ -187,10 +218,19 @@ function TimelineInfo() {
             memo : timelineState.memo
         }).then((res) => {
             if (res.status === 200) {
-                message.success("일정추가완료");
-                setState(res);
-                setLoading(false);
-                closeTimelineModal();
+                //연차개수 수정
+                Axios.post('/home/updateLeaveCount', {
+                    userid: id,
+                    count : count
+                }).then((res) => {
+                    if (res.status === 200) {
+                        message.success("일정추가완료");
+                        setState(res);
+                        setLoading(false);
+                        closeTimelineModal();
+                    }
+                    else message.error("일정추가오류");
+                })
             }
             else message.error("일정추가오류");
         })
@@ -200,6 +240,10 @@ function TimelineInfo() {
     const timelineUpdateHandler = () => {
         setLoading(true);
 
+        const id = userId;
+        let count = leaveCount;
+        const pre_leave_type = preLeaveTypeSave;
+
         if (timelineState.selectLeaveType === null) {
             message.warning("휴가 유형을 선택해 주세요.");
             setLoading(false);
@@ -211,6 +255,26 @@ function TimelineInfo() {
             return;
         }
 
+        /*
+        <연차 수정 계산>
+        
+        휴가유형을 변경하지 않은 경우는 0
+        기존 연차, 병가, 여름휴가를 선택한 후 오전반차, 오후반차로 변경할 경우 + 0.5
+        기존 오전반차나 오후반차를 선택한 후 연차, 병가, 여름휴가로 변경할 경우 - 0.5
+        */
+        if((pre_leave_type === "연차" || 
+            pre_leave_type === "병가" || 
+            pre_leave_type === "여름휴가") 
+            && (timelineState.selectLeaveType === "오후반차" || timelineState.selectLeaveType === "오전반차")){
+            count += 0.5;
+        }
+        else if((timelineState.selectLeaveType === "연차" || 
+                 timelineState.selectLeaveType === "병가" || 
+                 timelineState.selectLeaveType === "여름휴가") 
+                 && (pre_leave_type === "오후반차" || pre_leave_type === "오전반차")){
+            count -= 0.5;
+        }
+
         Axios.post('/home/updateTimelineOne', {
             idx : timelineState.selectIdx,
             selectLeaveType: timelineState.selectLeaveType,
@@ -218,10 +282,19 @@ function TimelineInfo() {
             memo : timelineState.memo
         }).then((res) => {
             if (res.status === 200) {
-                message.success("일정수정완료");
-                setState(res);
-                setLoading(false);
-                closeTimelineUpdateModal();
+                 //연차개수 수정
+                 Axios.post('/home/updateLeaveCount', {
+                    userid: id,
+                    count : count
+                }).then((res) => {
+                    if (res.status === 200) {
+                        message.success("일정수정완료");
+                        setState(res);
+                        setLoading(false);
+                        closeTimelineUpdateModal();
+                    }
+                    else message.error("일정수정오류");
+                })
             }
             else message.error("일정수정오류");
         })
@@ -245,14 +318,41 @@ function TimelineInfo() {
     const timelineDeleteHandler = () => {
         setLoading(true);
 
+        const id = userId;
+        let count = leaveCount;
+
+         /*
+        <연차 삭제 계산>
+
+        기존 연차, 병가, 여름휴가를 선택 + 1
+        기존 오전반차나 오후반차를 선택 + 0.5
+        */
+        if(timelineState.selectLeaveType === "연차" || 
+           timelineState.selectLeaveType === "병가" || 
+           timelineState.selectLeaveType === "여름휴가"){
+            count += 1;
+        }
+        else if(timelineState.selectLeaveType === "오전반차" || timelineState.selectLeaveType === "오후반차"){
+            count += 0.5;
+        }
+
         Axios.post('/home/deleteTimelineOne', {
             idx : timelineState.selectIdx
         }).then((res) => {
             if (res.status === 200) {
-                message.success("일정삭제완료");
-                setState(res);
-                setLoading(false);
-                closeTimelineUpdateModal();
+                 //연차개수 수정
+                 Axios.post('/home/updateLeaveCount', {
+                    userid: id,
+                    count : count
+                }).then((res) => {
+                    if (res.status === 200) {
+                        message.success("일정삭제완료");
+                        setState(res);
+                        setLoading(false);
+                        closeTimelineUpdateModal();
+                    }
+                    else message.error("일정삭제오류");
+                })
             }
             else message.error("일정삭제오류");
         })
@@ -281,7 +381,6 @@ function TimelineInfo() {
     const GetThisWeekTimeline = () => {
 
         const thisWeekList = timelineThisWeekList;
-        console.log(thisWeekList)
 
         return (
             <>
@@ -291,6 +390,7 @@ function TimelineInfo() {
                         const leave_type = e.leave_type.split(',');
                         const idx = e.idx.split(',');
                         const memo = e.memo !== null ? e.memo.split(',') : null;
+                        console.log(e.memo)
                         
                         return (
                             <div key={"thisWeek" + e.leave_start}>
@@ -302,7 +402,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
-                                                    {memo !== null && memo.length > 0 ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
+                                                    {memo !== null && memo[index] !== "" ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -342,7 +442,7 @@ function TimelineInfo() {
                                                 <p className="hoverable" style={{ marginBottom: '3px' }} onClick={() => {openTimelineUpdateModal(idx[index])}}>
                                                     - <ChangeTagColor value={leave_type[index]} />
                                                     <span>{username[index]}</span>
-                                                    {memo !== null && memo.length > 0 ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
+                                                    {memo !== null && memo[index] !== "" ? <span> <CaretRightOutlined /> {memo[index]}</span> : null}
                                                 </p>
                                             </div>
                                         )
@@ -357,11 +457,8 @@ function TimelineInfo() {
             </>
         )
     }
-
-
     return (
         <>
-        
             <div>
                 {/* 이벤트 타임라인 */}
                 <Card style={{
@@ -396,10 +493,10 @@ function TimelineInfo() {
             </div>
              {/* 타임라인 등록 팝업 */}
              <TimeLineRegisterModal display={timelineModalOpen} close={closeTimelineModal} insert={timelineRegisterHandler} loading={loading}>
-                {/* <div style={{ width : '100%', height : 32, marginBottom: 12}}>
-                    <span style={{float : 'right'}}>0개</span>
-                    <span style={{marginRight : 20, float : 'right' }}>잔여휴가일수</span>
-                </div> */}
+                <div style={{ width : '100%', height : 23, marginBottom: 2}}>
+                    <span style={{float : 'right'}}><span style={{color : 'red'}}>{leaveCount}</span> 개</span>
+                    <span style={{marginRight : 5, float : 'right' }}>잔여휴가일수 : </span>
+                </div>
                 <div style={{height : 32, marginBottom : 12 }}>
                     <Select placeholder = "일정유형선택" style={{ width: '100%', textAlign : 'center' }} 
                             onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
@@ -435,8 +532,11 @@ function TimelineInfo() {
             </TimeLineRegisterModal>
             {/* 타임라인 수정 팝업 */}
             <TimeLineUpdateModal display={timelineUpdateModalOpen} close={closeTimelineUpdateModal} update={timelineUpdateHandler} del={onConfirmdel} loading={loading}>
+                <div style={{ width : '100%', height : 23, marginBottom: 2}}>
+                    <span style={{float : 'right'}}><span style={{color : 'red'}}>{leaveCount}</span> 개</span>
+                    <span style={{marginRight : 5, float : 'right' }}>잔여휴가일수 : </span>
+                </div>
                 <div style={{height : 32, marginBottom : 12 }}>
-                    {/* <span style={{ width : 40, height : 40, marginRight : 20 }}>유형선택</span> */}
                     <Select placeholder = "일정유형선택"  style={{ width: '100%', textAlign : 'center' }} 
                             onChange={leaveTypeHandler} value={timelineState.selectLeaveType}>
                         <OptGroup label="기본">

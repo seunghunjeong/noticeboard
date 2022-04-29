@@ -289,6 +289,9 @@ router.get('/logout', (req, res) => {
       isAuth: false,
       id: null,
       userName: null,
+      admin: false,
+      department : null,
+      position : null,
       logoutSuccess: true
     })
   }

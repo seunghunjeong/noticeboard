@@ -121,7 +121,8 @@ router.get("/getUserList", (req, res) => {
             approved,
             auth,
             department,
-            position
+            position,
+            leave_count
         FROM
             board.users
         ORDER BY 

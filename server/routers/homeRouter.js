@@ -24,7 +24,7 @@ router.post("/getTimelineThisWeekList", (req, res) => {
     const this_monday = req.body.this_monday;
     const this_sunday = req.body.this_sunday;
 
-    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(memo) as memo"
+    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(IFNULL(memo, '')) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
                    + " HAVING leave_start BETWEEN ? AND ?"
@@ -42,7 +42,7 @@ router.post("/getTimelineNextWeekList", (req, res) => {
     const next_monday = req.body.next_monday;
     const next_sunday = req.body.next_sunday;
 
-    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(memo) as memo"
+    const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(IFNULL(memo, '')) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
                    + " HAVING leave_start BETWEEN ? AND ?"
@@ -125,6 +125,38 @@ router.post("/deleteTimelineOne", (req, res) => {
                    + " WHERE idx = ?"
  
     db.query(sqlQuery, [idx], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+// 잔여 연차일수 가져오기
+router.post("/getLeaveCount", (req, res) => {
+    
+    const id = req.body.userid;
+
+    const sqlQuery = "SELECT leave_count FROM users WHERE id = ?"
+ 
+    db.query(sqlQuery, [id], (err, result) => {
+        if (err) {
+            logger.error(err);
+        }
+        res.send(result);
+    })
+})
+
+// 잔여 연차일수 수정
+router.post("/updateLeaveCount", (req, res) => {
+    
+    const id = req.body.userid;
+    const leaveCount = req.body.count;
+
+    const sqlQuery = "UPDATE users"
+                    + " SET leave_count = ?"
+                    + " WHERE id = ?"
+ 
+    db.query(sqlQuery, [leaveCount, id], (err, result) => {
         if (err) {
             logger.error(err);
         }
