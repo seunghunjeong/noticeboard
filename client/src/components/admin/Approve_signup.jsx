@@ -140,6 +140,7 @@ const Approve_signup = () => {
             <Table
                 columns={columns}
                 dataSource={data}
+                bordered
             />
         </Content>
     )

@@ -90,8 +90,9 @@ const Leave_count_setting = () => {
         <>
             <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
                 <p style={{ fontSize: "20px", fontWeight: "bold" }}>연차 관리</p>
-                <Table
-                    columns={columns}
+                <Table 
+                    style={{width : '50%'}}
+                    columns={columns} bordered  
                     dataSource={data}
                 />
             </Content>

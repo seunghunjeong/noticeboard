@@ -200,6 +200,7 @@ const Setting_page = () => {
                 <Table
                     columns={columns}
                     dataSource={data}
+                    bordered
                 />
             </Content>
 

@@ -274,6 +274,7 @@ const User_management = () => {
                 <Table
                     columns={columns}
                     dataSource={data}
+                    bordered
                 />
             </Content>
             <UserModal display={userModal} close={closeModal} header={'직급부여'} insert={() => { modalSubmit(); }}>
