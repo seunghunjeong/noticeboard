@@ -45,7 +45,7 @@ const Leave_count_setting = () => {
             render: (title, row) =>
             (
                 <>
-                    <Input style={{width: 50, textAlign : 'right'}} value = {row.leave_count} onChange = {countValue}/>
+                    <Input style={{width: 50, textAlign : 'right'}} defaultValue={row.leave_count} onChange = {countValue}/>
                     <Button onClick={() => {updateLeaveCount(row.id)}}>수정</Button>    
                 </>
             )
@@ -67,8 +67,10 @@ const Leave_count_setting = () => {
         return data;
     });
 
-    const countValue = value => {
+    const countValue = e => {
+        const {value} = e.target;
         setLeave_count_update(value)
+        console.log(leave_count_update)
     }
     const updateLeaveCount = (id) => {
         //연차개수 수정
