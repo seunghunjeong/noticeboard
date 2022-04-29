@@ -1,11 +1,9 @@
 import { Layout, Menu, Avatar, Image, message } from 'antd';
-import { HomeOutlined, ProfileOutlined, SettingOutlined, BellOutlined, FileDoneOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, SettingOutlined, BellOutlined, FileDoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isMobile } from "react-device-detect";
 import MobileStyle from '../../App_mobile.module.css';
-// 사용자 정보 가져오기
-import { useSelector } from 'react-redux';
 import { logout} from '../../_actions/user_action';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -177,6 +175,9 @@ function Nav(props) {
                 <Menu.Item key={e.category}><Link to={`/board_list/${e.category}`}>{e.category}</Link></Menu.Item>
               )
             }
+          </SubMenu>
+          <SubMenu key="mypage" icon={<UserOutlined />} title="마이페이지">
+            <Menu.Item key="leave_management"><Link to={`/mypage/leave_management`}>휴가사용목록</Link></Menu.Item>   
           </SubMenu>
           {admin === true && !isMobile ? <SubMenu key="setting" icon={<SettingOutlined />} title="설정">
                               <Menu.Item key="approve_signup"><Link to={`/setting/approve_signup`}>가입승인</Link></Menu.Item>   

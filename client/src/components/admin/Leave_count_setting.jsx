@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react'
 import Axios from 'axios';
 import Auth from '../../_hoc/auth'
 
-import { Layout, Button, Table, message, Input } from 'antd';
+import {Layout, Button, Table, message, Input, Card} from 'antd';
 
 // antd
 const { Content } = Layout;
-
 const Leave_count_setting = () => {
 
     // 렌더링을 위한 state
     const [state, setState] = useState();
     // 연차일수 변경값 
-    const [leave_count_update, setLeave_count_update] = useState(0);
+    const [leave_count_update, setLeave_count_update] = useState(null);
 
     // 유저목록 불러오기
     const [userList, setUserList] = useState([]);
@@ -40,8 +39,8 @@ const Leave_count_setting = () => {
         },
         {
             title: '잔여연차일수',
-            dataIndex: 'y',
-            key: 'y',
+            dataIndex: 'leave_count',
+            key: 'leave_count',
             align: 'center',
             render: (title, row) =>
             (
@@ -91,10 +90,13 @@ const Leave_count_setting = () => {
             <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
                 <p style={{ fontSize: "20px", fontWeight: "bold" }}>연차 관리</p>
                 <Table 
-                    style={{width : '50%'}}
                     columns={columns} bordered  
                     dataSource={data}
                 />
+                {/* <Card style={{width : '49%', float:'left', marginLeft : 16, boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'}}>
+                    <p>연차사용목록</p>
+                </Card>
+                 */}
             </Content>
         </>
     )
