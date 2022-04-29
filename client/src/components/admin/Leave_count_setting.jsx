@@ -3,8 +3,8 @@ import Axios from 'axios';
 import Auth from '../../_hoc/auth'
 
 // modal 
-//import ListModal from '../modals/LeaveManagementList'
-import {Layout, Button, Table, message, Input} from 'antd';
+import ListModal from '../modals/LeaveManagementList'
+import {Layout, Button, Table, message, Input,  List, Typography} from 'antd';
 
 // antd
 const { Content } = Layout;
@@ -14,6 +14,13 @@ const Leave_count_setting = () => {
     const [state, setState] = useState();
     // 연차일수 변경값 
     const [leave_count_update, setLeave_count_update] = useState(null);
+
+    // modal상태값
+    const [listModal, setListModal] = useState(false);
+    const openModal = (id) => {
+        setListModal(true);
+    };
+    const closeModal = () => { setListModal(false); };
 
     // 유저목록 불러오기
     const [userList, setUserList] = useState([]);
@@ -60,7 +67,7 @@ const Leave_count_setting = () => {
             render: (title, row) =>
             (
                 <>
-                    <Button onClick={() => {updateLeaveCount(row.id)}}>보기</Button>    
+                    <Button onClick={() => {openModal(row.id)}}>보기</Button>    
                 </>
             )
         }
@@ -92,7 +99,6 @@ const Leave_count_setting = () => {
             userid: id,
             count : leave_count_update
         }).then((res) => {
-            console.log(res)
             if (res.data !== "err" ) {
                 message.success("수정완료");
                 setState(res);
@@ -100,6 +106,13 @@ const Leave_count_setting = () => {
             else message.error("수정오류. 알맞은 값을 입력하세요.");
         })
     }
+    const dataList = [
+        'Racing car sprays burning fuel into crowd.',
+        'Japanese princess to wed commoner.',
+        'Australian walks 100km after outback crash.',
+        'Man charged over missing wedding girl.',
+        'Los Angeles battles huge wildfires.',
+      ];
 
     //render
     return (
@@ -110,36 +123,20 @@ const Leave_count_setting = () => {
                     columns={columns} bordered  
                     dataSource={data}
                 />
-                {/* <Card style={{width : '49%', float:'left', marginLeft : 16, boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'}}>
-                    <p>연차사용목록</p>
-                </Card>
-                 */}
             </Content>
-            {/* <ListModal display={userModal} close={closeModal} header={'직급부여'}>
-                <Descriptions
+            <ListModal display={listModal} close={closeModal} header={'사용목록'}>
+                <List
+                    header={<div>Header</div>}
+                    footer={<div>Footer</div>}
                     bordered
-                    column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
-                >
-                    <Descriptions.Item label="이름">{manageMent.name}</Descriptions.Item>
-                    <Descriptions.Item label="부서">
-                        <Select placeholder={'부서선택'} onChange={departmentSelect} defaultValue={manageMent.department}>
-                            <Option key={'ICT 사업부'}>ICT 사업부</Option>
-                            <Option key={'연구소'}>연구소</Option>
-                        </Select>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="직급">
-                        <Select placeholder={'직급선택'} onChange={positionSelect} defaultValue={manageMent.position}>
-                            <Option key={'1,사장'}>사장</Option>
-                            <Option key={'2,이사'}>이사</Option>
-                            <Option key={'3,부장'}>부장</Option>
-                            <Option key={'4,차장'}>차장</Option>
-                            <Option key={'5,과장'}>과장</Option>
-                            <Option key={'6,대리'}>대리</Option>
-                            <Option key={'7,사원'}>사원</Option>
-                        </Select>
-                    </Descriptions.Item>
-                </Descriptions>
-            </ListModal> */}
+                    dataSource={dataList}
+                    renderItem={item => (
+                        <List.Item>
+                        <Typography.Text mark>[ITEM]</Typography.Text> {item}
+                    </List.Item>
+                )}
+                />
+            </ListModal>    
         </>
     )
 }

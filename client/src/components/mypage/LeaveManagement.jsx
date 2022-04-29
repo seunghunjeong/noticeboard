@@ -33,6 +33,7 @@ const LeaveManagement = () => {
         Axios.post(('/home/getLeaveCount'), {
             userid : userId
         }).then((res) => {
+            if(res.data[0] > 0)
             setLeaveCount(res.data[0].leave_count);
         })
     }, [userId])
