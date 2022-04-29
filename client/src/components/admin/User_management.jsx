@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Button, Table, message } from 'antd';
-import Auth from '../../_hoc/auth'
 import Axios from 'axios';
-import UserModal from '../modals/UserManagement'
+import Auth from '../../_hoc/auth'
 
-// modal confirm
+// modal 
+import UserModal from '../modals/UserManagement'
 import confirmModal from '../modals/ConfirmModal_mobile';
 
-import { Select, Descriptions } from 'antd';
+import { Layout, Button, Table, message, Select, Descriptions } from 'antd';
 
+// antd
+const { Content } = Layout;
 const { Option } = Select;
 
 const User_management = () => {
 
-    // antd
-    const { Content } = Layout;
-
-    
     // 렌더링을 위한 state
     const [state, setState] = useState();
 
@@ -108,8 +105,6 @@ const User_management = () => {
                     </>
                 )
             }
-
-
         },
         {
             title: '직급부여',
