@@ -6,11 +6,12 @@ import Auth from '../../_hoc/auth'
 import moment from 'moment';
 import 'moment/locale/ko'
 import {Layout, Table} from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 
 // antd
 const { Content } = Layout;
 
-//마이페이지 -> 휴가사용목록 
+//마이페이지 -> 휴가사용목록 페이지
 const LeaveManagement = () => {
 
     //사용자 정보 받아오기
@@ -75,6 +76,22 @@ const LeaveManagement = () => {
             key: 'memo',
             align: 'center'
         }
+        // {
+        //     title: '삭제',
+        //     dataIndex: 'auth',
+        //     key: 'auth',
+        //     align: 'center',
+        //     width: '15%',
+        //     render: (title, row) => (
+        //         <>
+        //         {
+        //             <CloseOutlined style={{ marginLeft: "4px", color: 'red' }} onClick={() => {
+        //                 deleteMyleaveList(row.idx);
+        //             }}/> 
+        //         }
+        //         </>
+        //     )
+        // }
     ];
 
     //table rows
@@ -88,6 +105,16 @@ const LeaveManagement = () => {
         });
         return data;
     });
+
+    // confirm param object
+    let confirmParam = {
+        txt : '',
+        action : ''
+    }
+
+    // 나의 일정 삭제
+    const deleteMyleaveList = (idx) => {
+    }
 
     //render
     return (

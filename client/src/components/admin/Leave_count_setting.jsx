@@ -12,6 +12,7 @@ import {Layout, Button, Table, message, Input} from 'antd';
 // antd
 const { Content } = Layout;
 
+//관리자설정 -> 연차관리 페이지
 const Leave_count_setting = () => {
 
     // 렌더링을 위한 state

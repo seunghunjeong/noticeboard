@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { useOutletContext } from 'react-router-dom';
+import Axios from 'axios';
+import Auth from '../../_hoc/auth'
+
 import { Button, Input, Table, Layout, message } from 'antd';
 import { CloseOutlined, EditOutlined } from '@ant-design/icons';
-import Auth from '../../_hoc/auth'
-import AddCategoryModal from '../modals/AddCategory';
-import Axios from 'axios';
 
-// modal confirm
+// modal
+import AddCategoryModal from '../modals/AddCategory';
 import confirmModal from '../modals/ConfirmModal_mobile';
 
+//관리자 설정 -> 게시판관리 페이지
 const Setting_page = () => {
 
     // antd
@@ -95,10 +97,7 @@ const Setting_page = () => {
                 }
                 </>
             )
-        },
-
-
-
+        }
     ];
 
     // 카테고리 리스트 뿌려주기
