@@ -7,6 +7,7 @@ import { Layout, Input, Select, Breadcrumb, Card, Space, Pagination, Empty, mess
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 import axios from 'axios';
+import MobileStyle from '../../App_mobile.module.css';
 
 function Board_list() {
   
@@ -165,6 +166,7 @@ function Board_list() {
           viewContent.map((e, index) =>
           <Card key={index}
             size="small"
+            className={MobileStyle.detailBorder}
           >
             <Card key={index}
               size="small"

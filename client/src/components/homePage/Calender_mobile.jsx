@@ -393,6 +393,7 @@ function Calender_mobile (props) {
                 fullscreen={true}
                 dateCellRender={dateCellRender}
                 onSelect={onSelect}
+                className={MobileStyle.detailBorder}
             />
             <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
