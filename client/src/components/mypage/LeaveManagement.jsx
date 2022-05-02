@@ -25,7 +25,7 @@ const LeaveManagement = () => {
         Axios.post('/mypage/getMyleaveList', {id : userId})
             .then((response) => {
                 
-                console.log(response)
+                //console.log(response)
                 setMyLeaveList(response.data);
         })
 
@@ -33,7 +33,7 @@ const LeaveManagement = () => {
         Axios.post(('/home/getLeaveCount'), {
             userid : userId
         }).then((res) => {
-            console.log(res)
+            //console.log(res)
             if(res.data !== undefined)
             setLeaveCount(res.data[0].leave_count);
         })
@@ -58,7 +58,7 @@ const LeaveManagement = () => {
             ],
             defaultFilteredValue : ["2022"],
             filterResetToDefaultFilteredValue : "true",
-            onFilter: (value, record) => record.date.indexOf(value) === 0,
+            onFilter: (value, record) => record.date.indexOf(value) === 0
         },
         {
             title: '종류',

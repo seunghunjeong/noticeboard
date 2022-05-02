@@ -29,7 +29,7 @@ const Leave_count_setting = () => {
         Axios.post('/mypage/getMyleaveList', {id : id})
         .then((response) => {
             setUsedLeaveList(response.data);
-            console.log(response.data)
+            //console.log(response.data)
             setListModal(true);
         })
     };
@@ -104,7 +104,7 @@ const Leave_count_setting = () => {
     const countValue = e => {
         const {value} = e.target;
         setLeave_count_update(value)
-        console.log(leave_count_update)
+        //console.log(leave_count_update)
     }
 
     const updateLeaveCount = (id) => {
@@ -113,7 +113,7 @@ const Leave_count_setting = () => {
             userid: id,
             count : leave_count_update
         }).then((res) => {
-            console.log(res)
+            //console.log(res)
             if (res.data.massege !== "err" ) {
                 message.success("수정완료");
                 setState(res);
@@ -154,7 +154,7 @@ const Leave_count_setting = () => {
     // 연차사용목록보기 클릭시 모달에 데이터 넣기
     const usedLeaveData = [];
     if(usedLeaveList.length > 0){
-        console.log(usedLeaveList)
+        //console.log(usedLeaveList)
         usedLeaveList.map(element => {
             usedLeaveData.push({
                 key : element.idx,
