@@ -10,6 +10,7 @@ import {Layout, Table} from 'antd';
 // antd
 const { Content } = Layout;
 
+//마이페이지 -> 휴가사용목록 
 const LeaveManagement = () => {
 
     //사용자 정보 받아오기
@@ -46,6 +47,7 @@ const LeaveManagement = () => {
             dataIndex: 'date',
             key: 'date',
             align: 'center',
+            width : 500,
             filters: [
                 {   //년도 filter값 moment로 배열만들어야함
                   text: '2022',
@@ -64,6 +66,13 @@ const LeaveManagement = () => {
             title: '종류',
             dataIndex: 'leave_type',
             key: 'leave_type',
+            align: 'center',
+            width : 500
+        },
+        {
+            title: '비고',
+            dataIndex: 'memo',
+            key: 'memo',
             align: 'center'
         }
     ];
@@ -74,7 +83,8 @@ const LeaveManagement = () => {
         data.push({
             key : element.idx,
             date : moment(element.leave_start).format('YYYY년 MM월 DD일 dddd'),
-            leave_type : element.leave_type
+            leave_type : element.leave_type,
+            memo : element.memo
         });
         return data;
     });
@@ -89,6 +99,7 @@ const LeaveManagement = () => {
                     dataSource = {data}
                     bordered  
                     footer = {() => '잔여휴가일수 : ' + leaveCount + "개"}
+                    pagination={{position: ["bottomCenter"]}} 
                 />
             </Content>
         </>

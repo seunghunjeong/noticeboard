@@ -174,7 +174,7 @@ const Leave_count_setting = () => {
                 <Table 
                     columns={columns}
                     dataSource={data} 
-                    bordered  
+                    bordered 
                 />
             </Content>
             <ListModal display={listModal} close={closeModal} header={'사용목록'}>
@@ -182,6 +182,7 @@ const Leave_count_setting = () => {
                     columns={columnsList} bordered  
                     dataSource={usedLeaveData}
                     size="small"
+                    pagination={{position: ["bottomCenter"]}} 
                 />
             </ListModal>    
         </>

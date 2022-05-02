@@ -9,7 +9,7 @@ const LeaveManagementList = (props) => {
         // 클래스명 변경을 통해 활성화 / 비활성화
         <div className={display ? 'openModal modal' : 'modal'}>
             {display ? (
-                <section>
+                <section style={{width: 400}}>
                     <header>
                         {header}
                         <button style={{ position: 'absolute', top: '8px' }} className="closeView" onClick={close}>
