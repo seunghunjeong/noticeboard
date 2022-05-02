@@ -56,3 +56,8 @@
   box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
   margin-bottom: 10px;
 }
+
+.detailBorder {
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+}

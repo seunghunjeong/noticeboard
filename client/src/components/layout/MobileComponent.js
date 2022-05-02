@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import BoardingListPage from '../boardingPage/Board_list_mobile';
 import BoardingDetailPage from '../boardingPage/Board_detail_mobile';
+import LeaveManagement from '../mypage/LeaveManagement';
 
 // components views
 import LoginPage from '../loginPage/Login';
@@ -19,6 +20,7 @@ const MobileViewComponent = ({ children }) => {
                     <Route path="/home" element={<HomePageMobile />} />
                     <Route path="/board_list/:category" element={<BoardingListPage />} />
                     <Route path="/board_detail/:idx/:category" element={<BoardingDetailPage />} />
+                    <Route path="/mypage/leave_management" element = {<LeaveManagement/>}/>
                 </Route>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/sign-up" element={<JoinPage />} />

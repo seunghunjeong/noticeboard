@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import './DailyReport.css';
-import { Avatar } from 'antd';
+import { Avatar, Typography } from 'antd';
+import { FieldTimeOutlined } from '@ant-design/icons';
 import MobileStyle from '../../App_mobile.module.css';
+
 import moment from 'moment';
+
+// antd variable
+const { Text } = Typography;
 
 const NewSosickModal = (props) => {
       // 페이지 이동
@@ -74,8 +79,10 @@ const NewSosickModal = (props) => {
         <div className={display ? 'openModal modal' : 'modal'} key='Keymodal'>
             {display ? (
                 <section style={{width:"100vw", height:"100vh"}}>
-                    <header>
-                        <button style={{ position: 'absolute', top: '-2px' }} className="closeView" onClick={close}>
+                    <header style={{color:'black'}}>
+                        <FieldTimeOutlined style={{ position:'relative', top:'5px' ,fontSize: '25px', color: '#08c', float: 'left' }} />
+                        <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>새 소식 </Text>
+                        <button style={{ position: 'absolute', top: '8px' }} className="closeView" onClick={close}>
                             &times;
                         </button>
                     </header>

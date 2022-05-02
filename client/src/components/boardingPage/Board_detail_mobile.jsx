@@ -19,6 +19,8 @@ import 'highlight.js/styles/atom-one-dark.css';
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
+import MobileStyle from '../../App_mobile.module.css';
+
 
 function Board_detail() {
   // antd 변수
@@ -168,7 +170,8 @@ function Board_detail() {
       extra={[
         userIdConfrim ?
         <DeleteOutlined key='keyDel' style={{ float: 'right', fontSize: '1.7em' }} onClick={onConfirmdel}/> : null
-      ]}      
+      ]}
+      className={MobileStyle.detailBorder}
       >
         <p className='writer'>작성자 |
           <span style={{ fontWeight: 'bold' }}> {BoardDetail.writer} </span>
