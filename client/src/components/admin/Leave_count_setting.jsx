@@ -18,7 +18,7 @@ const Leave_count_setting = () => {
     // 렌더링을 위한 state
     const [state, setState] = useState();
     // 연차일수 변경값 
-    const [leave_count_update, setLeave_count_update] = useState(null);
+    const [leave_count_update, setLeave_count_update] = useState("");
     // 연차사용목록 리스트
     const [usedLeaveList, setUsedLeaveList] = useState({});
 
@@ -28,10 +28,14 @@ const Leave_count_setting = () => {
 
         //선택한 사용자의 연차사용목록 불러오기
         Axios.post('/mypage/getMyleaveList', {id : id})
-        .then((response) => {
-            setUsedLeaveList(response.data);
-            //console.log(response.data)
-            setListModal(true);
+        .then((res) => {
+            if (res.data.message === "success") {
+                setUsedLeaveList(res.data.result);
+                //console.log(response.data)
+                setListModal(true);
+            }
+            else message.error("데이터를 불러오지 못했습니다.")
+
         })
     };
     const closeModal = () => { setListModal(false); };

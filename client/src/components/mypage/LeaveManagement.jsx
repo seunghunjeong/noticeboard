@@ -6,7 +6,7 @@ import Auth from '../../_hoc/auth'
 import moment from 'moment';
 import 'moment/locale/ko'
 import {Layout, Table} from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+//import { CloseOutlined } from '@ant-design/icons';
 
 // antd
 const { Content } = Layout;

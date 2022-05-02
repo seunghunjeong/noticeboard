@@ -24,9 +24,9 @@ router.post("/getMyleaveList", (req, res) => {
     db.query(sqlQuery, [id], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
