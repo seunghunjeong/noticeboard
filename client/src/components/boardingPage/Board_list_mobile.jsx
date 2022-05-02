@@ -7,6 +7,7 @@ import { Layout, Input, Select, Breadcrumb, Card, Space, Pagination, Empty, mess
 import { useNavigate, Link, useParams } from "react-router-dom"
 import Auth from '../../_hoc/auth'
 import axios from 'axios';
+import MobileStyle from '../../App_mobile.module.css';
 
 function Board_list() {
   
@@ -100,7 +101,6 @@ function Board_list() {
     page : 1,
     pageSize : 4
     });
-
   }, [category])
 
   // 페이지 이동
@@ -166,6 +166,7 @@ function Board_list() {
           viewContent.map((e, index) =>
           <Card key={index}
             size="small"
+            className={MobileStyle.detailBorder}
           >
             <Card key={index}
               size="small"
@@ -186,7 +187,7 @@ function Board_list() {
       {
         viewContent.length !== 0 ?
         <div  style={{ width : '100%', textAlign : 'center', marginTop : "20px" }}>
-         <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={4}/>
+         <Pagination size="small" current={pagingVal.page} total={listCnt[0].cnt ? listCnt[0].cnt : 0}  showTotal={total => `total : ${total}`} onChange={pagingHandler} pageSize={4}/>
         </div>
         :
         null

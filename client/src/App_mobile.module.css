@@ -8,10 +8,15 @@
 /* header */
 .avtHeader {
   bottom: 0.25em;
+  margin: 0 0.5em;
 }
 
 .btnHeader {
   margin: 0 0.25em;
+}
+
+.avtNav {
+  float: right;
 }
 
 .logoutM {
@@ -43,4 +48,17 @@
 .drv_date {
   position: absolute;
   right: 11px;
+}
+
+/* 새소실모달 */
+.soSickDiv {
+  background: white;
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+  margin-bottom: 10px;
+}
+
+.detailBorder {
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
 }

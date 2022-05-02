@@ -9,7 +9,7 @@
   }
 
   .mainDetailContent .ant-page-header-heading-title {
-    width: 65vw;
+    width: 62vw;
     white-space: pre-line;
   }
 
@@ -20,5 +20,12 @@
 
   .mainDetailContent img {
     max-width: 77vw;
+  }
+
+  .newSosick {
+    table-layout: fixed;
+    width: 97vw;
+    color: black;
+    overflow: hidden;
   }
 }

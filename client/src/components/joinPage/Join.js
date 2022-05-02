@@ -9,6 +9,7 @@ import Logo from '../layout/cmworld-logo.png';
 
 import './Join.css'
 
+
 function Join() {
 
   //페이지이동
@@ -71,7 +72,7 @@ function Join() {
   }
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    //console.log('Failed:', errorInfo);
   };
 
   return (

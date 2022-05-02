@@ -50,7 +50,7 @@ function Board_register() {
 
   // 에디터에서 입력값 받아오는 함수
   const getValue = e => {
-    console.log(boardContent);
+    //console.log(boardContent);
     const { name, value } = e.target;
     setBoardContent({
       ...boardContent,
@@ -63,7 +63,7 @@ function Board_register() {
       ...boardContent,
       category: e
     })
-    console.log(boardContent)
+    //console.log(boardContent)
   }
 
 
@@ -162,7 +162,7 @@ function Board_register() {
                 )
               }
             </Select>
-            <Input maxLength={50} placeholder='제목을 입력해주세요.'
+            <Input maxLength={100} placeholder='제목을 입력해주세요.'
               onChange={getValue} name='title'
               style={{ width: '93%', fontSize: '19px', marginBottom: '16px', padding: "3px 11px 5px" }} />
           </div>

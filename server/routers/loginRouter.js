@@ -251,7 +251,8 @@ router.post('/auth', (req, res, next) => {
         id: null,
         isAuth: false,
         admin: false,
-        department : null
+        department : null,
+        position : null
       });
     }
     // 인증실패
@@ -261,7 +262,8 @@ router.post('/auth', (req, res, next) => {
         id: null,
         isAuth: false,
         admin: false,
-        department : null
+        department : null,
+        position : null
       });
     }
     // 인증성공
@@ -271,7 +273,8 @@ router.post('/auth', (req, res, next) => {
         id: result[0].id,
         isAuth: true,
         admin: result[0].auth === 1 ? true : false,
-        department : result[0].department
+        department : result[0].department,
+        position : result[0].position
       });
     }
   });
@@ -286,6 +289,9 @@ router.get('/logout', (req, res) => {
       isAuth: false,
       id: null,
       userName: null,
+      admin: false,
+      department : null,
+      position : null,
       logoutSuccess: true
     })
   }

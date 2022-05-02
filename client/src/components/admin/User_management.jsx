@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Button, Table, message } from 'antd';
-import Auth from '../../_hoc/auth'
 import Axios from 'axios';
-import UserModal from '../modals/UserManagement'
+import Auth from '../../_hoc/auth'
 
-// modal confirm
+// modal 
+import UserModal from '../modals/UserManagement'
 import confirmModal from '../modals/ConfirmModal_mobile';
 
-import { Select, Descriptions } from 'antd';
+import { Layout, Button, Table, message, Select, Descriptions } from 'antd';
 
+// antd
+const { Content } = Layout;
 const { Option } = Select;
 
 const User_management = () => {
 
-    // antd
-    const { Content } = Layout;
-
-    
     // 렌더링을 위한 state
     const [state, setState] = useState();
 
@@ -108,8 +105,6 @@ const User_management = () => {
                     </>
                 )
             }
-
-
         },
         {
             title: '직급부여',
@@ -185,26 +180,26 @@ const User_management = () => {
 
     // 부서 선택
     const departmentSelect = value => {
-        console.log(value);
+        //console.log(value);
         setManagemanet({
             ...manageMent,
             department: value
         })
-        console.log(manageMent);
+        //console.log(manageMent);
 
     }
     // 직급 선택
     const positionSelect = value => {
-        console.log(value);
+        //console.log(value);
         setManagemanet({
             ...manageMent,
             position: value
         })
-        console.log(manageMent);
+        //console.log(manageMent);
     }
     // 부여 , 수정 모달 확인창 클릭
     const modalSubmit = () => {
-        console.log(manageMent);
+        //console.log(manageMent);
 
         Axios.post('/admin/insert_management', {
             department: manageMent.department,
@@ -221,7 +216,7 @@ const User_management = () => {
     const adminAppointHandler = (event, value) => {
         event.preventDefault();
         const userId = value;
-        console.log(value);
+        //console.log(value);
         const actionAuth = () => {
             Axios.post('/api/admin-appoint', { id: userId })
                 .then((response) => {
@@ -245,7 +240,7 @@ const User_management = () => {
     const adminRemoveHandler = (event, value) => {
         event.preventDefault();
         const userId = value;
-        console.log(value);
+        //console.log(value);
 
         const actionAuthFire = () => {
             Axios.post('/api/admin-remove', { id: userId })
@@ -274,6 +269,7 @@ const User_management = () => {
                 <Table
                     columns={columns}
                     dataSource={data}
+                    bordered
                 />
             </Content>
             <UserModal display={userModal} close={closeModal} header={'직급부여'} insert={() => { modalSubmit(); }}>

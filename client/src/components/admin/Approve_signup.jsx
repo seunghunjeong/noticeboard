@@ -27,7 +27,7 @@ const Approve_signup = () => {
     const approveHandler = (event, value) => {  
         event.preventDefault();
         const userId = value;
-        console.log(value);
+        //console.log(value);
 
         Axios.post('/api/approve-sign-up', {id : userId})
         .then((response) => {
@@ -44,7 +44,7 @@ const Approve_signup = () => {
     // 가입거절 클릭
     const rejectHandler = (event, value) => {
         const userId = value;
-        console.log(value);
+        //console.log(value);
 
         const actionDel = () => {
             Axios.post('/api/reject-sign-up', {id : userId})
@@ -140,6 +140,7 @@ const Approve_signup = () => {
             <Table
                 columns={columns}
                 dataSource={data}
+                bordered
             />
         </Content>
     )

@@ -124,7 +124,7 @@ function Board_list() {
 
   // table method
   function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
+    //console.log('params', pagination, filters, sorter, extra);
   }
 
   // Search 값 저장
@@ -162,7 +162,7 @@ function Board_list() {
       </div>
       <Table columns = {columns} dataSource = {data} onChange={onChange} bordered  
              pagination={{position: ["bottomCenter"]}} 
-             footer={() => 'total : ' + dataLength }
+             footer={() => 'total : ' + dataLength}
       /> 
       <div style={{ width : '100%', textAlign : 'center', marginTop : "20px" }} >
         <Select

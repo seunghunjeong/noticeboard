@@ -138,6 +138,14 @@
   font-weight: bold;
 }
 
+.ant-picker-range input{
+  text-align: center;
+}
+
+.ant-picker input {
+  text-align: center;
+}
+
 .ant-picker-date-panel .ant-picker-content th:nth-child(1), .ant-picker-date-panel .ant-picker-content th:nth-child(7) {
   color : red
 }
@@ -157,7 +165,13 @@
 
 /*home => 새글소식 card 수정*/
 .newBoardCard.ant-card-type-inner .ant-card-body{
-  padding: 5px 10px;
+  padding : 3px 10px;
+}
+.newBoardCard.ant-card-type-inner .ant-card-head{
+  min-height : 27px;
+}
+.newBoardCard.ant-card-type-inner .ant-card-head-title{
+  padding : 6px 0;
 }
 
 /* 메인 콘텐트 */
@@ -189,4 +203,19 @@
 .ant-badge-dot {
   right: 8px;
   top: 8px;
+}
+
+/*timeline select*/
+.hoverable {
+  cursor: pointer;
+  width: 100%;
+}
+
+.hoverable:hover {
+  color : rgb(103, 103, 161);
+}
+
+
+.timeline_memo.ant-input[placeholder] {
+  text-align: center;
 }

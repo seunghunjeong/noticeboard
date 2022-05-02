@@ -19,6 +19,8 @@ import 'highlight.js/styles/atom-one-dark.css';
 // modal confirm
 import confirmModal from '../modals/ConfirmModal_mobile';
 
+import MobileStyle from '../../App_mobile.module.css';
+
 
 function Board_detail() {
   // antd 변수
@@ -52,7 +54,7 @@ function Board_detail() {
           message.error("상세페이지 불러오기 실패");
         }
       })
-  }, []);
+  }, [idx]);
   
   //작성한 사람만 수정/삭제할 수 있도록
   //state안에있는 사용자 id와 게시판의 사용자 id값이 같은지 확인
@@ -168,7 +170,8 @@ function Board_detail() {
       extra={[
         userIdConfrim ?
         <DeleteOutlined key='keyDel' style={{ float: 'right', fontSize: '1.7em' }} onClick={onConfirmdel}/> : null
-      ]}      
+      ]}
+      className={MobileStyle.detailBorder}
       >
         <p className='writer'>작성자 |
           <span style={{ fontWeight: 'bold' }}> {BoardDetail.writer} </span>
@@ -181,7 +184,7 @@ function Board_detail() {
               <FilePath/>
             </Tag>
         </Card>
-        <Card key='keyBody' bodyStyle={{padding:'0.8em'}}>
+        <Card key='keyBody' bodyStyle={{padding:'0.8em', wordBreak:'break-all'}}>
           <div key='keyContent' className='content'>
               {ReactHtmlParser(BoardDetail.content)}
           </div>

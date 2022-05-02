@@ -9,6 +9,8 @@ import BoardingUpdatePage from '../boardingPage/Board_update';
 import AdminSetting from '../admin/Setting_page';
 import ApproveSignup from '../admin/Approve_signup';
 import UserManagement from '../admin/User_management';
+import LeaveCountSetting from '../admin/Leave_count_setting';
+import LeaveManagement from '../mypage/LeaveManagement';
 
 import HomePage from '../homePage/Home';
 import LoginPage from '../loginPage/Login';
@@ -30,9 +32,11 @@ const BrowserComponent = () => {
                     <Route path="/board_register/:category" element = {<BoardingRegisterPage/>}/>
                     <Route path="/board_detail/:idx/:category" element = {<BoardingDetailPage/>}/>
                     <Route path="/board_update/:idx/:category" element = {<BoardingUpdatePage/>}/>
+                    <Route path="/mypage/leave_management" element = {<LeaveManagement/>}/>
                     <Route path="/setting/setting_page" element={<AdminSetting/>}/>
                     <Route path="/setting/approve_signup" element={<ApproveSignup/>}/>
                     <Route path="/setting/user_management" element={<UserManagement/>}/>
+                    <Route path="/setting/leave_count_setting" element={<LeaveCountSetting/>}/>
                 </Route>
                 <Route path="/" element = {<LoginPage/>}/>
                 <Route path="/sign-up" element = {<JoinPage/>}/>

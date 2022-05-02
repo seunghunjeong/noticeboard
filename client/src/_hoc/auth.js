@@ -47,7 +47,7 @@ export default function(SpecificComponent, option, adminRoute = null) {
                     //로그인한 유저만 
                     else{
                         //관리자페이지
-                        console.log(response.payload.admin)
+                        //console.log(response.payload.admin)
                         if(adminRoute && !response.payload.admin){
                             message.warning("관리자 전용 페이지입니다.");
                             navigate("/home")

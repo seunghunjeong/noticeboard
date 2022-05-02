@@ -36,12 +36,16 @@ const dailyReportRouter = require('./routers/daliyReport');
 const boardRouter = require('./routers/board');
 const navRouter = require('./routers/nav');
 const adminRouter = require('./routers/admin');
+const homeRouter = require('./routers/homeRouter');
+const mypageRouter = require('./routers/mypageRouter');
 
 app.use('/admin', adminRouter);
 app.use('/nav', navRouter);
 app.use('/board', boardRouter);
 app.use('/report', dailyReportRouter);
 app.use('/api', loginRouter);
+app.use('/home', homeRouter);
+app.use('/mypage', mypageRouter);
 
 app.listen(PORT, () => {
     console.log(`running on port ${PORT}`);
