@@ -45,7 +45,20 @@ const LeaveManagement = () => {
             title: '날짜',
             dataIndex: 'date',
             key: 'date',
-            align: 'center'
+            align: 'center',
+            filters: [
+                {   //년도 filter값 moment로 배열만들어야함
+                  text: '2022',
+                  value: '2022',
+                },
+                {  
+                    text: '2021',
+                    value: '2021',
+                }
+            ],
+            defaultFilteredValue : ["2022"],
+            filterResetToDefaultFilteredValue : "true",
+            onFilter: (value, record) => record.date.indexOf(value) === 0,
         },
         {
             title: '종류',
@@ -69,12 +82,13 @@ const LeaveManagement = () => {
     //render
     return (
         <>
-            <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
-                <p style={{ fontSize: "20px", fontWeight: "bold" }}>휴가사용목록</p>
+            <Content style = {{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
+                <p style = {{ fontSize: "20px", fontWeight: "bold" }}>휴가사용목록</p>
                 <Table 
-                    columns={columns} bordered  
-                    dataSource={data}
-                    footer={() => '잔여휴가일수 : ' + leaveCount + "개"}
+                    columns = {columns} 
+                    dataSource = {data}
+                    bordered  
+                    footer = {() => '잔여휴가일수 : ' + leaveCount + "개"}
                 />
             </Content>
         </>

@@ -128,7 +128,20 @@ const Leave_count_setting = () => {
             title: '날짜',
             dataIndex: 'date',
             key: 'date',
-            align: 'center'
+            align: 'center',
+            filters: [
+                {   //년도 filter값 moment로 배열만들어야함
+                  text: '2022',
+                  value: '2022',
+                },
+                {  
+                    text: '2021',
+                    value: '2021',
+                }
+            ],
+            defaultFilteredValue : ["2022"],
+            filterResetToDefaultFilteredValue : "true",
+            onFilter: (value, record) => record.date.indexOf(value) === 0
         },
         {
             title: '종류',
@@ -159,8 +172,9 @@ const Leave_count_setting = () => {
             <Content style={{ margin: '16px 16px 0 16px', height: 'calc(100% - 134px)' }}>
                 <p style={{ fontSize: "20px", fontWeight: "bold" }}>연차 관리</p>
                 <Table 
-                    columns={columns} bordered  
-                    dataSource={data}
+                    columns={columns}
+                    dataSource={data} 
+                    bordered  
                 />
             </Content>
             <ListModal display={listModal} close={closeModal} header={'사용목록'}>
