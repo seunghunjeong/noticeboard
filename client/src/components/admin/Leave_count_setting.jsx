@@ -30,9 +30,10 @@ const Leave_count_setting = () => {
         Axios.post('/mypage/getMyleaveList', {id : id})
         .then((res) => {
             if (res.data.message === "success") {
-                setUsedLeaveList(res.data.result);
-                //console.log(response.data)
-                setListModal(true);
+                if(res.data.result.length > 0 ){
+                    setUsedLeaveList(res.data.result);
+                    setListModal(true);
+                }
             }
             else message.error("데이터를 불러오지 못했습니다.")
 

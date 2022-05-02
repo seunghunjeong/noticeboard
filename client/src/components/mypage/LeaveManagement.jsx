@@ -24,11 +24,15 @@ const LeaveManagement = () => {
     const [leaveCount, setLeaveCount] = useState("");
 
     useEffect(() => {
+        // 나의 휴가사용목록 불러오기
         Axios.post('/mypage/getMyleaveList', {id : userId})
-            .then((response) => {
-                
-                //console.log(response)
-                setMyLeaveList(response.data);
+            .then((res) => {
+                if (res.data.message === "success") {
+                    if(res.data.result.length > 0 ){
+                        setMyLeaveList(res.data.result);
+                    }
+                }
+                else setMyLeaveList([]);
         })
 
         // 잔여 휴가일수 가져오기
@@ -112,14 +116,14 @@ const LeaveManagement = () => {
     });
 
     // confirm param object
-    let confirmParam = {
-        txt : '',
-        action : ''
-    }
+    // let confirmParam = {
+    //     txt : '',
+    //     action : ''
+    // }
 
     // 나의 일정 삭제
-    const deleteMyleaveList = (idx) => {
-    }
+    // const deleteMyleaveList = (idx) => {
+    // }
 
     //render
     return (
