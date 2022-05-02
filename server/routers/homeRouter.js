@@ -14,9 +14,9 @@ router.get("/getNewBoardList", (req, res) => {
     db.query(sqlQuery, (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -34,9 +34,9 @@ router.post("/getTimelineThisWeekList", (req, res) => {
     db.query(sqlQuery, [this_monday, this_sunday], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -53,9 +53,9 @@ router.post("/getTimelineNextWeekList", (req, res) => {
     db.query(sqlQuery, [next_monday, next_sunday], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -74,9 +74,9 @@ router.post("/timelineRegister", (req, res) => {
     db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDateStart, memo], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -92,9 +92,9 @@ router.post("/getTimelineInfo", (req, res) => {
     db.query(sqlQuery, [idx], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -114,9 +114,9 @@ router.post("/updateTimelineOne", (req, res) => {
     db.query(sqlQuery, [selectLeaveType, selectLeaveDateStart, memo, idx], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -133,9 +133,9 @@ router.post("/deleteTimelineOne", (req, res) => {
     db.query(sqlQuery, [idx], (err, result) => {
         if (err) {
             logger.error(err);
-            return res.status(400).send(err);
+            return res.json({message: "error"})
         }
-        return res.status(200).send(result);
+        return res.json({message : "success", result : result})
     })
 })
 // 잔여 연차일수 가져오기

@@ -82,25 +82,29 @@ function TimelineInfo() {
         Axios.post(('/home/getTimelineInfo'), {
             idx : idx
         }).then((res) => {
-            setTimelineState({
-                selectIdx : res.data[0].idx,
-                selectUserId : res.data[0].userid,
-                selectLeaveType : res.data[0].leave_type,
-                selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
-                selectLeaveDateEnd : null,
-                memo : res.data[0].memo
-            });
-
-            setPreLeaveTypeSave(res.data[0].leave_type); //휴가 종류 저장
-            
-            if(userId === res.data[0].userid || isAdmin){ //관리자거나 글작성자일 경우만 수정허용
-                setTimelineUpdateModalOpen(true);
-                document.body.style.overflow = "hidden";
+            if (res.data.message === "success" ) {
+                setTimelineState({
+                    selectIdx : res.data.result[0].idx,
+                    selectUserId : res.data.result[0].userid,
+                    selectLeaveType : res.data.result[0].leave_type,
+                    selectLeaveDateStart : moment(res.data.result[0].leave_start).format('YYYY-MM-DD'),
+                    selectLeaveDateEnd : null,
+                    memo : res.data.result[0].memo
+                });
+    
+                setPreLeaveTypeSave(res.data.result[0].leave_type); //휴가 종류 저장
+                
+                if(userId === res.data.result[0].userid || isAdmin){ //관리자거나 글작성자일 경우만 수정허용
+                    setTimelineUpdateModalOpen(true);
+                    document.body.style.overflow = "hidden";
+                }
+                else{
+                    setTimelineUpdateModalOpen(false);
+                    document.body.style.overflow = "unset";   
+                } 
             }
-            else{
-                setTimelineUpdateModalOpen(false);
-                document.body.style.overflow = "unset";   
-            } 
+            else message.error("데이터를 불러오지 못했습니다.");
+            
         })
     }
     const closeTimelineUpdateModal = () => {
@@ -147,7 +151,8 @@ function TimelineInfo() {
             this_monday: this_monday,
             this_sunday: this_sunday
         }).then((res) => {
-            setTimelineThisWeekList(res.data);
+            if (res.data.message === "success" ) 
+            setTimelineThisWeekList(res.data.result);
             //console.log(res.data)
         })
 
@@ -156,7 +161,8 @@ function TimelineInfo() {
             next_monday: next_monday,
             next_sunday: next_sunday
         }).then((res) => {
-            setTimelineNextWeekList(res.data);
+            if (res.data.message === "success" ) 
+            setTimelineNextWeekList(res.data.result);
             //console.log(res.data)
         })
 
@@ -231,7 +237,7 @@ function TimelineInfo() {
             username: name,
             memo : timelineState.memo
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                 //연차개수 수정
                 Axios.post('/home/updateLeaveCount', {
                     userid: id,
@@ -303,7 +309,7 @@ function TimelineInfo() {
             selectLeaveDateStart: timelineState.selectLeaveDateStart,
             memo : timelineState.memo
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                  //연차개수 수정
                  Axios.post('/home/updateLeaveCount', {
                     userid: id,
@@ -361,7 +367,7 @@ function TimelineInfo() {
         Axios.post('/home/deleteTimelineOne', {
             idx : timelineState.selectIdx
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                  //연차개수 수정
                  Axios.post('/home/updateLeaveCount', {
                     userid: id,

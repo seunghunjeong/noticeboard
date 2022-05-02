@@ -24,8 +24,8 @@ const NewSosickModal = (props) => {
     useEffect(() => {
         // 새 글 목록 가져오기
         Axios.get('/home/getNewBoardList').then((res) => {
-            if(res.data)
-                setNewBoardList(res.data);
+            if (res.data.message === "success") 
+                setNewBoardList(res.data.result);
         })
 
     }, [])

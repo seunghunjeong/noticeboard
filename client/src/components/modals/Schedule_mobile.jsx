@@ -74,14 +74,14 @@ function ScheduleModal(props) {
             idx : idx
         }).then((res) => {
             setTimelineState({
-                selectIdx : res.data[0].idx,
-                selectUserId : res.data[0].userid,
-                selectLeaveType : res.data[0].leave_type,
-                selectLeaveDateStart : moment(res.data[0].leave_start).format('YYYY-MM-DD'),
+                selectIdx : res.data.result[0].idx,
+                selectUserId : res.data.result[0].userid,
+                selectLeaveType : res.data.result[0].leave_type,
+                selectLeaveDateStart : moment(res.data.result[0].leave_start).format('YYYY-MM-DD'),
                 selectLeaveDateEnd : null
             });
             
-            if(userId === res.data[0].userid){
+            if(userId === res.data.result[0].userid){
                 setTimelineUpdateModalOpen(true);
                 document.body.style.overflow = "hidden";
             }
@@ -116,7 +116,7 @@ function ScheduleModal(props) {
             this_monday: this_monday,
             this_sunday: this_sunday
         }).then((res) => {
-            setTimelineThisWeekList(res.data);
+            setTimelineThisWeekList(res.data.result);
             //console.log(res.data)
         })
 
@@ -125,7 +125,7 @@ function ScheduleModal(props) {
             next_monday: next_monday,
             next_sunday: next_sunday
         }).then((res) => {
-            setTimelineNextWeekList(res.data);
+            setTimelineNextWeekList(res.data.result);
             //console.log(res.data)
         })
 
@@ -173,9 +173,9 @@ function ScheduleModal(props) {
             userid: id,
             username: name
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                 message.success("일정추가완료");
-                setState(res);
+                setState(res.data.result);
                 setLoading(false);
                 closeTimelineModal();
             }
@@ -203,9 +203,9 @@ function ScheduleModal(props) {
             selectLeaveType: timelineState.selectLeaveType,
             selectLeaveDateStart: timelineState.selectLeaveDateStart
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                 message.success("일정수정완료");
-                setState(res);
+                setState(res.data.result);
                 setLoading(false);
                 closeTimelineUpdateModal();
             }
@@ -234,7 +234,7 @@ function ScheduleModal(props) {
         Axios.post('/home/deleteTimelineOne', {
             idx : timelineState.selectIdx
         }).then((res) => {
-            if (res.status === 200) {
+            if (res.data.message === "success" ) {
                 message.success("일정삭제완료");
                 setState(res);
                 setLoading(false);
