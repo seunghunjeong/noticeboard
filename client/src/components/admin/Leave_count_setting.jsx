@@ -115,9 +115,9 @@ const Leave_count_setting = () => {
             count : leave_count_update
         }).then((res) => {
             //console.log(res)
-            if (res.data.massege !== "err" ) {
+            if (res.data.message === "success" ) {
                 message.success("수정완료");
-                setState(res);
+                setState(res.data.result);
             }
             else message.error("수정오류. 알맞은 값을 입력하세요.");
         })

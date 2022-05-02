@@ -25,8 +25,8 @@ if (!directory) fs.mkdirSync(uploadPath, { recursive: true } );
 const job = schedule.scheduleJob('0 0 0 * * *', () => {
     current = moment().format('Y-M-D');
     uploadPath = `C:/upload/${current}`;
-    console.log(current);
-    console.log(uploadPath);
+    //console.log(current);
+    //console.log(uploadPath);
 })
 
 //diskStorage 엔진으로 파일저장경로와 파일명을 세팅한다. 

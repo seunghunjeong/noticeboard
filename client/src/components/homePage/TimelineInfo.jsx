@@ -40,9 +40,9 @@ function TimelineInfo() {
     // 렌더링을 위한 state
     const [state, setState] = useState();
     // 잔여 연차일수
-    const [leaveCount, setLeaveCount] = useState(0);
+    const [leaveCount, setLeaveCount] = useState("");
     // 수정 전 leave_type을 저장하기 위한 변수
-    const [preLeaveTypeSave, setPreLeaveTypeSave] = useState();
+    const [preLeaveTypeSave, setPreLeaveTypeSave] = useState("");
     // 이번주 일정 타임라인
     const [timelineThisWeekList, setTimelineThisWeekList] = useState([]);
     // 다음주 일정 타임라인
@@ -131,10 +131,16 @@ function TimelineInfo() {
 
         // 잔여 휴가일수 가져오기
         Axios.post(('/home/getLeaveCount'), {
-            userid : userId
+            id : userId
         }).then((res) => {
-            if(res.data !== undefined)
-            setLeaveCount(res.data[0].leave_count);
+            if (res.data.message === "success" ) {
+                if(res.data.result.length > 0 ){
+                    setLeaveCount(res.data.result[0].leave_count);
+                }
+            }
+            else {
+                setLeaveCount("");
+            }
         })
         // 이번주 타임라인 목록 가져오기
         Axios.post(('/home/getTimelineThisWeekList'), {
@@ -231,9 +237,9 @@ function TimelineInfo() {
                     userid: id,
                     count : count
                 }).then((res) => {
-                    if (res.status === 200) {
+                    if (res.data.message === "success" ) {
                         message.success("일정추가완료");
-                        setState(res);
+                        setState(res.data.result);
                         setLoading(false);
                         closeTimelineModal();
                     }
@@ -303,9 +309,9 @@ function TimelineInfo() {
                     userid: id,
                     count : count
                 }).then((res) => {
-                    if (res.status === 200) {
+                    if (res.data.message === "success" ) {
                         message.success("일정수정완료");
-                        setState(res);
+                        setState(res.data.result);
                         setLoading(false);
                         closeTimelineUpdateModal();
                     }
@@ -361,9 +367,9 @@ function TimelineInfo() {
                     userid: id,
                     count : count
                 }).then((res) => {
-                    if (res.status === 200) {
+                    if (res.data.message === "success" ) {
                         message.success("일정삭제완료");
-                        setState(res);
+                        setState(res.data.result);
                         setLoading(false);
                         closeTimelineUpdateModal();
                     }

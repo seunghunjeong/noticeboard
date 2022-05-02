@@ -180,26 +180,26 @@ const User_management = () => {
 
     // 부서 선택
     const departmentSelect = value => {
-        console.log(value);
+        //console.log(value);
         setManagemanet({
             ...manageMent,
             department: value
         })
-        console.log(manageMent);
+        //console.log(manageMent);
 
     }
     // 직급 선택
     const positionSelect = value => {
-        console.log(value);
+        //console.log(value);
         setManagemanet({
             ...manageMent,
             position: value
         })
-        console.log(manageMent);
+        //console.log(manageMent);
     }
     // 부여 , 수정 모달 확인창 클릭
     const modalSubmit = () => {
-        console.log(manageMent);
+        //console.log(manageMent);
 
         Axios.post('/admin/insert_management', {
             department: manageMent.department,
@@ -216,7 +216,7 @@ const User_management = () => {
     const adminAppointHandler = (event, value) => {
         event.preventDefault();
         const userId = value;
-        console.log(value);
+        //console.log(value);
         const actionAuth = () => {
             Axios.post('/api/admin-appoint', { id: userId })
                 .then((response) => {
@@ -240,7 +240,7 @@ const User_management = () => {
     const adminRemoveHandler = (event, value) => {
         event.preventDefault();
         const userId = value;
-        console.log(value);
+        //console.log(value);
 
         const actionAuthFire = () => {
             Axios.post('/api/admin-remove', { id: userId })

@@ -135,7 +135,7 @@ const Setting_page = () => {
             category: category,
             description: description
         }).then((res) => {
-            console.log(res);
+            //console.log(res);
             if (res.data === "중복") {
                 message.warning('이미 존재하는 카테고리명입니다.');
             } else {

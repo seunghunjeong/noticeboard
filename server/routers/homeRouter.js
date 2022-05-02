@@ -14,8 +14,9 @@ router.get("/getNewBoardList", (req, res) => {
     db.query(sqlQuery, (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -33,8 +34,9 @@ router.post("/getTimelineThisWeekList", (req, res) => {
     db.query(sqlQuery, [this_monday, this_sunday], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -51,8 +53,9 @@ router.post("/getTimelineNextWeekList", (req, res) => {
     db.query(sqlQuery, [next_monday, next_sunday], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -71,8 +74,9 @@ router.post("/timelineRegister", (req, res) => {
     db.query(sqlQuery, [userid, username, selectLeaveType, selectLeaveDateStart, memo], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -88,8 +92,9 @@ router.post("/getTimelineInfo", (req, res) => {
     db.query(sqlQuery, [idx], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -109,8 +114,9 @@ router.post("/updateTimelineOne", (req, res) => {
     db.query(sqlQuery, [selectLeaveType, selectLeaveDateStart, memo, idx], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 
@@ -127,22 +133,24 @@ router.post("/deleteTimelineOne", (req, res) => {
     db.query(sqlQuery, [idx], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.status(400).send(err);
         }
-        res.send(result);
+        return res.status(200).send(result);
     })
 })
 // 잔여 연차일수 가져오기
 router.post("/getLeaveCount", (req, res) => {
     
-    const id = req.body.userid;
+    const id = req.body.id;
 
     const sqlQuery = "SELECT leave_count FROM users WHERE id = ?"
  
     db.query(sqlQuery, [id], (err, result) => {
         if (err) {
             logger.error(err);
+            return res.json({message: "error"})
         }
-        res.send(result);
+        return res.json({message : "success", result : result})
     })
 })
 
@@ -158,10 +166,10 @@ router.post("/updateLeaveCount", (req, res) => {
  
     db.query(sqlQuery, [leaveCount, id], (err, result) => {
         if (err) {
-            res.send({massege : "err"});
-            logger.error(err);
+            logger.error(err); 
+            return res.json({message: "error"})
         }
-        res.send(result);
+        return res.json({message: "success", result : result})
         
     })
 })

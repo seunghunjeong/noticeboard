@@ -21,7 +21,7 @@ const LeaveManagement = () => {
     // 나의 연차 사용목록 가져오기
     const [myLeaveList, setMyLeaveList] = useState([]);
     // 잔여 연차일수
-    const [leaveCount, setLeaveCount] = useState(0);
+    const [leaveCount, setLeaveCount] = useState("");
 
     useEffect(() => {
         Axios.post('/mypage/getMyleaveList', {id : userId})
@@ -33,11 +33,16 @@ const LeaveManagement = () => {
 
         // 잔여 휴가일수 가져오기
         Axios.post(('/home/getLeaveCount'), {
-            userid : userId
+            id : userId
         }).then((res) => {
-            //console.log(res)
-            if(res.data !== undefined)
-            setLeaveCount(res.data[0].leave_count);
+            if (res.data.message === "success" ) {
+                if(res.data.result.length > 0 ){
+                    setLeaveCount(res.data.result[0].leave_count);
+                }
+            }
+            else {
+                setLeaveCount("");
+            }
         })
     }, [userId])
 

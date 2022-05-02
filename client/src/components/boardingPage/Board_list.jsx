@@ -124,7 +124,7 @@ function Board_list() {
 
   // table method
   function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra);
+    //console.log('params', pagination, filters, sorter, extra);
   }
 
   // Search 값 저장

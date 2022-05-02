@@ -36,7 +36,7 @@ function Board_update() {
       ...boardContent,
       category: e
     })
-    console.log(boardContent)
+    //console.log(boardContent)
   }
 
   const [boardContent, setBoardContent] = useState({});

@@ -22,7 +22,7 @@ router.post("/addCategory", (req, res) => {
         }
 
         if (check) {
-            console.log('test');
+            //console.log('test');
             const sqlQuery = `
                 INSERT INTO
                     boardCategory
@@ -71,7 +71,7 @@ router.post('/delCategory', (req, res) => {
 // 카테고리 수정
 router.post('/udtCategory', (req, res) => {
 
-    console.log(req.body);
+    //console.log(req.body);
     const sqlQuery = `
         UPDATE
             boardCategory
