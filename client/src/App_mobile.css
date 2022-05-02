@@ -1,5 +1,9 @@
 /* 반응형 웹을 위한 미디어쿼리 */
 @media only screen and (max-width: 1100px) {
+  :root {
+    --vh: 100%;
+  }
+
   .ant-picker-calendar-date {
     height: 10vh !important;
   }

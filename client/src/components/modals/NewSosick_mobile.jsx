@@ -78,7 +78,7 @@ const NewSosickModal = (props) => {
         // 클래스명 변경을 통해 활성화 / 비활성화
         <div className={display ? 'openModal modal' : 'modal'} key='Keymodal'>
             {display ? (
-                <section style={{width:"100vw", height:"100vh"}}>
+                <section style={{width:"100vw", height: 'calc(var(--vh, 1vh) * 100)'}}>
                     <header style={{color:'black'}}>
                         <FieldTimeOutlined style={{ position:'relative', top:'5px' ,fontSize: '25px', color: '#08c', float: 'left' }} />
                         <Text strong style={{ marginLeft: '5px', fontSize: '16px' }}>새 소식 </Text>
