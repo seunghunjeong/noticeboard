@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import BoardingListPage from '../boardingPage/Board_list_mobile';
 import BoardingDetailPage from '../boardingPage/Board_detail_mobile';
@@ -12,6 +12,13 @@ import MainLayoutMobile from '../layout/MainLayout_mobile';
 import HomePageMobile from '../homePage/Home_mobile';
 
 const MobileViewComponent = ({ children }) => {
+    function setScreenSize() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+      }
+      useEffect(() => {
+        setScreenSize();
+      });
 
     return (
         <BrowserRouter>
