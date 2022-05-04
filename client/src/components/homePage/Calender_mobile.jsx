@@ -230,7 +230,7 @@ function Calender_mobile (props) {
     const insertBogo = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            message.warning("금일 실적을 입력해주세요");
+            message.warning("실적을 입력해주세요");
             setLoading(false);
             return;
         }
@@ -253,15 +253,15 @@ function Calender_mobile (props) {
     const updateReport = () => {
         setLoading(true);
         if (dailyReport.report === "◎") {
-            message.warning("금일 실적을 입력해주세요.");
+            message.warning("실적을 입력해주세요.");
             setLoading(false);
             return;
         }
 
         Axios.post('/report/updateM', {
             idx: readBogoArr.idx,
-            report: updateBogoArr ? dailyReport.report : readBogoArr.report,
-            plan : updateBogoArr ? dailyReport.plan : readBogoArr.plan,
+            report: updateBogoArr.reportChk ? dailyReport.report : readBogoArr.report,
+            plan : updateBogoArr.planChk ? dailyReport.plan : readBogoArr.plan,
             date: dailyReport.regist_date
         }).then(() => {
             message.success("수정완료");
@@ -316,7 +316,12 @@ function Calender_mobile (props) {
                 case 1 : 
                     subNumb = 3;
                     break;
-                case 6 :
+                case 6:
+                    return `◎ 작업
+    
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`;
                 case 7 :
                         return '◎';
                 default :
@@ -333,13 +338,29 @@ function Calender_mobile (props) {
         }
         return resultTxt.length > 0 ? resultTxt[0].report : '◎';
     }
-    
+
     // 익일 계획 읽기
     const readPlan = () => {
         let resultTxt = [];
         if (state === 'updateModal') {
             resultTxt = filterBogo(dailyReport.regist_date);
+        } else if (state === 'insertModal') {
+        
+         if(moment(dailyReport.regist_date).weekday() === 6 ){
+            resultTxt = `◎ 작업  
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`
+             
+            setDailyReport({
+                ...dailyReport,
+                plan: resultTxt
+            })
+            return resultTxt
         }
+    }
+
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
     }
 
@@ -395,21 +416,25 @@ function Calender_mobile (props) {
                 onSelect={onSelect}
                 className={MobileStyle.detailBorder}
             />
-            <Modal state={state} display={modalOpen} close={closeModal} header="일일 보고" insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
+            <Modal state={state} display={modalOpen} close={closeModal} header={
+                moment(dailyReport.regist_date).weekday() !== 6 ? "일일 보고" : "주간 보고"
+            } insert={insertBogo} update={updateReport} del={deleteReport} loading={loading}>
                 <Tag style={{ marginBottom: '5px' }}>작성자 :{userName}</Tag>
                 <Tag style={{ marginBottom: '5px' }}>작성일 :{dailyReport.regist_date}</Tag>
                 <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 
-                    { moment(dailyReport.regist_date).weekday() !== 6 ? '금일 실적' : '금주 실적' }
+                    { moment(dailyReport.regist_date).weekday() !== 6 ? '금일 실적 ' : '금주 실적 ' }   
                 <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readBogo} name='today'></TextArea>
-                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}> 
-                    { moment(dailyReport.regist_date).weekday() !== 6 ? '익일 계획' : '차주 계획' } 
+                <Divider orientation="left" orientationMargin={2} className={MobileStyle.bogoTxt}>
+                    { moment(dailyReport.regist_date).weekday() !== 6 ? '익일 계획 ' : '차주 계획 ' }     
                 <FormOutlined /></Divider>
                 <TextArea className={MobileStyle.bogoTxtArea} onChange={textAreaHandleChange} defaultValue={readPlan} name='tomorrow'></TextArea>
             </Modal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header="ICT 사업부 일일 업무 보고" day={dailyReport.regist_date}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={
+                 moment(dailyReport.regist_date).weekday() !== 6 ? "ICT 사업부 일일 업무 보고" : "ICT 사업부 주간 업무 보고"
+            } day={dailyReport.regist_date}>
                 <GetDetailReport />
             </ReportViewModal>
         </>
