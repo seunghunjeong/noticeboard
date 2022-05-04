@@ -340,6 +340,11 @@ function DailyReport() {
                 subNumb = 3;
                 break;
             case 6:
+                return `◎ 작업
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`;
             case 7:
                 return '◎';
             default:
@@ -355,6 +360,16 @@ function DailyReport() {
             today: resultTxt.length > 0 ? resultTxt[0].plan : ''
         });
         return resultTxt.length > 0 ? resultTxt[0].plan : '◎';
+    }
+
+    const defaultValue = () => {
+        return moment(selectDay.selectedValue).weekday() !== 6 ? '◎'
+            :
+            `◎ 작업  
+
+◎ 외근 : 없음
+
+◎ 휴가 : 없음`
     }
 
     return (
@@ -374,7 +389,9 @@ function DailyReport() {
             />
 
             {/* 등록팝업 */}
-            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={`${department} 일일 업무 보고`} insert={submitReport} loading={loading}>
+            <ReportRegisterModal display={registerModalOpen} close={closeRegisterModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } insert={submitReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -392,11 +409,13 @@ function DailyReport() {
                     </thead>
                 </table>
                 <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={readBogo} name="today"></TextArea>
-                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue="◎" name="tomorrow"></TextArea>
+                <TextArea style={{ height: '300px', width: '50%', resize: 'none' }} onChange={getReport} defaultValue={defaultValue} name="tomorrow"></TextArea>
             </ReportRegisterModal>
 
             {/* 수정팝업 */}
-            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={`${department} 일일 업무 보고`} update={updateReport} del={deleteReport} loading={loading}>
+            <ReportUpdateModal display={updateModalOpen} close={closeUpdateModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } update={updateReport} del={deleteReport} loading={loading}>
                 <div>
                     <Tag style={{ marginBottom: '5px' }}>작성자 : {userName}</Tag>
                     <Tag style={{ marginBottom: '5px' }}>작성일 : {selectDay.selectedValue.format('YYYY-MM-DD')}</Tag>
@@ -418,7 +437,9 @@ function DailyReport() {
             </ReportUpdateModal>
 
             {/* 조회팝업 */}
-            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={`${department} 일일 업무 보고`} day={selectDay.selectedValue.format('YYYY-MM-DD')}>
+            <ReportViewModal display={viewModalOpen} close={closeViewModal} header={
+                `${department} ${moment(selectDay.selectedValue).weekday() !== 6 ? '일일 업무 보고' : '주간 업무 보고'}`
+            } day={selectDay.selectedValue.format('YYYY-MM-DD')}>
                 <GetDetailReport />
             </ReportViewModal>
         </>
