@@ -504,7 +504,7 @@ function ScheduleModal(props) {
                         {/* 이벤트 타임라인 */}
                         <Card style={{
                             margin: '16px 0 0 16px',
-                            width: '300px',
+                            width: '80vw',
                             height: '400px',
                             borderRadius: '10px',
                             boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px'
