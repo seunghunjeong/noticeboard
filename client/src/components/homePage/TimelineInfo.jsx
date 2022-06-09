@@ -131,7 +131,7 @@ function TimelineInfo() {
         let this_monday = moment().day(1).format('YYYY-MM-DD');
         let this_sunday = moment().day(7).format('YYYY-MM-DD');
         let next_monday = moment().day(8).format('YYYY-MM-DD');
-        let next_sunday = moment().day(14).format('YYYY-MM-DD');
+        //let next_sunday = moment().day(14).format('YYYY-MM-DD');
 
         // 잔여 휴가일수 가져오기
         Axios.post(('/home/getLeaveCount'), {
@@ -158,8 +158,9 @@ function TimelineInfo() {
 
         // 다음주 타임라인 목록 가져오기
         Axios.post(('/home/getTimelineNextWeekList'), {
-            next_monday: next_monday,
-            next_sunday: next_sunday
+            next_monday: next_monday
+            //,
+            //next_sunday: next_sunday
         }).then((res) => {
             if (res.data.message === "success" ) 
             setTimelineNextWeekList(res.data.result);
@@ -505,7 +506,7 @@ function TimelineInfo() {
                         <p style={{ marginBottom: '10px' }}><Text strong> 이번주 일정</Text></p>
                         <GetThisWeekTimeline />
                         {/* 다음주 이벤트 */}
-                        <p style={{ marginTop: '10px', marginBottom: '10px' }}><Text strong style={{ color: 'grey' }}> 다음주 일정</Text></p>
+                        <p style={{ marginTop: '10px', marginBottom: '10px' }}><Text strong style={{ color: 'grey' }}> 이후 일정</Text></p>
                         <GetNextWeekTimeline />
                     </Timeline>
                     <Button

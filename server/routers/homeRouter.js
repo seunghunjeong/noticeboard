@@ -42,15 +42,21 @@ router.post("/getTimelineThisWeekList", (req, res) => {
 
 router.post("/getTimelineNextWeekList", (req, res) => {
     const next_monday = req.body.next_monday;
-    const next_sunday = req.body.next_sunday;
+    //const next_sunday = req.body.next_sunday; -> 다음주이후 모든 스케쥴 가져오기위해
+
+    // const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(IFNULL(memo, '')) as memo"
+    //                + " FROM timelineInfo"
+    //                + " GROUP BY leave_start"
+    //                + " HAVING leave_start > ? AND ?"
+    //                + " ORDER BY leave_start ASC"
 
     const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(IFNULL(memo, '')) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
-                   + " HAVING leave_start BETWEEN ? AND ?"
+                   + " HAVING leave_start > ?"
                    + " ORDER BY leave_start ASC"
  
-    db.query(sqlQuery, [next_monday, next_sunday], (err, result) => {
+    db.query(sqlQuery, [next_monday /*, next_sunday*/], (err, result) => {
         if (err) {
             logger.error(err);
             return res.json({message: "error"})
