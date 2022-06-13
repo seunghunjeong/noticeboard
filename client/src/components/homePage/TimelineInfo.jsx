@@ -164,8 +164,7 @@ function TimelineInfo() {
         }).then((res) => {
             if (res.data.message === "success" ) 
             setTimelineNextWeekList(res.data.result);
-            console.log(next_monday)
-            console.log(res.data)
+            //console.log(res.data)
         })
 
         return () => {
