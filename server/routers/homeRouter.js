@@ -53,7 +53,7 @@ router.post("/getTimelineNextWeekList", (req, res) => {
     const sqlQuery = "select leave_start , GROUP_CONCAT(username) as username, GROUP_CONCAT(leave_type) as leave_type, GROUP_CONCAT(idx) as idx, GROUP_CONCAT(IFNULL(memo, '')) as memo"
                    + " FROM timelineInfo"
                    + " GROUP BY leave_start"
-                   + " HAVING leave_start > ?"
+                   + " HAVING leave_start >= ?"
                    + " ORDER BY leave_start ASC"
  
     db.query(sqlQuery, [next_monday /*, next_sunday*/], (err, result) => {
