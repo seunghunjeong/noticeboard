@@ -86,6 +86,8 @@ router.get("/getReportDetail", (req, res) => {
             a.id = b.id
         WHERE
             b.department = '${req.query.department}'
+        AND
+        	a.regist_date >= DATE_ADD(now(), INTERVAL -2 MONTH)
         ORDER BY
             b.position ASC
         `;
