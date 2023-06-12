@@ -137,6 +137,10 @@ const Leave_count_setting = () => {
             align: 'center',
             filters: [
                 {   //년도 filter값 moment로 배열만들어야함
+                    text: '2023',
+                    value: '2023',
+                },
+                {   //년도 filter값 moment로 배열만들어야함
                   text: '2022',
                   value: '2022',
                 },
